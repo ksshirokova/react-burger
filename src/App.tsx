@@ -1,26 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
+import { createModuleResolutionCache } from 'typescript';
 import './App.css';
+import AppHeader from './components/app-header/app-header.js';
+import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
+import BurgerConstructor from './components/burger-constructor/burger-constructor';
 
+import ModalOverlay from './components/modal-overlay/modal-overlay';
+const API_URL = 'https://norma.nomoreparties.space/api';
 function App() {
+  
+  const [state, setState] = React.useState({ ingredients: null });
+  
+
+  React.useEffect(() => {
+    fetch(`${API_URL}/ingredients`)
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        return Promise.reject(`Ошибка ${res.status}`)
+      })
+      // .then(res => console.log(res))
+      .then(res => setState({
+        ...state,
+        ingredients: res.data
+      }))
+      
+      .catch(err => console.error(err))
+  })
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <AppHeader />
+      <main className='main'>
+      <BurgerIngredients props = {state} />
+      <BurgerConstructor props = {state}/>
+      </main>
+      {/* <ModalOverlay /> */}
+    </>
+    
   );
 }
+
 
 export default App;

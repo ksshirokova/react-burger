@@ -1,0 +1,19 @@
+.section {
+    max-width: 600px;
+    
+}
+
+
+
+
+
+.price {
+    display: flex;
+    justify-content: center;
+}
+
+
+.container{
+    max-height: 686px;
+    overflow: scroll;
+}

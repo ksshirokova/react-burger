@@ -1,0 +1,25 @@
+
+.ul {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    border: 1px solid red;
+    
+}
+
+.name {
+    max-width: 272px;
+}
+
+.list {
+    list-style-type: none;
+    text-align: center;
+    border: 1px solid red;
+    width: 262px;
+    
+}
+
+.list:nth-child(2n) {
+    margin-left: 24px;
+}

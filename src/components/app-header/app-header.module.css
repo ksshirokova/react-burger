@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    background-color: #1c1c21;
+    font-family: 'JetBrains Mono' Arial, sans-serif;
+    border: 1px solid red;
+    align-items: center;
+    max-width: 1180px;
+    margin: 0 auto;
+
+}
+
+.logo {
+    margin: auto;
+    border: 1px solid red;
+}
+
+.firstBlock {
+    display: flex;
+}
+
+
+
+.listItem {
+    border: 1px solid red;
+    display: flex;
+    text-decoration: none;
+    color: white;
+    
+
+}
+
+
+.listItem:nth-child(3) {
+    margin-left: auto;
+}
