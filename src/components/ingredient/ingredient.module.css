@@ -13,13 +13,23 @@
 }
 
 .list {
+   
     list-style-type: none;
     text-align: center;
     border: 1px solid red;
     width: 262px;
     
+    
 }
 
 .list:nth-child(2n) {
     margin-left: 24px;
+}
+
+.price{
+    display: flex;
+    justify-content: center;
+    
+   
+    
 }

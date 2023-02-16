@@ -17,3 +17,8 @@
     max-height: 686px;
     overflow: scroll;
 }
+.ul{
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+}

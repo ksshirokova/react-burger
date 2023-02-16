@@ -28,3 +28,25 @@ code {
   src: url("./fonts/JetBrainsMono-Regular.woff") format("woff");
   font-weight: 400;
 }
+
+::-webkit-scrollbar{
+  width: 8px;
+  
+}
+::-webkit-scrollbar-track{
+ background: #2F2F37;
+ margin-bottom: 52px;
+ margin-top: 40px;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #8585AD;
+  height: 492px; 
+  
+}
+
+/* * {
+  overflow-y: scroll;
+  scrollbar-color: #8585AD  #2F2F37;
+  scrollbar-width: thin;
+} */

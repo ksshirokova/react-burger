@@ -1,14 +1,15 @@
 import React from 'react';
-import OrderStyle from './order-details.module.css'
+
+import  doneIcon  from '../../images/graphics.svg'
 
 export default function OrderDetails() {
     return (
-        <section className={OrderStyle.container}>
-            <p>034536</p>
-            <p>идентификатор заказа</p>
-            <img src="../images/done.png"></img>
-            <p>Ваш заказ начали готовить</p>
-            <p>Дождитесь готовности на орбитальной станции</p>
+        <section style={{textAlign: 'center'}}>
+            <p className="text text_type_digits-large mt-9 mb-8">034536</p>
+            <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
+            <img src={doneIcon}></img>
+            <p className="text text_type_main-small mt-15 mb-2">Ваш заказ начали готовить</p>
+            <p className="text text_type_main-small text_color_inactive mb-15">Дождитесь готовности на орбитальной станции</p>
         </section>
 
     )

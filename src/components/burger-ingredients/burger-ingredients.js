@@ -6,33 +6,37 @@ import Ingredients from '../ingredient/ingredient';
 
 
 
-export default function BurgerIngredients(props) {
+export default function BurgerIngredients({ buns, main, sauce, toOpen }) {
     const [current, setCurrent] = React.useState('Булки');
 
     return (
+
         <section className={burgerIngredientsStyle.section}>
             <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-            <div style={{ display: 'flex' }}>
-                <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
-                    Булки
-                </Tab>
-                <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
-                    Соусы
-                </Tab>
-                <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
-                    Начинки
-                </Tab>
-            </div>
+            <nav style={{ display: 'flex' }}>
+                <ul className={burgerIngredientsStyle.ul}>
+                    <li><Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
+                        Булки
+                    </Tab></li>
+                    <li><Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
+                        Соусы
+                    </Tab></li>
+                    <li><Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
+                        Начинки
+                    </Tab></li>
+                </ul>
+            </nav>
 
-            <section className={`${burgerIngredientsStyle.container} mt-10`}>
-                
-                <Ingredients name = "Булки" data = {props}/>
-                <Ingredients name = "Соусы"/>
-                <Ingredients name = "Начинки"/>
+            <section className={`${burgerIngredientsStyle.container} `}>
 
-                
+                <Ingredients name="Булки" ingredients={buns} onOpen={toOpen} />
+                <Ingredients name="Соусы" ingredients={sauce} onOpen={toOpen} />
+                <Ingredients name="Начинки" ingredients={main} onOpen={toOpen} />
+
+
             </section>
         </section>
+
 
     )
 }

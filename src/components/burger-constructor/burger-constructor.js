@@ -1,14 +1,17 @@
 import React from 'react';
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import ConstructorStyle from './burger-constructor.module.css'
+import ConstructorStyle from './burger-constructor.module.css';
+import { IngredientPropTypes } from '../../utils/types';
+import PropType from 'prop-types'
 
-export default function BurgerConstructor({ props }) {
+
+export default function BurgerConstructor({ ingredients, toOpen, buns, main, sauce}) {
     return (
         <>
             <section >
                 <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} className={ConstructorStyle.section}>
                     <ul className={ConstructorStyle.ul}>
-                        {props.ingredients && props.ingredients.map((item) => (<li key={item._id} className='mb-4 ml-8'>
+                        {buns && buns.map((item) => (<li key={item._id} className='mb-4 ml-8'>
 
                             <ConstructorElement
                                 type="top"
@@ -19,7 +22,7 @@ export default function BurgerConstructor({ props }) {
                             />
 
                         </li>))}
-                        {props.ingredients && props.ingredients.map((item) => (<li key={item._id} className='mb-4 ml-2'>
+                        {main && main.map((item) => (<li key={item._id} className='mb-4 ml-2'>
 
 
                             <DragIcon type="primary" />
@@ -30,7 +33,19 @@ export default function BurgerConstructor({ props }) {
                             />
 
                         </li>))}
-                        {props.ingredients && props.ingredients.map((item) => (<li key={item._id} className='mb-4 ml-8'>
+
+                        {sauce && sauce.map((item) => (<li key={item._id} className='mb-4 ml-2'>
+
+
+                            <DragIcon type="primary" />
+                            <ConstructorElement
+                                text={`${item.name} (верх)`}
+                                price={item.price}
+                                thumbnail={item.image}
+                            />
+
+                        </li>))}
+                        {buns && buns.map((item) => (<li key={item._id} className='mb-4 ml-8'>
 
                             <ConstructorElement
                                 type="bottom"
@@ -48,7 +63,7 @@ export default function BurgerConstructor({ props }) {
                     <div className={ConstructorStyle.icon}>
                         <CurrencyIcon type="primary" />
                     </div>
-                    <Button htmlType="button" type="primary" size="large">
+                    <Button htmlType="button" type="primary" size="large" onClick={toOpen}>
                         Оформить заказ
                     </Button>
                 </section>
@@ -64,3 +79,7 @@ export default function BurgerConstructor({ props }) {
         </>
     )
 }
+
+BurgerConstructor.propType = {
+    ingredients: PropType.arrayOf(IngredientPropTypes).isRequired
+} 
