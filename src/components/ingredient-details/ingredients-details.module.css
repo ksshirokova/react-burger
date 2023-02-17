@@ -4,4 +4,16 @@
 
 .section{
     max-width: 500px;
+   align-self: center;
+   text-align: center;
+}
+
+.ul{
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+.list{
+    text-align: center;
 }
