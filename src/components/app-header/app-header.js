@@ -5,7 +5,7 @@ import headerStyles from './app-header.module.css';
 
 export default function AppHeader() {
     return (
-       
+       <div className={headerStyles.background}>
             <header className={`${headerStyles.header} p-4`}>
                 <div className={headerStyles.firstBlock}>
                     <a href='#' className={`${headerStyles.listItem} pt-4 pb-4 pr-5 pl-5 `}>
@@ -26,6 +26,7 @@ export default function AppHeader() {
                     <p className={`${headerStyles.text} text text_type_main-default text_color_inactive ml-2`}>Личный кабинет</p>
                 </a>
             </header>
+            </div>
         
     )
 }

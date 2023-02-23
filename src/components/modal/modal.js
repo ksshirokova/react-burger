@@ -23,22 +23,25 @@ export default function Modal(ingredient) {
 
     return ReactDOM.createPortal(
         <>
-        <ModalOverlay toClose={ingredient.onClose}   />
-        <section className={`${ModalStyle.container} pt-15 pb-15 pr-10 pl-10`}>
+            <ModalOverlay toClose={ingredient.onClose} children = {ingredient.children}>
+                <section className={`${ModalStyle.container} pt-15 pb-15 pr-10 pl-10`}>
 
                     <div className={ModalStyle.div}>
                         <h3 className='text text_type_main-large'>{ingredient.title}</h3>
 
-                        <div className={ModalStyle.closeIcon} onClick={ingredient.toClose}>
+                        <div className={ModalStyle.closeIcon} onClick={ingredient.onClose}>
                             <CloseIcon type="primary" />
                         </div>
 
                     </div>
-
-                    
                     {ingredient.children}
+
+
                 </section>
-        
+
+            </ModalOverlay>
+
+
         </>
         ,
         modals

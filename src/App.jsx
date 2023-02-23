@@ -69,30 +69,31 @@ function App() {
       <main className='main'>
         <BurgerIngredients ingredients={ingredients} buns={buns} main={main} sauce={sauce} toOpen={handleClick} />
         <BurgerConstructor main={main} buns={buns} sauce={sauce} toOpen={openOrderModal} />
-
-        {orderModal &&
-          <>
-
-            <Modal onClose={closeOrderModal} ingredients={ingredients}>
-              <OrderDetails />
-            </Modal>
-          </>
-        }
-
-        {IngredientModal &&
-          <>
-
-            <Modal onClose={closeIngredientModal} title='Детали ингредиента' ingredients={ingredients}>
-              <IngredientDetails ingredients={modalIngredients} />
-            </Modal>
-          </>
-        }
-
-
-
-
-
       </main>
+      
+      {orderModal &&
+        <>
+
+          <Modal onClose={closeOrderModal} ingredients={ingredients}>
+            <OrderDetails />
+          </Modal>
+        </>
+      }
+
+      {IngredientModal &&
+        <>
+
+          <Modal onClose={closeIngredientModal} title='Детали ингредиента' ingredient={ingredients}>
+            <IngredientDetails ingredients={modalIngredients} />
+          </Modal>
+        </>
+      }
+
+
+
+
+
+
 
     </>
 

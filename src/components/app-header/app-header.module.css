@@ -2,16 +2,19 @@
     display: flex;
     background-color: #1c1c21;
     font-family: 'JetBrains Mono' Arial, sans-serif;
-    border: 1px solid red;
+   
     align-items: center;
     max-width: 1280px;
     margin: 0 auto;
 
 }
-
+.background{
+    background-color: #1c1c21;
+    max-width: 1920px;
+}
 .logo {
     margin: auto;
-    border: 1px solid red;
+   
 }
 
 .firstBlock {
@@ -21,7 +24,7 @@
 
 
 .listItem {
-    border: 1px solid red;
+    
     display: flex;
     text-decoration: none;
     color: white;
