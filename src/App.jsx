@@ -1,104 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { createModuleResolutionCache } from 'typescript';
-import './App.css';
-import AppHeader from './components/app-header/app-header.js';
-import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
-import BurgerConstructor from './components/burger-constructor/burger-constructor';
-import ModalOverlay from './components/modal-overlay/modal-overlay';
-import Modal from './components/modal/modal';
-import IngredientDetails from './components/ingredient-details/ingredient-details';
-import OrderDetails from './components/order-details/order-details';
-const API_URL = 'https://norma.nomoreparties.space/api';
+import { useEffect } from "react";
 
+import "./App.css";
+import AppHeader from "./components/app-header/app-header.js";
+import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
+import BurgerConstructor from "./components/burger-constructor/burger-constructor";
 
+import Modal from "./components/modal/modal";
+import IngredientDetails from "./components/ingredient-details/ingredient-details";
+import OrderDetails from "./components/order-details/order-details";
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredients } from "./services/actions/ingredients";
+import {
+  addModalIngredients,
+  OPEN_ING_MODAL,
+  CLOSE_ING_MODAL,
+  DELITE_MODAL_INGREDIENTS,
+} from "./services/actions/ingredient-modal";
+import {
+  CLOSE_ORDER_MODAL,
+  OPEN_ORDER_MODAL,
+} from "./services/actions/order-modal";
+
+import { DROP_CONSTRUCTOR_ELEMENT } from "./services/actions/constructors-ingredients";
+import { addDraggedElement } from "./services/actions/constructors-ingredients";
 
 function App() {
-  const [ingredients, setIngredient] = useState(null)
-  const [buns, setBuns] = useState(null)
-  const [main, setMain] = useState(null)
-  const [sauce, setSauce] = useState(null)
+  // const [useSelector1, useDispatch1] = React.useState()
 
-  const [orderModal, setOrderModal] = useState(false); //проверяет открыто или закрыто окно заказа
-  const [IngredientModal, setIngredientModal] = useState(false); //проверяет открыто или закрыто окно ингредиентов
-  const [modalIngredients, setModalIngredients] = useState(null)
+  const dispatch = useDispatch();
+  const orderIsOpened = useSelector((state) => state.orderInfo.isOpened);
+  const modalIngredients = useSelector((state) => state.ingredientInfo.item);
+  
+  
+  const ingredientsIsOpened = useSelector(
+    (state) => state.ingredientInfo.isOpened
+  );
+  const handleDragOver = (event) => { //обработчик при наведении
+    event.preventDefault()
 
-  const handleClick = (item) => {
-    setModalIngredients(item)
-    openIngredientModal()
   }
-
+  const handleDrop = () => { //обработчик когда отпустили
+    dispatch({ type: DROP_CONSTRUCTOR_ELEMENT });
+    
+  }
+  const handleDrag = (event, item) => { //обработчик когда зажали
+    event.preventDefault();
+    dispatch(addDraggedElement(item))
+}
 
   const closeOrderModal = () => {
-    setOrderModal(false)
-  }
+    dispatch({ type: CLOSE_ORDER_MODAL });
+  };
 
   const closeIngredientModal = () => {
-    setIngredientModal(false)
-  }
+    dispatch({ type: CLOSE_ING_MODAL });
+    dispatch({ type: DELITE_MODAL_INGREDIENTS });
+  };
 
   const openOrderModal = () => {
-    setOrderModal(true)
-  }
-
-  const openIngredientModal = () => {
-    setIngredientModal(true)
-  }
+    dispatch({ type: OPEN_ORDER_MODAL });
+  };
 
 
-  useEffect(() => {
-    fetch(`${API_URL}/ingredients`)
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        }
-        return Promise.reject(`Ошибка ${res.status}`)
-      })
-      .then(res => {
-        const ingredientsFromApi = res.data
-        setBuns(ingredientsFromApi.filter(item => item.type === 'bun'))
-        setMain(ingredientsFromApi.filter(item => item.type === 'main'))
-        setSauce(ingredientsFromApi.filter(item => item.type === 'sauce'))
-        setIngredient(ingredientsFromApi)
-      })
-      .catch(err => console.error(err))
-  }, [])
+
+
+
 
   return (
     <>
       <AppHeader />
-      <main className='main'>
-        <BurgerIngredients ingredients={ingredients} buns={buns} main={main} sauce={sauce} toOpen={handleClick} />
-        <BurgerConstructor main={main} buns={buns} sauce={sauce} toOpen={openOrderModal} />
+      <main className="main">
+        <BurgerIngredients dragHandler={handleDrag}
+        />
+        <BurgerConstructor
+          
+          toOpen={openOrderModal} toDrop = {handleDrop} onDragOverHandler = {handleDragOver} dragHandler={handleDrag}
+        />
       </main>
-      
-      {orderModal &&
-        <>
 
-          <Modal onClose={closeOrderModal} ingredients={ingredients}>
+      {orderIsOpened && (
+        <>
+          <Modal onClose={closeOrderModal} >
             <OrderDetails />
           </Modal>
         </>
-      }
+      )}
 
-      {IngredientModal &&
+      {ingredientsIsOpened && (
         <>
+          <Modal
+            onClose={closeIngredientModal}
+            title="Детали ингредиента"
 
-          <Modal onClose={closeIngredientModal} title='Детали ингредиента' ingredient={ingredients}>
+          >
             <IngredientDetails ingredients={modalIngredients} />
           </Modal>
         </>
-      }
-
-
-
-
-
-
-
+      )}
     </>
-
   );
 }
-
 
 export default App;
