@@ -11,31 +11,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { OPEN_ING_MODAL } from '../../services/actions/ingredient-modal';
 import { useEffect } from 'react';
 import { addDraggedElement } from '../../services/actions/ingredients';
+import { useInView } from 'react-intersection-observer'
 
 
 
 
 
-export default function BurgerIngredients({dragHandler}) {
-    const [current, setCurrent] = React.useState('Булки');
+export default function BurgerIngredients({ dragHandler }) {
+    // const [current, setCurrent] = React.useState('Булки');
     const element = document.getElementById('container')
     const { bun, main, sauce } = useSelector((state) => state.ingredients);
     const dispatch = useDispatch();
-
-
-
-    
-
-
-    const handleDragOver = (event) => { //обработчик при наведении
-        event.preventDefault()
-    }
-    
-    //сделать массив из элементов в этом контейнере
-
-
-
-
 
     useEffect(() => {
         dispatch(getIngredients());
@@ -50,32 +36,46 @@ export default function BurgerIngredients({dragHandler}) {
         openIngredientModal();
     };
 
-    const scrollIntoBuns = () => {
-        element.scrollTo(0, 0)
+    
+    const [current, setCurrent] = React.useState('one')
+
+    const { ref: bunRef, inView: inViewBuns } = useInView();
+    const { ref: sauceRef, inView: inViewSauces } = useInView();
+    const { ref: mainRef, inView: inViewMain } = useInView();
+
+    function tabSwitch(viewBuns, viewSauce, viewMain) {
+        if (viewBuns) {
+            return setCurrent('one')
+        } if (viewSauce) {
+            return setCurrent('two')
+        } if (viewMain) {
+            return setCurrent('three')
+        }
     }
 
-    const scrollIntoSauces = () => {
-        element.scrollTo(0, 300)
-    }
+    useEffect(() => {
+        tabSwitch(inViewBuns, inViewSauces, inViewMain)
+    }, [inViewBuns, inViewSauces, inViewMain])
 
-
-    const scrollIntoMain = () => {
-        element.scrollTo(0, 850)
-    }
-
+    const moveToElement = (current) => {
+        const element = document.getElementById(`${current}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
     return (
 
         <section className={style.section}>
             <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
             <nav style={{ display: 'flex' }}>
                 <ul className={style.ul}>
-                    <li onClick={scrollIntoBuns}><Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
+                    <li><Tab value="one" active={current === 'one'}  onClick={()=>{moveToElement('one')}}>
                         Булки
                     </Tab></li>
-                    <li onClick={scrollIntoSauces}><Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
+                    <li><Tab value="two" active={current === 'two'} onClick={()=>{moveToElement('two')}}>
                         Соусы
                     </Tab></li>
-                    <li onClick={scrollIntoMain}><Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
+                    <li><Tab value="three" active={current === 'three'} onClick={()=>{moveToElement('three')}}>
                         Начинки
                     </Tab></li>
                 </ul>
@@ -83,9 +83,9 @@ export default function BurgerIngredients({dragHandler}) {
 
             <section className={style.container} id='container'>
 
-                <Ingredients name="Булки" ingredients={bun} onOpen={handleClick} onDragHandler={dragHandler} />
-                <Ingredients name="Соусы" ingredients={sauce} onOpen={handleClick} onDragHandler={dragHandler} />
-                <Ingredients name="Начинки" ingredients={main} onOpen={handleClick} onDragHandler={dragHandler} />
+                <Ingredients  elRef={bunRef} name="Булки" currentId = {'one'} ingredients={bun} onOpen={handleClick} onDragHandler={dragHandler} />
+                <Ingredients  elRef={sauceRef} name="Соусы" currentId = {'two'} ingredients={sauce} onOpen={handleClick} onDragHandler={dragHandler} />
+                <Ingredients elRef={mainRef}  name="Начинки"  currentId = {'three'} ingredients={main} onOpen={handleClick} onDragHandler={dragHandler} />
 
 
             </section>
