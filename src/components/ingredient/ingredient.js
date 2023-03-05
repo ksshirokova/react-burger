@@ -1,30 +1,28 @@
-import React, { useCallback } from "react";
 import style from "./ingredient.module.css";
 import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { IngredientPropTypes } from "../../utils/types";
-import PropType from "prop-types";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useMemo } from "react";
 import { changeCount } from "../../services/actions/ingredients";
-import { CHANGE_INGREDIENTS_COUNT } from "../../services/actions/ingredients";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Ingredients({
   ingredients,
   name,
   onOpen,
-  onDragHandler, elRef, currentId
+  onDragHandler,
+  elRef,
+  currentId,
 }) {
   const dispatch = useDispatch();
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling
   );
   const buns = useSelector((state) => state.constructorStore.draggedBuns);
- 
-
-  
 
   const ingredientCount = useMemo(() => {
     let counter = {};
@@ -33,42 +31,40 @@ export default function Ingredients({
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }
-      counter[element._id]++
-
-      
-
-      
-    }
-    );
+      counter[element._id]++;
+    });
 
     buns.forEach((element) => {
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }
       counter[element._id]++;
-
-      
     });
-   
-    
+
+    dispatch(changeCount(counter));
     return counter;
-    dispatch(changeCount(counter))
   }, [burgerIngredients]);
 
   return (
     <>
-      <h2 className="text text_type_main-medium mb-6 mt-10" ref = {elRef} id={currentId}>{name}</h2>
-      <ul className={style.ul} >
+      <h2
+        className="text text_type_main-medium mb-6 mt-10"
+        ref={elRef}
+        id={currentId}
+      >
+        {name}
+      </h2>
+      <ul className={style.ul}>
         {ingredients &&
           ingredients.map((item) => (
-            <li 
+            <li
               key={item._id}
               className={`${style.list} ml-4 mb-8`}
               onClick={() => onOpen(item)}
               draggable
-              onDrag={(e) => onDragHandler(e, item)}
+              onDrag={(e) => onDragHandler(e, item, uuidv4())}
             >
-              <img src={item.image} />
+              <img src={item.image} alt={item.name} />
               {ingredientCount[item._id] && (
                 <div className={style.counter}>
                   <Counter
@@ -95,9 +91,11 @@ export default function Ingredients({
   );
 }
 
-Ingredients.propType = {
-  ingredients: PropType.arrayOf(IngredientPropTypes).isRequired,
-  name: PropType.string,
-  elRef: PropType.string,
-  currentId:  PropType.string,
+Ingredients.propTypes = {
+  ingredients: PropTypes.array,
+  name: PropTypes.string,
+  elRef: PropTypes.func,
+  currentId: PropTypes.string,
+  onOpen: PropTypes.func,
+  onDragHandler: PropTypes.func,
 };
