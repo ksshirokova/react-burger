@@ -3,7 +3,6 @@ import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { IngredientPropTypes } from "../../utils/types";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useMemo } from "react";
@@ -41,7 +40,7 @@ export default function Ingredients({
       counter[element._id]++;
     });
 
-    dispatch(changeCount(counter));
+    
     return counter;
   }, [burgerIngredients]);
 
@@ -92,10 +91,10 @@ export default function Ingredients({
 }
 
 Ingredients.propTypes = {
-  ingredients: PropTypes.array,
-  name: PropTypes.string,
-  elRef: PropTypes.func,
-  currentId: PropTypes.string,
-  onOpen: PropTypes.func,
-  onDragHandler: PropTypes.func,
+  ingredients: PropTypes.array.isRequired,
+  name: PropTypes.string.isRequired,
+  elRef: PropTypes.func.isRequired,
+  currentId: PropTypes.string.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  onDragHandler: PropTypes.func.isRequired,
 };

@@ -17,6 +17,7 @@ import {
 } from "../../services/actions/order-modal";
 import { sendOrder } from "../../services/actions/order-modal";
 import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
+import { v4 as uuid } from "uuid";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -35,16 +36,16 @@ export default function BurgerConstructor() {
 
   const openOrderModal = () => {
     dispatch({ type: OPEN_ORDER_MODAL });
-    dispatch({ type: ADD_ORDER_REQUEST });
-
-    dispatch(sendOrder(burgerIngredient, dispatch));
+    dispatch(sendOrder(burgerIngredient));
   };
   const handleDrop = (e, uuid) => {
-    //обработчик когда отпустили
-    e.preventDefault();
-    dispatch({ type: DROP_CONSTRUCTOR_ELEMENT, payload: { uuid } });
+    setTimeout(() => {
+      e.preventDefault();
+      dispatch({ type: DROP_CONSTRUCTOR_ELEMENT, payload: { uuid } });
 
-    dispatch({ type: CHECK_DROPED_ELEMENT });
+      dispatch({ type: CHECK_DROPED_ELEMENT });
+    }, 0);
+
   };
 
   const handleDragOver = (event) => {
@@ -110,7 +111,7 @@ export default function BurgerConstructor() {
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
                     typeOfText={item.name}
-                    key={item.uuid}
+                    key={uuid()}
                   />
                 ))}
             </div>

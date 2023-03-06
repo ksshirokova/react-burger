@@ -34,7 +34,7 @@ export default function BurgerConstructorElement({
 
   const [, drop] = useDrop({
     accept: "element",
-    hover: (item) => {
+    hover(item){
       const { id: draggedId, index: itemIndex } = item;
       const fromIndex = index;
       const toIndex = itemIndex;
@@ -76,12 +76,12 @@ export default function BurgerConstructorElement({
 }
 
 BurgerConstructorElement.propTypes = {
-  index: PropTypes.number,
-  item: PropTypes.object,
+  index: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
   id: PropTypes.string,
-  isLocked: PropTypes.bool,
-  typeOfText: PropTypes.string,
-  className: PropTypes.string,
+  isLocked: PropTypes.bool.isRequired,
+  typeOfText: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
   toClose: PropTypes.func,
   toDrag: PropTypes.func,
   type: PropTypes.string,
