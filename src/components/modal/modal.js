@@ -40,5 +40,7 @@ export default function Modal(props) {
 }
 
 modals.PropTypes ={
-  props: PropTypes.obj
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+
 }

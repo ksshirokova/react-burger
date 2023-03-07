@@ -17,7 +17,7 @@ import {
 } from "../../services/actions/order-modal";
 import { sendOrder } from "../../services/actions/order-modal";
 import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
-import { v4 as uuid } from "uuid";
+import { v4 as uuid1 } from "uuid";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export default function BurgerConstructor() {
   const draggedBuns = useSelector(
     (state) => state.constructorStore.draggedBuns
   );
-
+  
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling
   );
@@ -47,6 +47,8 @@ export default function BurgerConstructor() {
     }, 0);
 
   };
+  // const itemUuid = useSelector((state)=>state.constructorStore.payload)
+  
 
   const handleDragOver = (event) => {
     //обработчик при наведении
@@ -84,7 +86,7 @@ export default function BurgerConstructor() {
         <section
           className={style.section}
           onDragOver={handleDragOver}
-          onDrop={handleDrop}
+          onDrop={(e)=>handleDrop(e, uuid1())}
         >
           <ul className={style.ul}>
             {draggedBuns &&
@@ -111,7 +113,7 @@ export default function BurgerConstructor() {
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
                     typeOfText={item.name}
-                    key={uuid()}
+                    key={item.uuid}
                   />
                 ))}
             </div>
@@ -149,9 +151,3 @@ export default function BurgerConstructor() {
   );
 }
 
-BurgerConstructor.propTypes = {
-  toOpen: PropTypes.func,
-  toDrop: PropTypes.func,
-  onDragOverHandler: PropTypes.func,
-  onDelite: PropTypes.func,
-};

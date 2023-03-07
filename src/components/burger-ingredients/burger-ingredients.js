@@ -12,7 +12,7 @@ import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
 
-export default function BurgerIngredients({ dragHandler }) {
+export default function BurgerIngredients() {
   const { bun, main, sauce } = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
 
@@ -134,6 +134,4 @@ export default function BurgerIngredients({ dragHandler }) {
   );
 }
 
-BurgerIngredients.propTypes = {
-  dragHandler: PropTypes.func,
-};
+
