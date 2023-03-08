@@ -17,6 +17,7 @@ import {
 } from "../../services/actions/order-modal";
 import { sendOrder } from "../../services/actions/order-modal";
 import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
+import { dropElement } from "../../services/actions/constructors-ingredients";
 import { v4 as uuid1 } from "uuid";
 
 export default function BurgerConstructor() {
@@ -38,16 +39,16 @@ export default function BurgerConstructor() {
     dispatch({ type: OPEN_ORDER_MODAL });
     dispatch(sendOrder(burgerIngredient));
   };
-  const handleDrop = (e, uuid) => {
+  const handleDrop = (e) => {
     setTimeout(() => {
       e.preventDefault();
-      dispatch({ type: DROP_CONSTRUCTOR_ELEMENT, payload: { uuid } });
-
+      dispatch(dropElement());
+      
       dispatch({ type: CHECK_DROPED_ELEMENT });
     }, 0);
 
   };
-  // const itemUuid = useSelector((state)=>state.constructorStore.payload)
+  
   
 
   const handleDragOver = (event) => {
@@ -69,6 +70,7 @@ export default function BurgerConstructor() {
   const initialValue = 0;
 
   let fillingsPrice = fillingPrice.reduce((acc, i) => acc + i, initialValue);
+  
 
   const totalPriceCounter = useMemo(() => {
     let totalPrice = 0;
@@ -86,7 +88,7 @@ export default function BurgerConstructor() {
         <section
           className={style.section}
           onDragOver={handleDragOver}
-          onDrop={(e)=>handleDrop(e, uuid1())}
+          onDrop={(e)=>handleDrop(e)}
         >
           <ul className={style.ul}>
             {draggedBuns &&
@@ -113,7 +115,7 @@ export default function BurgerConstructor() {
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
                     typeOfText={item.name}
-                    key={item.uuid}
+                    key={index}
                   />
                 ))}
             </div>
