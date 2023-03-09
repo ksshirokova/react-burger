@@ -33,16 +33,20 @@ export default function BurgerConstructor() {
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling
   );
+
+  const draggedElement = useSelector(
+    (state) => state.constructorStore.draggedElement
+  );
   const burgerIngredient = burgerIngredients.map((item) => item._id);
 
   const openOrderModal = () => {
     dispatch({ type: OPEN_ORDER_MODAL });
     dispatch(sendOrder(burgerIngredient));
   };
-  const handleDrop = (e) => {
+  const handleDrop = (e, item) => {
     setTimeout(() => {
       e.preventDefault();
-      dispatch(dropElement());
+      dispatch(dropElement(item));
       
       dispatch({ type: CHECK_DROPED_ELEMENT });
     }, 0);
@@ -115,7 +119,7 @@ export default function BurgerConstructor() {
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
                     typeOfText={item.name}
-                    key={index}
+                    key={item.uuid}
                   />
                 ))}
             </div>

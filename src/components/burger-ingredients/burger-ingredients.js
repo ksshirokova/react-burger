@@ -29,10 +29,10 @@ export default function BurgerIngredients() {
     openIngredientModal();
   };
 
-  const handleDrag = (event, item, uuid) => {
+  const handleDrag = (event, item) => {
     //обработчик когда зажали
     event.preventDefault();
-    dispatch(addDraggedElement(item, uuid));
+    dispatch(addDraggedElement(item));
   };
 
   const [current, setCurrent] = React.useState("one");

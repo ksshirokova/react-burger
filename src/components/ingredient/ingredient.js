@@ -61,7 +61,7 @@ export default function Ingredients({
               className={`${style.list} ml-4 mb-8`}
               onClick={() => onOpen(item)}
               draggable
-              onDrag={(e) => onDragHandler(e, item, uuidv4())}
+              onDrag={(e) => onDragHandler(e, item)}
             >
               <img src={item.image} alt={item.name} />
               {ingredientCount[item._id] && (

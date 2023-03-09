@@ -21,14 +21,14 @@ export const constructorReducer = (state = initialState, action) => {
   switch (action.type) {
     case DROP_CONSTRUCTOR_ELEMENT: {
       return {
-        ...state,
+        ...state, 
         draggedBuns:
           state.draggedElement.type === "bun"
             ? [state.draggedElement]
             : [...state.draggedBuns],
         draggedFilling:
           state.draggedElement.type !== "bun"
-            ? [...state.draggedFilling, state.draggedElement]
+            ? [...state.draggedFilling, state.draggedElement ]
             : [...state.draggedFilling],
 
         draggedElement: {},

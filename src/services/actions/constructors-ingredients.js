@@ -14,18 +14,26 @@ export const CHECK_DROPED_ELEMENT = "CHECK_DROPED_ELEMENT";
 
 export const addDraggedElement = (item) => {
   return {
+    
     type: DRAG_CONSTRUCTOR_ELEMENT,
-    uuid: uuid1(),
-    item
+    
+  
+    item: {...item, uuid: uuid1()}
+    
+    
     
   };
 };
 
 export const dropElement =(item)=>{
   return {
+    
     type: DROP_CONSTRUCTOR_ELEMENT,
-    uuid: uuid1(),
     item
+   
+    
+    
+    
 
   }
 }
