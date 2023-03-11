@@ -1,18 +1,10 @@
-import React from 'react';
-import ModalOverlayStyle from './modal-overlay.module.css'
+import style from "./modal-overlay.module.css";
+import PropTypes from "prop-types";
 
-
-export default function ModalOverlay({ toClose, children}) {
-   
-    return (
-        <>
-            <section className={ModalOverlayStyle.overlay} onClick={toClose}>
-                {children}
-               
-            </section>
-
-            
-
-        </>
-    )
+export default function ModalOverlay({ toClose }) {
+  return <section className={style.overlay} onClick={toClose}></section>;
 }
+
+ModalOverlay.propTypes = {
+  toClose: PropTypes.func.isRequired,
+};

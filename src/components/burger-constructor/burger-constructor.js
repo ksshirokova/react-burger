@@ -1,85 +1,159 @@
-import React from 'react';
-import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import ConstructorStyle from './burger-constructor.module.css';
-import { IngredientPropTypes } from '../../utils/types';
-import PropType from 'prop-types'
+import {
+  CurrencyIcon,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import style from "./burger-constructor.module.css";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { useMemo } from "react";
+import BurgerConstructorElement from "../burger-constructor-element/burger-constructor-element";
+import {
+  DROP_CONSTRUCTOR_ELEMENT,
+  CHECK_DROPED_ELEMENT,
+} from "../../services/actions/constructors-ingredients";
+import {
+  OPEN_ORDER_MODAL,
+  ADD_ORDER_REQUEST,
+} from "../../services/actions/order-modal";
+import { sendOrder } from "../../services/actions/order-modal";
+import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
+import { dropElement } from "../../services/actions/constructors-ingredients";
+import { v4 as uuid1 } from "uuid";
 
+export default function BurgerConstructor() {
+  const dispatch = useDispatch();
 
-export default function BurgerConstructor({ ingredients, toOpen, buns, main, sauce}) {
-    return (
-        <>
-            <section >
-                <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} className={ConstructorStyle.section}>
-                    <ul className={ConstructorStyle.ul}>
-                        {buns && buns.map((item) => (<li key={item._id} className='mb-4 ml-8'>
+  const draggedFilling = useSelector(
+    (state) => state.constructorStore.draggedFilling
+  );
+  const draggedBuns = useSelector(
+    (state) => state.constructorStore.draggedBuns
+  );
+  
+  const burgerIngredients = useSelector(
+    (state) => state.constructorStore.draggedFilling
+  );
 
-                            <ConstructorElement
-                                type="top"
-                                isLocked={true}
-                                text={`${item.name} (верх)`}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
+  const draggedElement = useSelector(
+    (state) => state.constructorStore.draggedElement
+  );
+  const burgerIngredient = burgerIngredients.map((item) => item._id);
 
-                        </li>))}
-                        {main && main.map((item) => (<li key={item._id} className='mb-4 ml-2'>
+  const openOrderModal = () => {
+    dispatch({ type: OPEN_ORDER_MODAL });
+    dispatch(sendOrder(burgerIngredient));
+  };
+  const handleDrop = (e, item) => {
+    setTimeout(() => {
+      e.preventDefault();
+      dispatch(dropElement(item));
+      
+      dispatch({ type: CHECK_DROPED_ELEMENT });
+    }, 0);
 
+  };
+  
+  
 
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                                text={`${item.name} (верх)`}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
+  const handleDragOver = (event) => {
+    //обработчик при наведении
+    event.preventDefault();
+  };
 
-                        </li>))}
+  const onDelite = (index) => {
+    dispatch({ type: DELITE_ELEMENT, payload: index });
+  };
 
-                        {sauce && sauce.map((item) => (<li key={item._id} className='mb-4 ml-2'>
+  const fillingPrice = draggedFilling.map((item) => {
+    return item.price;
+  });
 
+  const bunPrice = draggedBuns.map((item) => {
+    return item.price;
+  });
+  const initialValue = 0;
 
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                                text={`${item.name} (верх)`}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
+  let fillingsPrice = fillingPrice.reduce((acc, i) => acc + i, initialValue);
+  
 
-                        </li>))}
-                        {buns && buns.map((item) => (<li key={item._id} className='mb-4 ml-8'>
+  const totalPriceCounter = useMemo(() => {
+    let totalPrice = 0;
+    if (!bunPrice[0]) {
+      totalPrice = fillingsPrice;
+    } else {
+      totalPrice = fillingsPrice + bunPrice[0] + bunPrice[0];
+    }
+    return totalPrice;
+  }, [draggedFilling]);
 
-                            <ConstructorElement
-                                type="bottom"
-                                isLocked={true}
-                                text={`${item.name} (низ)`}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
+  return (
+    <>
+      <section>
+        <section
+          className={style.section}
+          onDragOver={handleDragOver}
+          onDrop={(e)=>handleDrop(e)}
+        >
+          <ul className={style.ul}>
+            {draggedBuns &&
+              draggedBuns.map((item) => (
+                <BurgerConstructorElement
+                  item={item}
+                  typeOfText={`${item.name} (верх)`}
+                  index={0}
+                  type={"top"}
+                  isLocked={true}
+                  className={"mb-4 ml-8"}
+                  key={`${item.uuid} (верх)`}
+                />
+              ))}
 
-                        </li>))}
-                    </ul>
-                </section>
-                <section className={`${ConstructorStyle.total} mt-10`}>
-                    <p className="text text_type_digits-medium">610</p>
-                    <div className={ConstructorStyle.icon}>
-                        <CurrencyIcon type="primary" />
-                    </div>
-                    <Button htmlType="button" type="primary" size="large" onClick={toOpen}>
-                        Оформить заказ
-                    </Button>
-                </section>
+            <div>
+              {draggedFilling &&
+                draggedFilling.map((item, index) => (
+                  <BurgerConstructorElement
+                    item={item}
+                    index={index}
+                    isLocked={false}
+                    id={item._id}
+                    className={"mb-4 ml-2"}
+                    toClose={onDelite}
+                    typeOfText={item.name}
+                    key={item.uuid}
+                  />
+                ))}
+            </div>
 
-
-
-
-
-
-
-            </section>
-
-        </>
-    )
+            {draggedBuns &&
+              draggedBuns.map((item) => (
+                <BurgerConstructorElement
+                  item={item}
+                  key={`${item.uuid} (низ)`}
+                  typeOfText={`${item.name} (низ)`}
+                  index={0}
+                  type={"bottom"}
+                  isLocked={true}
+                  className={"mb-4 ml-8"}
+                />
+              ))}
+          </ul>
+        </section>
+        <section className={`${style.total} mt-10`}>
+          <p className="text text_type_digits-medium">{totalPriceCounter}</p>
+          <div className={style.icon}>
+            <CurrencyIcon type="primary" />
+          </div>
+          <Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            onClick={openOrderModal}
+          >
+            Оформить заказ
+          </Button>
+        </section>
+      </section>
+    </>
+  );
 }
 
-BurgerConstructor.propType = {
-    ingredients: PropType.arrayOf(IngredientPropTypes).isRequired
-} 

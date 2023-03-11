@@ -1,24 +1,21 @@
 .section {
-    max-width: 600px;
-    
+  max-width: 600px;
 }
-
-
-
-
 
 .price {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-
-.container{
-    max-height: 686px;
-    overflow: scroll;
+.container {
+  max-height: 686px;
+  overflow: scroll;
 }
-.ul{
-    list-style-type: none;
-    display: flex;
-    padding: 0;
+.ul {
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+}
+.nav {
+  display: flex;
 }

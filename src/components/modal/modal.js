@@ -1,49 +1,46 @@
-import React from 'react'
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import ReactDOM from 'react-dom';
-import ModalStyle from './modal.module.css';
-import OrderDetails from '../order-details/order-details';
-import ModalOverlay from '../modal-overlay/modal-overlay';
-const modals = document.getElementById('modals')
+import React from "react";
+import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import ReactDOM from "react-dom";
+import style from "./modal.module.css";
+import ModalOverlay from "../modal-overlay/modal-overlay";
+import PropTypes from "prop-types";
 
-export default function Modal(ingredient) {
+const modals = document.getElementById("modals");
 
-    React.useEffect(() => {
-        const handleEsc = (event) => {
+export default function Modal(props) {
+  React.useEffect(() => {
+    const handleEsc = (event) => {
+      event.key === "Escape" && props.onClose();
+    };
 
-            event.key === 'Escape' && ingredient.onClose()
-        }
+    document.addEventListener("keydown", handleEsc);
 
-        document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [props.onClose]);
 
-        return () => {
-            document.removeEventListener('keydown', handleEsc)
-        };
-    }, [ingredient.onClose])
+  return ReactDOM.createPortal(
+    <>
+      <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
+        <div className={style.div}>
+          <h3 className="text text_type_main-large">{props.title}</h3>
 
-    return ReactDOM.createPortal(
-        <>
-            <ModalOverlay toClose={ingredient.onClose} children = {ingredient.children}>
-                <section className={`${ModalStyle.container} pt-15 pb-15 pr-10 pl-10`}>
+          <div className={style.closeIcon} onClick={props.onClose}>
+            <CloseIcon type="primary" />
+          </div>
+        </div>
+        {props.children}
+      </section>
 
-                    <div className={ModalStyle.div}>
-                        <h3 className='text text_type_main-large'>{ingredient.title}</h3>
+      <ModalOverlay toClose={props.onClose} />
+    </>,
+    modals
+  );
+}
 
-                        <div className={ModalStyle.closeIcon} onClick={ingredient.onClose}>
-                            <CloseIcon type="primary" />
-                        </div>
+modals.PropTypes ={
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 
-                    </div>
-                    {ingredient.children}
-
-
-                </section>
-
-            </ModalOverlay>
-
-
-        </>
-        ,
-        modals
-    )
 }
