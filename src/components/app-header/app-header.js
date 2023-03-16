@@ -5,40 +5,42 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./app-header.module.css";
+import {NavLink, useLocation} from 'react-router-dom'
 
 export default function AppHeader() {
+  const {pathname } = useLocation()
   return (
     <div className={style.background}>
       <header className={`${style.header} p-4`}>
         <div className={style.firstBlock}>
-          <a href="#" className={`${style.listItem} pt-4 pb-4 pr-5 pl-5 `}>
-            <BurgerIcon type="primary" />
+          <NavLink to='/' className={({isActive})=>(isActive ? ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listActive}`: ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listInactive}`)}>
+          {pathname =='/' ? <ListIcon type="primary" /> : <ListIcon type="secondary" />}
             <p
-              className={`${style.text} text text_type_main-default text_color_active ml-2`}
+              className={`${style.text} text text_type_main-default  ml-2`}
             >
               Конструктор
             </p>
-          </a>
-          <a href="#" className={`${style.listItem} pt-4 pb-4 pr-5 pl-5 ml-2`}>
-            <ListIcon type="secondary" />
+          </NavLink>
+          <NavLink to='/register' className={({isActive})=>(isActive ? ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listActive}`: ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listInactive}`)}>
+            {pathname =='/register' ? <ListIcon type="primary" /> : <ListIcon type="secondary" />}
             <p
-              className={`${style.text} text text_type_main-default text_color_inactive ml-2`}
+              className={`${style.text} text text_type_main-default  ml-2`}
             >
               Лента заказов
             </p>
-          </a>
+          </NavLink>
         </div>
         <div className={style.logo}>
           <Logo />
         </div>
-        <a href="#" className={`${style.listItem} pt-4 pb-4 pr-5 pl-5`}>
-          <ProfileIcon type="secondary" />
+        <NavLink to='/profile'  className={({isActive})=>(isActive ? ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listActive}`: ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listInactive}`)}>
+        {pathname =='/profile' ? <ListIcon type="primary" /> : <ListIcon type="secondary" />}
           <p
-            className={`${style.text} text text_type_main-default text_color_inactive ml-2`}
+            className={`${style.text} text text_type_main-default  ml-2`}
           >
             Личный кабинет
           </p>
-        </a>
+        </NavLink>
       </header>
     </div>
   );

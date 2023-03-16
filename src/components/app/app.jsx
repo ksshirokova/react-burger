@@ -7,15 +7,28 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
+import LoginPage from "../../pages/login-page";
+import ForgotPassword from "../../pages/forgot-password-1";
+import ProtectedRoute from "../protected-route.js/protected-route";
+
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   CLOSE_ING_MODAL,
   DELITE_MODAL_INGREDIENTS,
 } from "../../services/actions/ingredient-modal";
 import { CLOSE_ORDER_MODAL } from "../../services/actions/order-modal";
+import { Link, Route, Routes, useNavigate } from 'react-router-dom'
+import ProfilePage from "../../pages/profile-page";
+import RegistrationPage from "../../pages/registration-page";
+import ResetPassword from "../../pages/reset-password";
+import { useEffect } from "react";
+import { getUser, checkAuth } from "../../services/actions/routing";
+import { getCookie } from "../../utils/utils";
+
 
 function App() {
-  const dispatch = useDispatch();
+
   const orderIsOpened = useSelector((state) => state.orderInfo.isOpened);
   const modalIngredients = useSelector((state) => state.ingredientInfo.item);
   const burgerIngredients = useSelector(
@@ -25,6 +38,9 @@ function App() {
   const orderItems = useSelector((state) => state.orderInfo.orderItems);
   const orderItem = orderItems.map((item) => item.action.order.number);
   const orderNumber = orderItem[0];
+  const isAuth = useSelector(state => state.routeStore.isAuth)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const ingredientsIsOpened = useSelector(
     (state) => state.ingredientInfo.isOpened
   );
@@ -38,16 +54,38 @@ function App() {
     dispatch({ type: DELITE_MODAL_INGREDIENTS });
   };
 
+  useEffect(() => {
+
+    dispatch(checkAuth())
+
+
+  }, [dispatch])
+
   return (
     <>
       <AppHeader />
+      <Routes>
+        <Route path='/' element={
 
-      <main className={styles.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
+          <main className={styles.main}>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </DndProvider>
+          </main>
+        } />
+        <Route path='/login' element={<LoginPage />} /> //done
+        <Route path='/register' element={<RegistrationPage />} /> //done
+        <Route path='/forgot-password' element={<ForgotPassword />} /> //done
+        <Route path='/reset-password' element={<ResetPassword />} />
+        <Route path='/profile' element={
+          <ProtectedRoute anonymous={true}>
+            <ProfilePage />
+          </ProtectedRoute>
+        } /> //done
+        <Route path='/ingredients/:id' />
+
+      </Routes>
 
       {orderIsOpened && (
         <Modal onClose={closeOrderModal}>
