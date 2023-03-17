@@ -8,7 +8,7 @@ import styles from "./profile-page.module.css";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { changeData } from "../services/actions/routing";
+import { changeData, checkAuth } from "../services/actions/routing";
 import { logoutFromSite } from "../services/actions/routing";
 import { getCookie } from "../utils/utils";
 
@@ -78,6 +78,7 @@ export default function ProfilePage() {
       setName(user.name);
       setEmail(user.email);
       setPassword(user.password)
+      
       // passwordUser && setPassword(passwordUser);
     }
   }, [user]);

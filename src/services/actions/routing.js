@@ -109,7 +109,7 @@ export const loginUser = (email, password) => (dispatch) => {
       console.log(authToken)
       if (authToken) {
 
-        setCookie('token', authToken, {secure: true, 'max-age': 100000});
+        setCookie('token', authToken, {secure: true, 'max-age': 1000});
         setCookie('refreshToken', res.refreshToken)
       }
     })
@@ -136,7 +136,7 @@ export const getUser = (token) => (dispatch) => {
 
     })
     .catch((err)=>{
-      dispatch({ type: LOGIN_USER_FAILED, isAuth: false,  payload: { error: err } });
+      console.log(err)
     })
 
 

@@ -55,10 +55,9 @@ function App() {
   };
 
   useEffect(() => {
-    // navigate('/')
+    
     dispatch(checkAuth())
-    console.log(getCookie('refreshToken'))
-    console.log(getCookie('token'))
+    
     
 
 
@@ -84,9 +83,9 @@ function App() {
         <Route path='/forgot-password' element={<ForgotPassword />} /> //done
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile' element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <ProfilePage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } /> //done
         <Route path='/ingredients/:id' />
 

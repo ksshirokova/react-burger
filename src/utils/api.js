@@ -127,18 +127,27 @@ export const loginUserApi = async (usersEmail, usersPassword) => {
 };
 
 export const getUserApi = async (token) => {
-  fetchWithRefresh(`${API_URL}/auth/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: 'Bearer ' + `${token}`
-    },
+  return await new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(
+        fetchWithRefresh(`${API_URL}/auth/user`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: 'Bearer ' + `${token}`
+          },
+      
+        }
+      
+        )
 
-  }
-
-  )
+      );
+    }, 0)
+  );
 };
+
+
 
 
 
@@ -226,6 +235,7 @@ export const fetchWithRefresh = async (url, options) => {
           setCookie('refreshToken', refreshUsersData.refreshToken)
         })
         
+      
       const res = await fetch(url, options)
       return await checkResponse(res)
     } else {
