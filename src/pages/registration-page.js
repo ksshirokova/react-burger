@@ -34,9 +34,9 @@ export default function RegistrationPage() {
        
             dispatch(registerUser(name, email, password))
        
-        setTimeout(()=>{
-            isRegistred ? navigate('/login', {replace: true}) : navigate('/register')
-        },1000)
+        
+            navigate('/login', {replace: true}) 
+      
         
        
     }

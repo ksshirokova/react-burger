@@ -11,6 +11,7 @@ export default function LoginPage() {
   const inputRef = React.useRef(null)
   const [icon, setIcon] = React.useState('HideIcon')
   const passInput = document.getElementById("userPassword");
+  const isLogged = useSelector((state) => state.routeStore.isLogged)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onIconClick = () => {
@@ -28,9 +29,12 @@ export default function LoginPage() {
   }
   const sendData = () => {
     dispatch(loginUser(email, password));
-    navigate('/', {replace: true})
+
+
 
   }
+
+
   return (
     <main className={styles.main}>
 

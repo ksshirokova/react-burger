@@ -55,8 +55,12 @@ function App() {
   };
 
   useEffect(() => {
-
+    // navigate('/')
     dispatch(checkAuth())
+    console.log(getCookie('refreshToken'))
+    console.log(getCookie('token'))
+    
+
 
 
   }, [dispatch])
@@ -66,20 +70,21 @@ function App() {
       <AppHeader />
       <Routes>
         <Route path='/' element={
-
+//  <ProtectedRoute anonymous={true}>
           <main className={styles.main}>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients />
               <BurgerConstructor />
             </DndProvider>
           </main>
+          // </ProtectedRoute>
         } />
         <Route path='/login' element={<LoginPage />} /> //done
         <Route path='/register' element={<RegistrationPage />} /> //done
         <Route path='/forgot-password' element={<ForgotPassword />} /> //done
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile' element={
-          <ProtectedRoute anonymous={true}>
+          <ProtectedRoute>
             <ProfilePage />
           </ProtectedRoute>
         } /> //done

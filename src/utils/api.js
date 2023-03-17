@@ -126,29 +126,18 @@ export const loginUserApi = async (usersEmail, usersPassword) => {
   );
 };
 
-export const getUserApi = async () => {
-  return await new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(
-        requestData(`${API_URL}/auth/user`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: 'Bearer ' + getCookie('token')
-          },
-          
-        }
-        // .catch((err)=>{
-        //   if(err.message === 'jwt malformed'){
-        //     setCookie('token', (getCookie('refreshToken')));
-        //   }
-        // })
-        )
+export const getUserApi = async (token) => {
+  fetchWithRefresh(`${API_URL}/auth/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: 'Bearer ' + `${token}`
+    },
 
-      );
-    }, 0)
-  );
+  }
+
+  )
 };
 
 
@@ -181,52 +170,66 @@ export const changeUsersDataApi = async (newName, newEmail, newPassword) => {
   );
 };
 
-export const logoutApi = (refreshToken) => {
-  requestData(`${API_URL}/auth/logout`, {
-    method: 'POST',
+export const logoutApi = async (refreshToken) => {
+  return await new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(
+        requestData(`${API_URL}/auth/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+
+
+          },
+          body: JSON.stringify({
+            'token': refreshToken
+          })
+
+        }
+        )
+
+      );
+    }, 0)
+  );
+}
+
+export const refreshToken = (refreshToken) => {
+  return fetch(`${API_URL}/auth/token`, {
+    method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Accept: "application/json"
     },
     body: JSON.stringify({
-      'token': refreshToken
+      'token': `${refreshToken}`,
+
     })
   })
 }
 
-export const refreshToken = (refreshToken)=>{
-return fetch(`${API_URL}/auth/token`, {
-  method: "POST",
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: "application/json"
-},
-  body: JSON.stringify({
-      'token': refreshToken,
-
-})
-})
-}
-  
 
 export const fetchWithRefresh = async (url, options) => {
   try {
+    const res = await fetch(url, options)
+    return await checkResponse(res)
+  } catch (err) {
+
+    if (err === "Ошибка 403") {
+      console.log(getCookie('refreshToken'))
+      const refreshUsersData = await refreshToken(getCookie('refreshToken'));
+      
+      await checkResponse(refreshUsersData)
+        .then((refreshUsersData) => {
+          options.headers.Authorization = refreshUsersData.accessToken
+          setCookie('token', refreshUsersData.accessToken);
+          setCookie('refreshToken', refreshUsersData.refreshToken)
+        })
+        
       const res = await fetch(url, options)
       return await checkResponse(res)
-  } catch (err) {
-      if (err.message === "jwt expired") {
-       
-          const refreshData = await refreshToken(getCookie('refreshToken'));
-          await checkResponse(refreshData)
-              .then((refreshData) => {
-                  options.headers.Authorization = refreshData.accessToken
-                  setCookie('token', refreshData.accessToken);
-                  setCookie('refreshToken', refreshData.refreshToken)
-              })
-          const res = await fetch(url, options)
-          return await checkResponse(res)
-      } else {
-          return Promise.reject(err);
-      }
+    } else {
+      return Promise.reject(err);
+    }
   }
 }

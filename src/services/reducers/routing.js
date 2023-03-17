@@ -6,7 +6,9 @@ const initialState = {
     loading: false,
     error: null,
     user: {},
-    isRegistred: false
+    isRegistred: false,
+    isLogged: false,
+    password: null
 };
 
 export const routingReducer = (state = initialState, action) => {
@@ -68,7 +70,9 @@ export const routingReducer = (state = initialState, action) => {
         case LOGIN_USER_SUCCESS:{
             return { ...state,
                 loading: false,
-                // password:  action.password,
+                password:  action.password,
+                isLogged: true,
+                error: null,
                 
                 isAuth: true,
                 user: action.user
@@ -79,6 +83,7 @@ export const routingReducer = (state = initialState, action) => {
         case USER_SUCCESS:{
             return { ...state,
                 loading: false,
+                isAuth:true,
                 user: action.user
                
             
@@ -118,12 +123,12 @@ export const routingReducer = (state = initialState, action) => {
             deleteCookie('token');
             deleteCookie('refreshToken');
             return{
-                ...state, isLoading: false
+                ...state, isLoading: false, isLogged: false, isAuth: false
             }
         }
         case RESET_USERS_DATA:{
             return{
-                ...state, user: {}
+                ...state, user: {}, password: null
             }
                
         }

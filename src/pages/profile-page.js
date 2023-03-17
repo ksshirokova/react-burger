@@ -19,7 +19,7 @@ export default function ProfilePage() {
   // const name = useSelector((state) => state.routeStore.user.name)
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("wwwwww");
+  const [password, setPassword] = React.useState("");
   const [nameDisabled, setNameDisabled] = React.useState(true);
   const [passwordDisabled, setPasswordDisabled] = React.useState(true);
   const [emailDisabled, setEmailDisabled] = React.useState(true);
@@ -77,6 +77,7 @@ export default function ProfilePage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
+      setPassword(user.password)
       // passwordUser && setPassword(passwordUser);
     }
   }, [user]);
@@ -85,6 +86,9 @@ export default function ProfilePage() {
     setName(user.name);
     setEmail(user.email);
     setPassword(user.password)
+  }
+  const logoutFromHere = ()=>{
+    dispatch(logoutFromSite(getCookie('refreshToken')))
   }
 
   return (
@@ -121,7 +125,7 @@ export default function ProfilePage() {
           }
         >
           <p
-            className={`${styles.text} text text_type_main-medium text_color_inactive`} onClick={() => dispatch(logoutFromSite(getCookie('refreshToken')))}
+            className={`${styles.text} text text_type_main-medium text_color_inactive`} onClick={logoutFromHere}
           >
             Выход
           </p>

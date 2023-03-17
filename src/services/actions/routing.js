@@ -3,6 +3,8 @@ import { setCookie } from "../../utils/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/utils";
 import { refreshToken, logoutApi } from "../../utils/api";
+// import { fetchWithRefresh } from "../../utils/api";
+// const API_URL = "https://norma.nomoreparties.space/api";s
 
 
 export const SEND_EMAIL_REQUEST = "SEND_EMAIL_REQUEST";
@@ -92,7 +94,7 @@ export const registerUser = (name, email, password) => (dispatch) => {
 }
 
 export const loginUser = (email, password) => (dispatch) => {
-  dispatch({ type: LOGIN_USER_REQUEST });
+  dispatch({ type: LOGIN_USER_REQUEST, isLogged: false });
 
   loginUserApi(email, password)
     .then((res) => {
@@ -107,59 +109,65 @@ export const loginUser = (email, password) => (dispatch) => {
       console.log(authToken)
       if (authToken) {
 
-        setCookie('token', authToken);
+        setCookie('token', authToken, {secure: true, 'max-age': 100000});
         setCookie('refreshToken', res.refreshToken)
       }
     })
 
     .catch((err) => {
-      dispatch({ type: LOGIN_USER_FAILED, payload: { error: err } });
+      dispatch({ type: LOGIN_USER_FAILED, isLogged: false,  payload: { error: err } });
     });
 }
 
 export const checkAuth = () => (dispatch) => {
+  dispatch(getUser(getCookie('refreshToken')))
 
-  dispatch(fetchWithRefresh());
+  // dispatch(fetchWithRefresh());
   dispatch({ type: AUTH_CHECKED })
 }
 
-export const getUser = () => (dispatch) => {
-  getUserApi()
+
+export const getUser = (token) => (dispatch) => {
+
+  getUserApi(token)
     .then((res) => {
       dispatch({ type: USER_SUCCESS, user: res.user })
 
 
     })
+    .catch((err)=>{
+      dispatch({ type: LOGIN_USER_FAILED, isAuth: false,  payload: { error: err } });
+    })
 
 
 }
 
-function fetchWithRefresh() {
-  return function (dispatch) {
-    getUserApi()
-      .then((data) => {
-        if (data.success) {
-          dispatch({
-            type: USER_SUCCESS,
-            user: data.user
-          });
-        }
-      })
-      .catch(err => {
+// function fetchWithRefresh() {
+//   return function (dispatch) {
+//     getUserApi()
+//       .then((data) => {
+//         if (data.success) {
+//           dispatch({
+//             type: USER_SUCCESS,
+//             user: data.user
+//           });
+//         }
+//       })
+//       .catch(err => {
 
-        if (err.message === "jwt expired" || "jwt malformed") {
-          refreshToken(getCookie('refreshToken'))
-            .then(() => {
+//         if (err.message === "jwt expired" || "jwt malformed") {
+//           refreshToken(getCookie('refreshToken'))
+//             .then(() => {
             
-              return dispatch(getUser());
-              console.log(getCookie('refreshToken'))
-            })
-        } else {
-          return Promise.reject(`Error: ${err}`);
-        }
-      })
-  }
-}
+//               return dispatch(getUser());
+//               console.log(getCookie('refreshToken'))
+//             })
+//         } else {
+//           return Promise.reject(`Error: ${err}`);
+//         }
+//       })
+//   }
+// }
 
 export const changeData = (name, email, password) => (dispatch) => {
   changeUsersDataApi(name, email, password)
@@ -182,17 +190,16 @@ export const logoutFromSite = (refreshToken) => (dispatch) => {
   logoutApi(refreshToken)
     .then(() => {
       dispatch({
-        type: USER_SUCCESS,
-        user: null,
-        password: ''
+        type: LOGOUT_SUCCESS
+        
       })
     })
-    //   .then(() => {
-    //     dispatch({
-    //         type: RESET_USERS_DATA,
+      .then(() => {
+        dispatch({
+            type: RESET_USERS_DATA
 
-    //     })
-    // })
+        })
+    })
     .catch((err) => {
       console.log(err)
     })
