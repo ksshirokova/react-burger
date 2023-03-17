@@ -78,15 +78,15 @@ function App() {
           </main>
           // </ProtectedRoute>
         } />
-        <Route path='/login' element={<LoginPage />} /> //done
-        <Route path='/register' element={<RegistrationPage />} /> //done
-        <Route path='/forgot-password' element={<ForgotPassword />} /> //done
+        <Route path='/login' element={<LoginPage />} /> 
+        <Route path='/register' element={<RegistrationPage />} /> 
+        <Route path='/forgot-password' element={<ForgotPassword />} /> 
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile' element={
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <ProfilePage />
-          // </ProtectedRoute>
-        } /> //done
+           </ProtectedRoute>
+        } /> 
         <Route path='/ingredients/:id' />
 
       </Routes>

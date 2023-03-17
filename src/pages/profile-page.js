@@ -25,14 +25,6 @@ export default function ProfilePage() {
   const [emailDisabled, setEmailDisabled] = React.useState(true);
 
   const user = useSelector((state) => state.routeStore.user);
-
-  // const password = useSelector((state) => state.routeStore.user.password)
-  // const email = useSelector((state) => state.routeStore.user.email)
-
-  // const emailChangeInput = document.getElementById("emailChangeInput");
-
-  // const nameChangeInput = document.getElementById("nameChangeInput");
-  // const passwordChangeInput = document.getElementById("passwordChangeInput");
   const inputRef = React.useRef(null);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -79,7 +71,7 @@ export default function ProfilePage() {
       setEmail(user.email);
       setPassword(user.password)
       
-      // passwordUser && setPassword(passwordUser);
+  
     }
   }, [user]);
 

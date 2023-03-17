@@ -142,32 +142,7 @@ export const getUser = (token) => (dispatch) => {
 
 }
 
-// function fetchWithRefresh() {
-//   return function (dispatch) {
-//     getUserApi()
-//       .then((data) => {
-//         if (data.success) {
-//           dispatch({
-//             type: USER_SUCCESS,
-//             user: data.user
-//           });
-//         }
-//       })
-//       .catch(err => {
 
-//         if (err.message === "jwt expired" || "jwt malformed") {
-//           refreshToken(getCookie('refreshToken'))
-//             .then(() => {
-            
-//               return dispatch(getUser());
-//               console.log(getCookie('refreshToken'))
-//             })
-//         } else {
-//           return Promise.reject(`Error: ${err}`);
-//         }
-//       })
-//   }
-// }
 
 export const changeData = (name, email, password) => (dispatch) => {
   changeUsersDataApi(name, email, password)

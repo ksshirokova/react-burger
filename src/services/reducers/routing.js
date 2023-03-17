@@ -8,7 +8,8 @@ const initialState = {
     user: {},
     isRegistred: false,
     isLogged: false,
-    password: null
+    password: null,
+    isAuthChecked: false
 };
 
 export const routingReducer = (state = initialState, action) => {
@@ -68,6 +69,7 @@ export const routingReducer = (state = initialState, action) => {
             return { ...state, loading: true, isAuth: false };
         }
         case LOGIN_USER_SUCCESS:{
+            
             return { ...state,
                 loading: false,
                 password:  action.password,
@@ -84,7 +86,8 @@ export const routingReducer = (state = initialState, action) => {
             return { ...state,
                 loading: false,
                 isAuth:true,
-                user: action.user
+                user: action.user,
+                
                
             
             };
@@ -92,7 +95,7 @@ export const routingReducer = (state = initialState, action) => {
         case AUTH_CHECKED:{
             return{
                 ...state,
-                isAuth: true
+                isAuthChecked: true
             }
         }
         case LOGIN_USER_FAILED: {
