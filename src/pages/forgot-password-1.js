@@ -18,15 +18,17 @@ export default function ForgotPassword() {
     const emailValue = useSelector((state) => state.routeStore.email)
     const sendError = useSelector((state) => state.routeStore.error)
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault()
         dispatch(sendEmail(value));
-        <Link to='/reset-password' />
+       
 
     }
     return (
         <main className={styles.main}>
 
             <section className={styles.inputs}>
+                <form onSubmit={handleClick}>
                 <p className={`${styles.text} text text_type_main-medium mb-6`}>Вход</p>
                 <Input
                    
@@ -44,15 +46,16 @@ export default function ForgotPassword() {
                     size={'default'}
                     extraClass="ml-1 mb-6"
                 />
-                {!sendError ? <Link to='/reset-password'>
-                    <Button htmlType="button" type="primary" size="medium" onClick={handleClick}>
+                {value ? <Link to='/reset-password'>
+                    <Button htmlType="submit" type="primary" size="medium" >
                         Восстановить
                     </Button>
                 </Link> :
-                    <Button htmlType="button" type="primary" size="medium" onClick={handleClick}>
+                    <Button htmlType="submit" type="primary" size="medium" >
                         Восстановить
                     </Button>
                 }
+                </form>
                 <p className="text text_type_main-small text_color_inactive mt-20">Вспомнили пароль?<Link to="/login" className={styles.link}> Войти</Link></p>
 
             </section>

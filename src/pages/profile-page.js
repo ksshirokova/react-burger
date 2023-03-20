@@ -5,7 +5,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { changeData, checkAuth } from "../services/actions/routing";
@@ -25,9 +25,11 @@ export default function ProfilePage() {
   const [emailDisabled, setEmailDisabled] = React.useState(true);
 
   const user = useSelector((state) => state.routeStore.user);
+  const isLoading = useSelector((state) => state.routeStore.loading);
   const inputRef = React.useRef(null);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const onIconEmailClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
@@ -80,11 +82,19 @@ export default function ProfilePage() {
     setEmail(user.email);
     setPassword(user.password)
   }
-  const logoutFromHere = ()=>{
+  const logoutFromHere = (e)=>{
+    e.preventDefault()
     dispatch(logoutFromSite(getCookie('refreshToken')))
+    
+    
   }
 
   return (
+    isLoading ? 
+    <p className={`${styles.loader} text text_type_main-large mt-10 `}>
+            Загрузка...
+        </p>
+        :
     <main className={styles.main}>
       <div className={styles.nav}>
         <NavLink
@@ -131,7 +141,7 @@ export default function ProfilePage() {
         </p>
       </div>
       <div className={styles.inputs}>
-        <form>
+        <form onSubmit={submitData}>
           <Input
             id={"changeNameInput"}
             type={"text"}
@@ -187,7 +197,7 @@ export default function ProfilePage() {
               htmlType="button"
               type="primary"
               size="medium"
-              onClick={submitData}
+              
             >
               Сохранить
             </Button>

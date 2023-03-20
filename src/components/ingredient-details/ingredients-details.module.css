@@ -6,6 +6,7 @@
     max-width: 500px;
    align-self: center;
    text-align: center;
+   margin: 0 auto;
 }
 
 .ul{
@@ -15,5 +16,14 @@
 }
 
 .list{
+    text-align: center;
+}
+.single{
+    max-width: 500px;
+   align-self: center;
+   text-align: center;
+   margin: 120px auto 0;
+}
+.loader{
     text-align: center;
 }

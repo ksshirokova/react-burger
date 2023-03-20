@@ -24,12 +24,14 @@ export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAILED = "LOGIN_USER_FAILED";
 
 export const USER_SUCCESS = 'USER_SUCCESS';
+export const USER_REQUEST = 'USER_REQUEST'
 
 export const AUTH_CHECKED = 'AUTH_CHECKED'
 
 export const SEND_NEW_DATA = 'SEND_NEW_DATA'
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
+export const USER_FAILED = 'USER_FAILED'
 
 export const RESET_USERS_DATA = 'RESET_USERS_DATA'
 
@@ -105,17 +107,17 @@ export const loginUser = (email, password) => (dispatch) => {
         ...res,
       })
 
-      const authToken = res.accessToken.split('Bearer ')[1];
-      console.log(authToken)
-      if (authToken) {
+      // const authToken = res.accessToken.split('Bearer ')[1];
+      // console.log(authToken)
+      // if (authToken) {
 
-        setCookie('token', authToken, {secure: true, 'max-age': 1000});
-        setCookie('refreshToken', res.refreshToken)
-      }
+      //   setCookie('token', authToken, {secure: true, 'max-age': 1000});
+      //   setCookie('refreshToken', res.refreshToken)
+      // }
     })
 
     .catch((err) => {
-      dispatch({ type: LOGIN_USER_FAILED, isLogged: false,  payload: { error: err } });
+      dispatch({ type: LOGIN_USER_FAILED, isLogged: false, payload: { error: err } });
     });
 }
 
@@ -128,6 +130,7 @@ export const checkAuth = () => (dispatch) => {
 
 
 export const getUser = (token) => (dispatch) => {
+  dispatch({ type: USER_REQUEST })
 
   getUserApi(token)
     .then((res) => {
@@ -135,9 +138,10 @@ export const getUser = (token) => (dispatch) => {
 
 
     })
-    .catch((err)=>{
-      console.log(err)
+    .catch((err) => {
+     dispatch({type: USER_FAILED})
     })
+
 
 
 }
@@ -161,19 +165,19 @@ export const changeData = (name, email, password) => (dispatch) => {
 }
 
 export const logoutFromSite = (refreshToken) => (dispatch) => {
-
+ dispatch({type: LOGOUT_REQUEST})
   logoutApi(refreshToken)
     .then(() => {
       dispatch({
         type: LOGOUT_SUCCESS
-        
+
       })
     })
-      .then(() => {
-        dispatch({
-            type: RESET_USERS_DATA
+    .then(() => {
+      dispatch({
+        type: RESET_USERS_DATA
 
-        })
+      })
     })
     .catch((err) => {
       console.log(err)
@@ -183,5 +187,3 @@ export const logoutFromSite = (refreshToken) => (dispatch) => {
 
 
 
-// вызвать ее при монтировании
-// export const getUser

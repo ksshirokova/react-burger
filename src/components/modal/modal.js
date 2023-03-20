@@ -20,26 +20,35 @@ export default function Modal(props) {
     };
   }, [props.onClose]);
 
-  return ReactDOM.createPortal(
-    <>
-      <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
-        <div className={style.div}>
-          <h3 className="text text_type_main-large">{props.title}</h3>
 
-          <div className={style.closeIcon} onClick={props.onClose}>
-            <CloseIcon type="primary" />
+  
+
+
+    return ReactDOM.createPortal(
+
+
+
+      <>
+        <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
+          <div className={style.div}>
+            <h3 className="text text_type_main-large">{props.title}</h3>
+
+            <div className={style.closeIcon} onClick={props.onClose}>
+              <CloseIcon type="primary" />
+            </div>
           </div>
-        </div>
-        {props.children}
-      </section>
+          {props.children}
+        </section>
 
-      <ModalOverlay toClose={props.onClose} />
-    </>,
-    modals
-  );
+        <ModalOverlay toClose={props.onClose} />
+      </>,
+
+      modals
+    )
+  
 }
 
-modals.PropTypes ={
+modals.PropTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
 

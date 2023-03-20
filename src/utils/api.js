@@ -223,9 +223,9 @@ export const fetchWithRefresh = async (url, options) => {
     const res = await fetch(url, options)
     return await checkResponse(res)
   } catch (err) {
-
-    if (err === "Ошибка 403" ) {
-      console.log(getCookie('refreshToken'))
+    
+    if (err.message === "jwt malformed" || "jwt expired" ) {
+      
       const refreshUsersData = await refreshToken(getCookie('refreshToken'));
       
       await checkResponse(refreshUsersData)

@@ -1,15 +1,16 @@
-import { SEND_EMAIL_REQUEST, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED,SEND_EMAIL_FAILED, USER_SUCCESS,SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../actions/routing";
-
+import { SEND_EMAIL_REQUEST,USER_REQUEST, USER_FAILED, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED, SEND_EMAIL_FAILED, USER_SUCCESS, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../actions/routing";
+import { setCookie } from "../../utils/utils";
 import { deleteCookie } from "../../utils/utils";
 const initialState = {
-    isAuth:false,
+    isAuth: false,
     loading: false,
     error: null,
-    user: {},
+    user: null,
     isRegistred: false,
     isLogged: false,
     password: null,
-    isAuthChecked: false
+    isAuthChecked: false,
+    userChecked: false
 };
 
 export const routingReducer = (state = initialState, action) => {
@@ -21,7 +22,7 @@ export const routingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                email:  action.email,
+                email: action.email,
 
             };
 
@@ -30,27 +31,30 @@ export const routingReducer = (state = initialState, action) => {
             return { ...state, error: action.payload.error, loading: false };
 
         }
-        case SEND_NEW_PASSWORD_REQUEST:{
+        case SEND_NEW_PASSWORD_REQUEST: {
             return { ...state, loading: true };
         }
-        case SEND_NEW_PASSWORD_SUCCESS:{
-            return { ...state,
+        case SEND_NEW_PASSWORD_SUCCESS: {
+            return {
+                ...state,
                 loading: false,
-                password:  action.password,
-                token:  action.token};
+                password: action.password,
+                token: action.token
+            };
         }
         case SEND_NEW_PASSWORD_FAILED: {
             return { ...state, error: action.payload.error, loading: false };
 
         }
-        case SEND_NEW_USER_REQUEST:{
-            return { ...state, loading: true,  isRegistred: false };
+        case SEND_NEW_USER_REQUEST: {
+            return { ...state, loading: true, isRegistred: false };
         }
         case SEND_NEW_USER_SUCCESS: {
-            return { ...state,
+            return {
+                ...state,
                 loading: false,
-                password:  action.password,
-                email:  action.email,
+                password: action.password,
+                email: action.email,
                 name: action.name,
                 isRegistred: true,
                 user: {
@@ -59,41 +63,72 @@ export const routingReducer = (state = initialState, action) => {
                     password: action.password,
                 },
                 error: null
-            
+
             };
         }
         case SEND_NEW_USER_FAILED: {
-            return { ...state, error: action.payload.error, loading: false,  isRegistred: false };
+            return { ...state, error: action.payload.error, loading: false, isRegistred: false };
         }
-        case LOGIN_USER_REQUEST:{
+        case LOGIN_USER_REQUEST: {
             return { ...state, loading: true, isAuth: false };
         }
-        case LOGIN_USER_SUCCESS:{
-            
-            return { ...state,
+        case LOGIN_USER_SUCCESS: {
+            const authToken = action.accessToken.split('Bearer ')[1];
+            console.log(authToken)
+            if (authToken) {
+
+                setCookie('token', authToken, { secure: true, 'max-age': 1000 });
+                setCookie('refreshToken', action.refreshToken)
+            }
+            return {
+                ...state,
                 loading: false,
-                password:  action.password,
+                password: action.password,
                 isLogged: true,
                 error: null,
-                
+
                 isAuth: true,
                 user: action.user
-               
-            
+
+
             };
         }
-        case USER_SUCCESS:{
-            return { ...state,
+        case USER_SUCCESS: {
+            return {
+                ...state,
                 loading: false,
-                isAuth:true,
+                isAuth: true,
                 user: action.user,
-                
-               
-            
+                userChecked: true
+
+
+
             };
+
         }
-        case AUTH_CHECKED:{
-            return{
+        case USER_REQUEST:{
+            return {
+                ...state,
+                loading: true,
+                isAuth: false,
+                user: null,
+                userCheked: false
+            }
+        }
+        case USER_FAILED:{
+            return {
+            ...state, 
+            loading: false,
+            isAuth: false,
+            user: null,
+            userCheked: false,
+            isAuthChecked: true
+
+            }
+
+        }
+        case AUTH_CHECKED: {
+            return {
                 ...state,
                 isAuthChecked: true
             }
@@ -101,42 +136,43 @@ export const routingReducer = (state = initialState, action) => {
         case LOGIN_USER_FAILED: {
             return { ...state, isAuth: false, error: action.payload.error, loading: false };
         }
-        case SEND_NEW_DATA:{
-            return { ...state,
+        case SEND_NEW_DATA: {
+            return {
+                ...state,
                 loading: false,
-                password:  action.password,
-                email:  action.email,
+                password: action.password,
+                email: action.email,
                 name: action.name,
-                
+
                 user: {
                     email: action.email,
                     name: action.name,
                     password: action.password,
                 },
                 error: null
-            
+
             };
         }
         case LOGOUT_REQUEST: {
-            return{
+            return {
                 ...state, isLoading: true
             }
         }
         case LOGOUT_SUCCESS: {
             deleteCookie('token');
             deleteCookie('refreshToken');
-            return{
+            return {
                 ...state, isLoading: false, isLogged: false, isAuth: false
             }
         }
-        case RESET_USERS_DATA:{
-            return{
-                ...state, user: {}, password: null
+        case RESET_USERS_DATA: {
+            return {
+                ...state, user: null, password: null
             }
-               
+
         }
         default: {
             return state;
-          }
+        }
     }
 }

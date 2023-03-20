@@ -11,22 +11,30 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
+import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
+
 
 export default function BurgerIngredients() {
   const { bun, main, sauce } = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
+  
   const openIngredientModal = () => {
+    
     dispatch({ type: OPEN_ING_MODAL });
+  
+    // <Link to={'/ingredients'} />
+    // navigate('/ingredients')
   };
 
   const handleClick = (item) => {
-    dispatch(addModalIngredients(item));
-    openIngredientModal();
+    
+      dispatch(addModalIngredients(item));
+      openIngredientModal();
+    
+    
   };
 
   const handleDrag = (event, item) => {
