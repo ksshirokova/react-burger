@@ -19,9 +19,13 @@ import { sendOrder } from "../../services/actions/order-modal";
 import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
 import { dropElement } from "../../services/actions/constructors-ingredients";
 import { v4 as uuid1 } from "uuid";
+import { checkAuth } from "../../services/actions/routing";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const isAuth = useSelector(state=>state.routeStore.isAuth)
 
   const draggedFilling = useSelector(
     (state) => state.constructorStore.draggedFilling
@@ -38,11 +42,17 @@ export default function BurgerConstructor() {
     (state) => state.constructorStore.draggedElement
   );
   const burgerIngredient = burgerIngredients.map((item) => item._id);
+  console.log(draggedFilling.length)
 
   const openOrderModal = () => {
-    dispatch({ type: OPEN_ORDER_MODAL });
-    dispatch(sendOrder(burgerIngredient));
+    dispatch(checkAuth())
+    isAuth ? dispatch(sendOrder(burgerIngredient)) : navigate('/login');
+    isAuth && dispatch({ type: OPEN_ORDER_MODAL });
+    
+
   };
+
+  //при клике мы сначала должны проверить авторизацию
   const handleDrop = (e, item) => {
     setTimeout(() => {
       e.preventDefault();
@@ -143,14 +153,26 @@ export default function BurgerConstructor() {
           <div className={style.icon}>
             <CurrencyIcon type="primary" />
           </div>
-          <Button
+          {draggedFilling.length > 0  && draggedBuns.length >0 ?<Button
             htmlType="button"
             type="primary"
             size="large"
+            disabled={false}
             onClick={openOrderModal}
           >
             Оформить заказ
           </Button>
+          :
+          <Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            disabled={true}
+            onClick={openOrderModal}
+          >
+            Оформить заказ
+          </Button>
+        }
         </section>
       </section>
     </>

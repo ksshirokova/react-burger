@@ -9,7 +9,7 @@ export const SEND_ORDER_DATA_SUCCESS = "SEND_ORDER_DATA_SUCCESS";
 export const SEND_ORDER_DATA_FAILED = "SEND_ORDER_DATA_FAILED";
 export const DROP_MOVED_ELEMENT = "DROP_MOVED_ELEMENT";
 export const CHECK_DROPED_ELEMENT = "CHECK_DROPED_ELEMENT";
-
+export const CLEAN_CONSTRUCTOR = 'CLEAN_CONSTRUCTOR'
 
 
 export const addDraggedElement = (item) => {

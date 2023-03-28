@@ -8,7 +8,7 @@ import {
   SEND_ORDER_DATA_REQUEST,
   SEND_ORDER_DATA_SUCCESS,
   SEND_ORDER_DATA_FAILED,
-  DROP_MOVED_ELEMENT,
+  DROP_MOVED_ELEMENT, CLEAN_CONSTRUCTOR
 } from "../actions/constructors-ingredients";
 
 const initialState = {
@@ -72,6 +72,9 @@ export const constructorReducer = (state = initialState, action) => {
 
     case SEND_ORDER_DATA_SUCCESS: {
       return { ...state, loading: false, ingredients: state.draggedFilling.id };
+    }
+    case CLEAN_CONSTRUCTOR:{
+      return { ...state, loading: false, draggedBuns: [], draggedFilling:[] };
     }
     case SEND_ORDER_DATA_FAILED: {
       return { ...state, error: action.payload.error, loading: false };

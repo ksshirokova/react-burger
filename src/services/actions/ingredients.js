@@ -18,7 +18,7 @@ export const getIngredients = () => (dispatch) => {
 
       dispatch({
         type: GET_INGREDIENTS_SUCCESS,
-        payload: { data: res, sauce: sauce, bun: bun, main: main },
+        payload: { data: res.data, sauce: sauce, bun: bun, main: main },
       });
     })
     .catch((err) => {

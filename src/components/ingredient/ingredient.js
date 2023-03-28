@@ -4,10 +4,10 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useMemo } from "react";
-import { changeCount } from "../../services/actions/ingredients";
 import { v4 as uuidv4 } from "uuid";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Ingredients({
   ingredients,
@@ -17,11 +17,13 @@ export default function Ingredients({
   elRef,
   currentId,
 }) {
-  const dispatch = useDispatch();
+ 
+  const location = useLocation()
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling
   );
   const buns = useSelector((state) => state.constructorStore.draggedBuns);
+ 
 
   const ingredientCount = useMemo(() => {
     let counter = {};
@@ -56,7 +58,7 @@ export default function Ingredients({
       <ul className={style.ul}>
         {ingredients &&
           ingredients.map((item) => (
-            <li
+            <Link to={'/ingredients/' + item._id} state={{background: location, elementId: item._id}} className={style.list}><li
               key={item._id}
               className={`${style.list} ml-4 mb-8`}
               onClick={() => onOpen(item)}
@@ -84,6 +86,7 @@ export default function Ingredients({
                 {item.name}
               </p>
             </li>
+            </Link>
           ))}
       </ul>
     </>

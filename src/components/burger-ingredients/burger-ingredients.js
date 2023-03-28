@@ -3,7 +3,7 @@ import React from "react";
 import style from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredients from "../ingredient/ingredient";
-import { getIngredients } from "../../services/actions/ingredients";
+
 import { addModalIngredients } from "../../services/actions/ingredient-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { OPEN_ING_MODAL } from "../../services/actions/ingredient-modal";
@@ -11,26 +11,32 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
+import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
+
 
 export default function BurgerIngredients() {
   const { bun, main, sauce } = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
+  
 
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
+  
   const openIngredientModal = () => {
+    
     dispatch({ type: OPEN_ING_MODAL });
+  
+  
   };
 
   const handleClick = (item) => {
-    dispatch(addModalIngredients(item));
-    openIngredientModal();
+    
+      dispatch(addModalIngredients(item));
+      openIngredientModal();
+    
+    
   };
 
   const handleDrag = (event, item) => {
-    //обработчик когда зажали
+    
     event.preventDefault();
     dispatch(addDraggedElement(item));
   };

@@ -1,0 +1,22 @@
+.main {
+    margin: 0 auto;
+    width: 480;
+    display: flex;
+    margin-top: 180px;
+    text-align: center;
+
+}
+
+.inputs {
+    margin: 0 auto;
+
+}
+
+.text {
+    text-align: center;
+}
+
+.link{
+    color: #4C4CFF;
+    text-decoration: none;
+}
