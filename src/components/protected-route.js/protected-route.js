@@ -15,11 +15,12 @@ export default function ProtectedRoute({ children, user, anonymous }) {
     const isRegistred = useSelector(state => state.routeStore.isLogged)
     const userChecked = useSelector(state => state.routeStore.userChecked)
     
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    
+    const location = useLocation()
+    const from = location.state?.from || '/';
     // useEffect(() => {
         // console.log(isLoggedIn)
-         setTimeout(()=>{
+        //  setTimeout(()=>{
             
             if (!isAuthChecked && !userChecked) {
                 return <h1>Загрузка...</h1>
@@ -28,30 +29,32 @@ export default function ProtectedRoute({ children, user, anonymous }) {
     
             //анонимный доступ - может ли сюда войти человек без данных юзера
             if (anonymous && isLoggedIn && !user) {
-                return navigate('/login', { replace: true })
+                return <Navigate to={ from } />;
                 
             }
     
     
             if (!anonymous && !isLoggedIn && !user) {
-                return navigate('/login', { replace: true })
+                return <Navigate to="/login" state={{ from: location}}/>;
     
                 
             }
             if(!anonymous && !isAuth && isRegistred){
-                return navigate('/login', { replace: true })
+                return <Navigate to="/login" state={{ from: location}}/>;
     
             }
             if (!anonymous && isLoggedIn && user && isAuth) {
-                return navigate('/', { replace: true })
+                return <Navigate to={ from } />;
+                //  return<Navigate to='/' replace={true}/>
     
                
             }
-         }, 0)
+            
+        //  }, 0)
 
 
         
-
+ 
     // }, [isLoggedIn])
     
     return <>{children}</>

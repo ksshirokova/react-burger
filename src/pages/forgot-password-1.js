@@ -1,9 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 
 import styles from './registration-styles.module.css'
-import { Link, NavLink } from "react-router-dom"
-import { sendEmail } from "../services/actions/routing"
+import { Link, NavLink, useNavigate } from "react-router-dom"
+import { sendEmail, VISITED_FORGOT_PASSWORD } from "../services/actions/routing"
 import { useDispatch, useSelector } from "react-redux"
 
 export default function ForgotPassword() {
@@ -15,15 +15,18 @@ export default function ForgotPassword() {
         setTimeout(() => inputRef.current.focus(), 0)
         alert('Icon Click Callback')
     }
+    const navigate = useNavigate()
     const emailValue = useSelector((state) => state.routeStore.email)
     const sendError = useSelector((state) => state.routeStore.error)
 
     const handleClick = (e) => {
         e.preventDefault()
-        dispatch(sendEmail(value));
-       
-
-    }
+        value && dispatch(sendEmail(value));
+        value && navigate('/reset-password')
+        }
+        useEffect(()=>{
+           dispatch({type: VISITED_FORGOT_PASSWORD})
+        }, [])
     return (
         <main className={styles.main}>
 
@@ -46,15 +49,15 @@ export default function ForgotPassword() {
                     size={'default'}
                     extraClass="ml-1 mb-6"
                 />
-                {value ? <Link to='/reset-password'>
+                {/* {value ? <Link to='/reset-password'>
                     <Button htmlType="submit" type="primary" size="medium" >
                         Восстановить
                     </Button>
-                </Link> :
+                </Link> : */}
                     <Button htmlType="submit" type="primary" size="medium" >
                         Восстановить
                     </Button>
-                }
+                
                 </form>
                 <p className="text text_type_main-small text_color_inactive mt-20">Вспомнили пароль?<Link to="/login" className={styles.link}> Войти</Link></p>
 

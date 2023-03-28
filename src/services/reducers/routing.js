@@ -1,4 +1,4 @@
-import { SEND_EMAIL_REQUEST,USER_REQUEST, USER_FAILED, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED, SEND_EMAIL_FAILED, USER_SUCCESS, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../actions/routing";
+import { SEND_EMAIL_REQUEST,USER_REQUEST, USER_FAILED, VISITED_FORGOT_PASSWORD, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED, SEND_EMAIL_FAILED, USER_SUCCESS, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../actions/routing";
 import { setCookie } from "../../utils/utils";
 import { deleteCookie } from "../../utils/utils";
 const initialState = {
@@ -8,27 +8,30 @@ const initialState = {
     user: null,
     isRegistred: false,
     isLogged: false,
-    password: null,
+    password: '',
     isAuthChecked: false,
-    userChecked: false
+    userChecked: false,
+    emailSent: false,
+    forgotPassVisited: false
 };
 
 export const routingReducer = (state = initialState, action) => {
     switch (action.type) {
         case SEND_EMAIL_REQUEST: {
-            return { ...state, loading: true };
+            return { ...state, loading: true, emailSent: false};
         }
         case SEND_EMAIL_SUCCESS: {
             return {
                 ...state,
                 loading: false,
                 email: action.email,
+                emailSent: true
 
             };
 
         }
         case SEND_EMAIL_FAILED: {
-            return { ...state, error: action.payload.error, loading: false };
+            return { ...state, error: action.payload.error, loading: false, emailSent: false };
 
         }
         case SEND_NEW_PASSWORD_REQUEST: {
@@ -45,6 +48,11 @@ export const routingReducer = (state = initialState, action) => {
         case SEND_NEW_PASSWORD_FAILED: {
             return { ...state, error: action.payload.error, loading: false };
 
+        }
+        case VISITED_FORGOT_PASSWORD:{
+            return {
+                ...state, forgotPassVisited: true
+            }
         }
         case SEND_NEW_USER_REQUEST: {
             return { ...state, loading: true, isRegistred: false };
@@ -98,8 +106,11 @@ export const routingReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 isAuth: true,
-                user: action.user,
-                userChecked: true
+                user: action.payload.user,
+                userChecked: true,
+                password: '',
+
+                
 
 
 

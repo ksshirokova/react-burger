@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { sendOrdersData } from "../../utils/api";
+import { CLEAN_CONSTRUCTOR } from "./constructors-ingredients";
 
 export const OPEN_ORDER_MODAL = "OPEN_ORDER_MODAL";
 export const CLOSE_ORDER_MODAL = "CLOSE_ORDER_MODAL";
@@ -18,10 +19,16 @@ export const sendOrder = (data) =>(dispatch)=> {
     .then((res) => {
       dispatch({
         type: ADD_ORDER_SUCCESS,
+        
         ...res,
       });
     })
-    .then((res) => dispatch({ type: RESET_ORDER_DATA, ...res }))
+    .then((res) => {
+    dispatch({ type: RESET_ORDER_DATA, ...res })
+    dispatch({type: CLEAN_CONSTRUCTOR, ...res})
+    }
+    )
+    
 
     .catch((err) => {
       dispatch({ type: ADD_ORDER_FAILED, payload: { error: err } });

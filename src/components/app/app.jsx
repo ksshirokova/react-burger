@@ -33,11 +33,12 @@ import { getCookie } from "../../utils/utils";
 function App() {
 
   const orderIsOpened = useSelector((state) => state.orderInfo.isOpened);
+  const ingredientIsOpened = useSelector((state) => state.ingredientInfo.isOpened);
   const modalIngredients = useSelector((state) => state.ingredientInfo.item);
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling
   );
-  const ingredients = useSelector((state) => state.ingredients.data.data);
+  
   
 
   const orderItems = useSelector((state) => state.orderInfo.orderItems);
@@ -58,21 +59,24 @@ function App() {
   const ingredientsIsOpened = useSelector(
     (state) => state.ingredientInfo.isOpened
   );
+  const isItem = !!useSelector(
+    (state) => state.ingredientInfo.item
+  );
 
   const closeOrderModal = () => {
     dispatch({ type: CLOSE_ORDER_MODAL });
-    navigate('/')
-  };
-
-  const closeIngredientModal = () => {
     dispatch({ type: CLOSE_ING_MODAL });
     dispatch({ type: DELITE_MODAL_INGREDIENTS });
     navigate('/')
   };
 
+  
+
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkAuth())
+    
+    
   }, [])
  
     
@@ -83,14 +87,14 @@ function App() {
       <AppHeader />
       <Routes location={background || location}>
         <Route path='/' element={
-          //  <ProtectedRoute anonymous={true}>
+         
           <main className={styles.main}>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients />
               <BurgerConstructor />
             </DndProvider>
           </main>
-          // </ProtectedRoute>
+          
         } />
         <Route path='/login' element={<ProtectedRoute anonymous={false} user={true}><LoginPage /></ProtectedRoute>} />
         <Route path='/register' element={<ProtectedRoute anonymous={false} user={true}><RegistrationPage /></ProtectedRoute>} />
@@ -108,7 +112,7 @@ function App() {
       </Routes >
       
       
-        {background && <Routes>
+        {background && ingredientIsOpened && <Routes>
           <Route path={"/ingredients/" + elementId} element = {
           <Modal onClose={closeOrderModal} title="Детали ингредиента">
           <IngredientDetails ingredients={modalIngredients}  />

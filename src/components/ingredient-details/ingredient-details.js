@@ -2,8 +2,6 @@ import style from "./ingredients-details.module.css";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getIngredients } from "../../services/actions/ingredients";
-import { useEffect } from "react";
 
 
 export default function IngredientDetailsPage({ingredients}) {
@@ -82,5 +80,5 @@ export default function IngredientDetailsPage({ingredients}) {
 
 
 IngredientDetailsPage.propTypes = {
-    ingredients: PropTypes.object.isRequired,
+    ingredients: PropTypes.object,
 };

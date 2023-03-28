@@ -26,6 +26,7 @@ export default function ProfilePage() {
 
   const user = useSelector((state) => state.routeStore.user);
   const isLoading = useSelector((state) => state.routeStore.loading);
+  const usersPassword = useSelector((state) => state.routeStore.password);
   const inputRef = React.useRef(null);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ export default function ProfilePage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setPassword(user.password)
+      setPassword(usersPassword)
       
   
     }
@@ -80,7 +81,7 @@ export default function ProfilePage() {
   const backToUserData=()=>{
     setName(user.name);
     setEmail(user.email);
-    setPassword(user.password)
+    usersPassword && setPassword(usersPassword)
   }
   const logoutFromHere = (e)=>{
     e.preventDefault()
@@ -188,6 +189,7 @@ export default function ProfilePage() {
             errorText={"Ошибка"}
             size={"default"}
             extraClass="ml-1"
+            
           />
           <div className={styles.hiddenBlock}>
             <p className={`${styles.span} text text_type_main-small mr-7`} onClick={backToUserData}>
@@ -207,3 +209,4 @@ export default function ProfilePage() {
     </main>
   );
 }
+

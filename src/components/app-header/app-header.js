@@ -30,9 +30,9 @@ export default function AppHeader() {
             </p>
           </NavLink>
         </div>
-        <div className={style.logo}>
+        <NavLink to="/" className={style.logo}>
           <Logo />
-        </div>
+        </NavLink>
         <NavLink to='/profile'  className={({isActive})=>(isActive ? ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listActive}`: ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listInactive}`)}>
         {pathname =='/profile' ? <ListIcon type="primary" /> : <ListIcon type="secondary" />}
           <p

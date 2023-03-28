@@ -4,9 +4,8 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useMemo } from "react";
-import { changeCount } from "../../services/actions/ingredients";
 import { v4 as uuidv4 } from "uuid";
 import { Link, useLocation } from "react-router-dom";
 
@@ -18,7 +17,7 @@ export default function Ingredients({
   elRef,
   currentId,
 }) {
-  const dispatch = useDispatch();
+ 
   const location = useLocation()
   const burgerIngredients = useSelector(
     (state) => state.constructorStore.draggedFilling

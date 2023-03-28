@@ -34,6 +34,7 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const USER_FAILED = 'USER_FAILED'
 
 export const RESET_USERS_DATA = 'RESET_USERS_DATA'
+export const VISITED_FORGOT_PASSWORD = 'VISITED_FORGOT_PASSWORD'
 
 
 
@@ -107,14 +108,9 @@ export const loginUser = (email, password) => (dispatch) => {
         ...res,
       })
 
-      // const authToken = res.accessToken.split('Bearer ')[1];
-      // console.log(authToken)
-      // if (authToken) {
 
-      //   setCookie('token', authToken, {secure: true, 'max-age': 1000});
-      //   setCookie('refreshToken', res.refreshToken)
-      // }
     })
+
 
     .catch((err) => {
       dispatch({ type: LOGIN_USER_FAILED, isLogged: false, payload: { error: err } });
@@ -123,8 +119,6 @@ export const loginUser = (email, password) => (dispatch) => {
 
 export const checkAuth = () => (dispatch) => {
   dispatch(getUser(getCookie('refreshToken')))
-
-  // dispatch(fetchWithRefresh());
   dispatch({ type: AUTH_CHECKED })
 }
 
@@ -134,12 +128,12 @@ export const getUser = (token) => (dispatch) => {
 
   getUserApi(token)
     .then((res) => {
-      dispatch({ type: USER_SUCCESS, user: res.user })
+      dispatch({ type: USER_SUCCESS, payload: res })
 
 
     })
     .catch((err) => {
-     dispatch({type: USER_FAILED})
+      dispatch({ type: USER_FAILED, payload: err })
     })
 
 
@@ -165,7 +159,7 @@ export const changeData = (name, email, password) => (dispatch) => {
 }
 
 export const logoutFromSite = (refreshToken) => (dispatch) => {
- dispatch({type: LOGOUT_REQUEST})
+  dispatch({ type: LOGOUT_REQUEST })
   logoutApi(refreshToken)
     .then(() => {
       dispatch({

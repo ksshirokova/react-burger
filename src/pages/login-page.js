@@ -32,6 +32,7 @@ export default function LoginPage() {
   const sendData = (e) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
+   
   };
 
   return (

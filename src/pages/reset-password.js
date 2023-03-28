@@ -1,10 +1,10 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 
 import styles from './registration-styles.module.css'
-import { NavLink,Link } from "react-router-dom"
+import { NavLink, Link, Navigate, useNavigate, useLocation } from "react-router-dom"
 import { sendNewPassword } from "../services/actions/routing"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function ResetPassword() {
     const dispatch = useDispatch()
@@ -13,7 +13,10 @@ export default function ResetPassword() {
     const [icon, setIcon] = React.useState('HideIcon')
     const inputRef = React.useRef(null)
     const passInput = document.getElementById("resetPass");
-
+    const location = useLocation()
+    const emailSent = useSelector(state => state.routeStore.emailSent)
+    const navigate = useNavigate()
+    const lastPageIsVisited = useSelector(state=>state.routeStore.forgotPassVisited)
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
         if (passInput.type === 'password') {
@@ -27,7 +30,11 @@ export default function ResetPassword() {
         }
 
     }
-
+    useEffect(() => {
+        !lastPageIsVisited && navigate('/forgot-password')
+        
+           
+    }, [])
     const handleClick = (e) => {
         e.preventDefault();
         dispatch(sendNewPassword(password, code))
@@ -73,10 +80,10 @@ export default function ResetPassword() {
                             Сохранить
                         </Button>
                     </Link>
-                    :
-                    <Button htmlType="submit" type="primary" size="medium">
-                    Сохранить
-                </Button>
+                        :
+                        <Button htmlType="submit" type="primary" size="medium">
+                            Сохранить
+                        </Button>
                     }
                 </form>
                 <p className="text text_type_main-small text_color_inactive mt-20">Вспомнили пароль?<NavLink to="/login" className={styles.link}> Войти</NavLink></p>
