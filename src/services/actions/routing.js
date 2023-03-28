@@ -1,6 +1,6 @@
 import { sendEmailApi, sendNewPasswordApi, registerUserApi, loginUserApi, getUserApi, changeUsersDataApi } from "../../utils/api";
 import { setCookie } from "../../utils/utils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/utils";
 import { refreshToken, logoutApi } from "../../utils/api";
 // import { fetchWithRefresh } from "../../utils/api";
@@ -76,9 +76,12 @@ export const sendNewPassword = (newPassword, code) => (dispatch) => {
 export const registerUser = (name, email, password) => (dispatch) => {
 
   dispatch({ type: SEND_NEW_USER_REQUEST });
-
+  
   registerUserApi(name, email, password)
+
     .then((res) => {
+      
+      res.success == true &&
       dispatch({
         type: SEND_NEW_USER_SUCCESS,
         name: name,
@@ -107,6 +110,7 @@ export const loginUser = (email, password) => (dispatch) => {
         password: password,
         ...res,
       })
+      
 
 
     })
@@ -145,6 +149,7 @@ export const getUser = (token) => (dispatch) => {
 export const changeData = (name, email, password) => (dispatch) => {
   changeUsersDataApi(name, email, password)
     .then((res) => {
+      
       dispatch({
         type: SEND_NEW_DATA,
 

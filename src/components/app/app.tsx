@@ -21,47 +21,30 @@ import {
   DELITE_MODAL_INGREDIENTS,
 } from "../../services/actions/ingredient-modal";
 import { CLOSE_ORDER_MODAL } from "../../services/actions/order-modal";
-import { Link, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
+import {Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import ProfilePage from "../../pages/profile-page";
 import RegistrationPage from "../../pages/registration-page";
 import ResetPassword from "../../pages/reset-password";
 import { useEffect } from "react";
-import { getUser, checkAuth } from "../../services/actions/routing";
-import { getCookie } from "../../utils/utils";
+import { checkAuth } from "../../services/actions/routing";
+
 
 
 function App() {
 
+  
   const orderIsOpened = useSelector((state) => state.orderInfo.isOpened);
   const ingredientIsOpened = useSelector((state) => state.ingredientInfo.isOpened);
   const modalIngredients = useSelector((state) => state.ingredientInfo.item);
-  const burgerIngredients = useSelector(
-    (state) => state.constructorStore.draggedFilling
-  );
-  
-  
-
   const orderItems = useSelector((state) => state.orderInfo.orderItems);
   const orderItem = orderItems.map((item) => item.action.order.number);
   const orderNumber = orderItem[0];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation()
-  const background = location.state && location.state.background //location фоновой страницы
+  const background = location.state && location.state.background 
   const elementId = location.state && location.state.elementId;
   
-  
-  
-
-  
-
-// если введенный айди равен айди элемента из массива то мы возвращаем этот элемент
-  const ingredientsIsOpened = useSelector(
-    (state) => state.ingredientInfo.isOpened
-  );
-  const isItem = !!useSelector(
-    (state) => state.ingredientInfo.item
-  );
 
   const closeOrderModal = () => {
     dispatch({ type: CLOSE_ORDER_MODAL });

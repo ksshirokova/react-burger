@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import PropTypes from "prop-types";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
-import { Navigate, useLocation, useNavigate, Link } from "react-router-dom";
+
 
 
 export default function BurgerIngredients() {

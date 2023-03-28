@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 
 import styles from './registration-styles.module.css'
-import { Link, NavLink, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { sendEmail, VISITED_FORGOT_PASSWORD } from "../services/actions/routing"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -16,13 +16,14 @@ export default function ForgotPassword() {
         alert('Icon Click Callback')
     }
     const navigate = useNavigate()
-    const emailValue = useSelector((state) => state.routeStore.email)
-    const sendError = useSelector((state) => state.routeStore.error)
+    
+    
 
     const handleClick = (e) => {
         e.preventDefault()
         value && dispatch(sendEmail(value));
         value && navigate('/reset-password')
+        
         }
         useEffect(()=>{
            dispatch({type: VISITED_FORGOT_PASSWORD})
@@ -49,11 +50,7 @@ export default function ForgotPassword() {
                     size={'default'}
                     extraClass="ml-1 mb-6"
                 />
-                {/* {value ? <Link to='/reset-password'>
-                    <Button htmlType="submit" type="primary" size="medium" >
-                        Восстановить
-                    </Button>
-                </Link> : */}
+                
                     <Button htmlType="submit" type="primary" size="medium" >
                         Восстановить
                     </Button>

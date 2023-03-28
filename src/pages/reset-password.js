@@ -35,6 +35,7 @@ export default function ResetPassword() {
         
            
     }, [])
+    
     const handleClick = (e) => {
         e.preventDefault();
         dispatch(sendNewPassword(password, code))

@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import styles from './registration-styles.module.css'
-import { Navigate, NavLink, useNavigate } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { registerUser } from "../services/actions/routing"
 
@@ -14,7 +14,7 @@ export default function RegistrationPage() {
     const passInput = document.getElementById("passwordInput");
     const isUser = !!useSelector(state => state.routeStore.user)
 
-    const navigate = useNavigate()
+    
     const dispatch = useDispatch()
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
@@ -33,15 +33,10 @@ export default function RegistrationPage() {
     const sendData = (e) => {
         e.preventDefault()
         dispatch(registerUser(name, email, password))
-
-       
-
-
-
-
-
+        
+        
     }
-
+    
     return (
         <main className={styles.main}>
 
@@ -96,7 +91,7 @@ export default function RegistrationPage() {
                         Зарегистрироваться
                     </Button>
                 </form>
-                <p className="text text_type_main-small text_color_inactive mt-20">Уже зарегистрированны?<NavLink to='/login' className={styles.link}> Войти</NavLink></p>
+                <p className="text text_type_main-small text_color_inactive mt-20">Уже зарегистрированны?<NavLink to='/login' className={styles.link}>Войти</NavLink></p>
             </section>
         </main>
     )
