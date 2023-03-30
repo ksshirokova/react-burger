@@ -3,57 +3,48 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./burger-constructor.module.css";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import { useMemo } from "react";
-import BurgerConstructorElement from "../burger-constructor-element/burger-constructor-element";
+import { BurgerConstructorElement } from "../burger-constructor-element/burger-constructor-element";
 import {
-  DROP_CONSTRUCTOR_ELEMENT,
   CHECK_DROPED_ELEMENT,
 } from "../../services/actions/constructors-ingredients";
 import {
   OPEN_ORDER_MODAL,
-  ADD_ORDER_REQUEST,
 } from "../../services/actions/order-modal";
 import { sendOrder } from "../../services/actions/order-modal";
 import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
 import { dropElement } from "../../services/actions/constructors-ingredients";
-import { v4 as uuid1 } from "uuid";
 import { checkAuth } from "../../services/actions/routing";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { TRouteState } from "../../utils/types";
+import { TRootState } from "../../services/store";
+import { TConstructorState, TItem } from "../../utils/types";
+import { useTypeDispatch } from "../../utils/hooks-types";
+
+
 
 export default function BurgerConstructor() {
-  const dispatch = useDispatch();
+  const dispatch = useTypeDispatch();
   const navigate = useNavigate()
-  const isAuth = useSelector(state=>state.routeStore.isAuth)
+  const { isAuth } = useSelector<TRootState, TRouteState>(state=>state.routeStore)
 
-  const draggedFilling = useSelector(
-    (state) => state.constructorStore.draggedFilling
-  );
-  const draggedBuns = useSelector(
-    (state) => state.constructorStore.draggedBuns
+  const { draggedFilling, draggedBuns }= useSelector<TRootState, TConstructorState>(
+    state => state.constructorStore
   );
   
-  const burgerIngredients = useSelector(
-    (state) => state.constructorStore.draggedFilling
-  );
-
-  const draggedElement = useSelector(
-    (state) => state.constructorStore.draggedElement
-  );
-  const burgerIngredient = burgerIngredients.map((item) => item._id);
-  console.log(draggedFilling.length)
+  
 
   const openOrderModal = () => {
     dispatch(checkAuth())
-    isAuth ? dispatch(sendOrder(burgerIngredient)) : navigate('/login');
+    isAuth ? dispatch(sendOrder(draggedFilling)) : navigate('/login');
     isAuth && dispatch({ type: OPEN_ORDER_MODAL });
     
 
   };
 
   //при клике мы сначала должны проверить авторизацию
-  const handleDrop = (e, item) => {
+  const handleDrop = (e: any, item?: TItem) => {
     setTimeout(() => {
       e.preventDefault();
       dispatch(dropElement(item));
@@ -65,12 +56,12 @@ export default function BurgerConstructor() {
   
   
 
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: any ) => {
     //обработчик при наведении
     event.preventDefault();
   };
 
-  const onDelite = (index) => {
+  const onDelite = (index: number) => {
     dispatch({ type: DELITE_ELEMENT, payload: index });
   };
 
@@ -94,7 +85,7 @@ export default function BurgerConstructor() {
       totalPrice = fillingsPrice + bunPrice[0] + bunPrice[0];
     }
     return totalPrice;
-  }, [draggedFilling]);
+  }, [bunPrice, fillingsPrice]);
 
   return (
     <>
@@ -115,6 +106,7 @@ export default function BurgerConstructor() {
                   isLocked={true}
                   className={"mb-4 ml-8"}
                   key={`${item.uuid} (верх)`}
+                  toClose={onDelite}
                 />
               ))}
 
@@ -123,13 +115,15 @@ export default function BurgerConstructor() {
                 draggedFilling.map((item, index) => (
                   <BurgerConstructorElement
                     item={item}
+                    key={item.uuid}
+                    typeOfText={item.name}
                     index={index}
                     isLocked={false}
                     id={item._id}
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
-                    typeOfText={item.name}
-                    key={item.uuid}
+                    
+                   
                   />
                 ))}
             </div>
@@ -144,6 +138,7 @@ export default function BurgerConstructor() {
                   type={"bottom"}
                   isLocked={true}
                   className={"mb-4 ml-8"}
+                  toClose={onDelite}
                 />
               ))}
           </ul>

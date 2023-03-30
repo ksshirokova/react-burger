@@ -2,41 +2,47 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import { FormEvent, useState, useRef } from "react";
 import styles from "./registration-styles.module.css";
-import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { loginUser } from "../services/actions/routing";
+import { TRootState } from "../services/store";
+import { TRouteState } from "../utils/types";
+import { useTypeDispatch } from "../utils/hooks-types";
 
 export default function LoginPage() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const inputRef = React.useRef(null);
-  const [icon, setIcon] = React.useState("HideIcon");
-  const passInput = document.getElementById("userPassword");
-  const isLogged = useSelector((state) => state.routeStore.isLogged);
-  const isLoading = useSelector((state) => state.routeStore.loading);
-  const isAuth = useSelector((state) => state.routeStore.isAuth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null!);
+  const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">("HideIcon");
+  const { loading } = useSelector<TRootState, TRouteState>((state) => state.routeStore);
+  const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
+  
+  const dispatch = useTypeDispatch();
+ 
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0);
-    if (passInput.type === "password") {
-      passInput.type = "text";
-      setIcon("ShowIcon");
-    } else {
-      passInput.type = "password";
-      setIcon("HideIcon");
+    setTimeout(() => inputRef.current.focus(), 0)
+    if (inputType === 'password') {
+        setInputType('text')
+        setIcon('ShowIcon')
     }
-  };
-  const sendData = (e) => {
+    else {
+        setInputType('password')
+        setIcon('HideIcon')
+
+    }
+
+}
+  const sendData = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
    
   };
 
   return (
-    isLoading ?
+    loading ?
     <p className={`${styles.loader} text text_type_main-large mt-10 `}>
             Загрузка...
         </p>

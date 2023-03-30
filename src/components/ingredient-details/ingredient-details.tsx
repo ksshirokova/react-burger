@@ -1,33 +1,32 @@
 import style from "./ingredients-details.module.css";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { TItem } from "../../utils/types";
+import { TRootState } from "../../services/store";
+import { TIngredientsState } from "../../utils/types";
 
 
-export default function IngredientDetailsPage({ingredients}) {
+export default function IngredientDetailsPage({ingredients}: {ingredients?: TItem}) {
 
     const { ingredientId } = useParams();
-    //сюда попадает все, что напишет пользователь
-    console.log(ingredientId);
-    const dispatch = useDispatch;
-    const initialIngredients = useSelector(state => state.ingredients.data)
-    console.log(initialIngredients)
+    const { data } = useSelector<TRootState, TIngredientsState>(state => state.ingredients)
+    
 
 
     
-    const selectedArr = initialIngredients.filter(item => {
+    const selectedArr = data.filter(item => {
         return item._id === ingredientId
     })
-    console.log(selectedArr)
+    
 
     const chosedIngredient = selectedArr[0]
-    console.log(ingredients)
+    
 
 
    
 
     return (
-       initialIngredients.length === 0 ?
+      data.length === 0 ?
         <p className={`${style.loader} text text_type_main-large mt-10 `}>
             Загрузка...
         </p>
@@ -79,6 +78,3 @@ export default function IngredientDetailsPage({ingredients}) {
 
 
 
-IngredientDetailsPage.propTypes = {
-    ingredients: PropTypes.object,
-};

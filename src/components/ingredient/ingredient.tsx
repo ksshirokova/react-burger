@@ -3,39 +3,38 @@ import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { FC, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { TIngredientsProps} from "../../utils/types";
+import { TRootState } from "../../services/store";
+import { TConstructorState } from "../../utils/types";
 
-export default function Ingredients({
+export const Ingredients:FC<TIngredientsProps>=({
   ingredients,
   name,
   onOpen,
   onDragHandler,
   elRef,
   currentId,
-}) {
+}) =>{
  
   const location = useLocation()
-  const burgerIngredients = useSelector(
-    (state) => state.constructorStore.draggedFilling
-  );
-  const buns = useSelector((state) => state.constructorStore.draggedBuns);
+  
+  const {draggedBuns, draggedFilling} = useSelector<TRootState, TConstructorState>(state => state.constructorStore);
  
 
   const ingredientCount = useMemo(() => {
-    let counter = {};
+    let counter: any = {};
 
-    burgerIngredients.forEach((element) => {
+    draggedFilling.forEach(element => {
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }
       counter[element._id]++;
     });
 
-    buns.forEach((element) => {
+    draggedBuns.forEach((element) => {
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }
@@ -44,7 +43,7 @@ export default function Ingredients({
 
     
     return counter;
-  }, [burgerIngredients]);
+  }, [draggedFilling, draggedBuns]);
 
   return (
     <>
@@ -93,11 +92,4 @@ export default function Ingredients({
   );
 }
 
-Ingredients.propTypes = {
-  ingredients: PropTypes.array.isRequired,
-  name: PropTypes.string.isRequired,
-  elRef: PropTypes.func.isRequired,
-  currentId: PropTypes.string.isRequired,
-  onOpen: PropTypes.func.isRequired,
-  onDragHandler: PropTypes.func.isRequired,
-};
+

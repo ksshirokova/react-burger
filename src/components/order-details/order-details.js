@@ -1,14 +1,14 @@
 
 
 import  doneIcon  from '../../images/graphics.svg'
-import PropTypes from 'prop-types'; 
+
 import style from './order-details.module.css';
 import { useSelector } from 'react-redux'; 
 import {Circles} from 'react-loader-spinner'
 
 export default function OrderDetails({number}) {
     const isLoading = useSelector(state=>state.orderInfo.loading) 
-    const error = useSelector(state=>state.orderInfo.error)
+    
 
     return (
         <section className={style.section}>
@@ -23,6 +23,3 @@ export default function OrderDetails({number}) {
     )
 }
 
-OrderDetails.propTypes = {
-    number: PropTypes.number
-}

@@ -1,6 +1,8 @@
 
 import { requestData, getCookie, checkResponse, setCookie } from "./utils";
 
+import { TRefreshUsersData } from "./types";
+
 const API_URL = "https://norma.nomoreparties.space/api";
 
 export const getIngredientsApi = async () => {
@@ -14,7 +16,7 @@ export const getIngredientsApi = async () => {
   );
 };
 
-export const sendOrdersData = async (burgerIngredients) => {
+export const sendOrdersData = async (burgerIngredients: Array<object>) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -33,7 +35,7 @@ export const sendOrdersData = async (burgerIngredients) => {
   );
 };
 
-export const sendEmailApi = async (usersEmail) => {
+export const sendEmailApi = async (usersEmail: string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -55,7 +57,7 @@ export const sendEmailApi = async (usersEmail) => {
   );
 };
 
-export const sendNewPasswordApi = async (usersPassword, usersToken) => {
+export const sendNewPasswordApi = async (usersPassword: string, usersToken: string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -77,7 +79,7 @@ export const sendNewPasswordApi = async (usersPassword, usersToken) => {
   );
 };
 
-export const registerUserApi = async (usersName, usersEmail, usersPassword) => {
+export const registerUserApi = async (usersName: string, usersEmail: string, usersPassword: string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -102,7 +104,7 @@ export const registerUserApi = async (usersName, usersEmail, usersPassword) => {
   );
 };
 
-export const loginUserApi = async (usersEmail, usersPassword) => {
+export const loginUserApi = async (usersEmail:string, usersPassword:string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -126,7 +128,7 @@ export const loginUserApi = async (usersEmail, usersPassword) => {
   );
 };
 
-export const getUserApi = async (token) => {
+export const getUserApi = async (token:string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -152,7 +154,7 @@ export const getUserApi = async (token) => {
 
 
 
-export const changeUsersDataApi = async (newName, newEmail, newPassword) => {
+export const changeUsersDataApi = async (newName:string, newEmail:string, newPassword:string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -179,7 +181,7 @@ export const changeUsersDataApi = async (newName, newEmail, newPassword) => {
   );
 };
 
-export const logoutApi = async (refreshToken) => {
+export const logoutApi = async (refreshToken:string) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -203,7 +205,7 @@ export const logoutApi = async (refreshToken) => {
   );
 }
 
-export const refreshToken = (refreshToken) => {
+export const refreshToken = (refreshToken:string | undefined) => {
   return fetch(`${API_URL}/auth/token`, {
     method: "POST",
     headers: {
@@ -218,18 +220,18 @@ export const refreshToken = (refreshToken) => {
 }
 
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async (url:string, options: any ) => {
   try {
     const res = await fetch(url, options)
     return await checkResponse(res)
     
-  } catch (err) {
+  } catch (err: any) {
     
     if (err.message === "jwt malformed" || "jwt expired" ) {
       
       const refreshUsersData = await refreshToken(getCookie('refreshToken'));
       
-      await checkResponse(refreshUsersData)
+      await checkResponse<TRefreshUsersData>(refreshUsersData)
         .then((refreshUsersData) => {
           options.headers.Authorization = refreshUsersData.accessToken
           setCookie('token', refreshUsersData.accessToken);

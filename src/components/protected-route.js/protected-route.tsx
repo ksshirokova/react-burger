@@ -1,19 +1,19 @@
 
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
-import { checkAuth } from "../../services/actions/routing";
+
+import { useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
+import { TRouteState } from "../../utils/types";
+import { TRootState } from "../../services/store";
 
 
 
-export default function ProtectedRoute({ children, user, anonymous }) {
-    const isAuth = useSelector(state => state.routeStore.isAuth)
-    const isAuthChecked = useSelector(state => state.routeStore.isAuthChecked)
+
+export default function ProtectedRoute({ children, isUser, anonymous } : {isUser?: boolean, anonymous: boolean, children: JSX.Element}) {
+    const { isAuth, isAuthChecked, isLogged, userChecked, user}= useSelector<TRootState, TRouteState>(state => state.routeStore)
     
-    const isLoggedIn = !!useSelector(state => state.routeStore.user)
-    const loading = useSelector(state => state.routeStore.loading)
-    const isRegistred = useSelector(state => state.routeStore.isLogged)
-    const userChecked = useSelector(state => state.routeStore.userChecked)
+    
+    // const isLoggedIn = !!useSelector<TRootState, TRouteState>(state => state.routeStore.user)
+    
     
     
     const location = useLocation()
@@ -28,22 +28,22 @@ export default function ProtectedRoute({ children, user, anonymous }) {
             }
     
             //анонимный доступ - может ли сюда войти человек без данных юзера
-            if (anonymous && isLoggedIn && !user) {
+            if (anonymous && user && !isUser) {
                 return <Navigate to={ from } />;
                 
             }
     
     
-            if (!anonymous && !isLoggedIn && !user) {
+            if (!anonymous && !user && !isUser) {
                 return <Navigate to="/login" state={{ from: location}}/>;
     
                 
             }
-            if(!anonymous && !isAuth && isRegistred){
+            if(!anonymous && !isAuth && isLogged){
                 return <Navigate to="/login" state={{ from: location}}/>;
     
             }
-            if (!anonymous && isLoggedIn && user && isAuth) {
+            if (!anonymous && user && isUser && isAuth) {
                 return <Navigate to={ from } />;
                 //  return<Navigate to='/' replace={true}/>
     

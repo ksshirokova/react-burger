@@ -3,25 +3,24 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
 import { CHECK_DROPED_ELEMENT } from "../../services/actions/constructors-ingredients";
-import { useRef } from "react";
+import { FC, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { DROP_MOVED_ELEMENT } from "../../services/actions/constructors-ingredients";
-import PropTypes from "prop-types";
+import { TConstructorProps, TItem } from "../../utils/types";
+import { useTypeDispatch } from "../../utils/hooks-types";
 
-export default function BurgerConstructorElement({
+export const BurgerConstructorElement: FC<TConstructorProps>=({
   id,
   item,
-  index,
+  index, 
   type,
   isLocked,
   toClose,
   typeOfText,
-  className,
-  toDrag,
-}) {
-  const dispatch = useDispatch();
+  className
+}) => {
+  const dispatch = useTypeDispatch();
   const ref = useRef(null);
 
   const [{ isDrag }, drag] = useDrag({
@@ -34,8 +33,10 @@ export default function BurgerConstructorElement({
 
   const [, drop] = useDrop({
     accept: "element",
-    hover(item){
-      const { id: draggedId, index: itemIndex } = item;
+    hover(item: TItem) {
+      const { _id: draggedId, index: itemIndex } = item;
+      // item = { id, index }
+
       const fromIndex = index;
       const toIndex = itemIndex;
 
@@ -51,14 +52,14 @@ export default function BurgerConstructorElement({
 
   const opacity = isDrag ? 0 : 1;
   drag(drop(ref));
-
+  
   return (
-    !isDrag && (
+    !isDrag ? (
       <li
         className={className}
         ref={item.type !== "bun" ? ref : null}
         style={{ opacity }}
-        onDrag={toDrag}
+      
       >
         {item.type !== "bun" && <DragIcon type="primary" />}
 
@@ -71,18 +72,8 @@ export default function BurgerConstructorElement({
           handleClose={() => toClose(index)}
         />
       </li>
+    ) : (
+      <div></div>
     )
   );
 }
-
-BurgerConstructorElement.propTypes = {
-  index: PropTypes.number.isRequired,
-  item: PropTypes.object.isRequired,
-  id: PropTypes.string,
-  isLocked: PropTypes.bool.isRequired,
-  typeOfText: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
-  toClose: PropTypes.func,
-  toDrag: PropTypes.func,
-  type: PropTypes.string,
-};

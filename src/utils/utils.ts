@@ -1,17 +1,24 @@
 
-export const checkResponse = (res) => {
+export const checkResponse = <T>(res: Response): Promise<T> => {
   if (res.ok) {
     return res.json();
   }
   return res.json().then((res) => Promise.reject(res));
 };
+const checkSuccess = (res: any)=> {
+  if(res && res.success){
+    return res 
+  } 
 
-
-export function requestData(url, options) { 
-  return fetch(url, options).then(checkResponse)
+  return Promise.reject(`Ошибка: ${res}`);
 }
 
-export function setCookie(name, value, props) {
+export function requestData(url: string, options?: object) { 
+  return fetch(url, options).then(checkResponse).then(checkSuccess)
+}
+
+export function setCookie(name: string, value: string , props?: {
+  expires?: any; "max-age"?: number; [x: string]: any; secure?: boolean; path?: number}) {
   props = props || {};
   let exp = props.expires;
   if (typeof exp == 'number' && exp) {
@@ -34,13 +41,14 @@ export function setCookie(name, value, props) {
   document.cookie = updatedCookie;
 }
 
-export function getCookie(name) {
+export function getCookie(name: string) {
   const matches = document.cookie.match(
     new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function deleteCookie(name) {
-  setCookie(name, null, -1);
+export function deleteCookie(name: string) {
+  setCookie(name, "null", {path: -1});
 }
+
