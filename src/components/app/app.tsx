@@ -1,11 +1,10 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styles from "./app.module.css";
-import AppHeader from "../app-header/app-header.js";
+import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import LoginPage from "../../pages/login-page";
 import ForgotPassword from "../../pages/forgot-password-1";
@@ -15,7 +14,7 @@ import { getIngredients } from "../../services/actions/ingredients";
 
 
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   CLOSE_ING_MODAL,
   DELITE_MODAL_INGREDIENTS,
@@ -27,21 +26,25 @@ import RegistrationPage from "../../pages/registration-page";
 import ResetPassword from "../../pages/reset-password";
 import { useEffect } from "react";
 import { checkAuth } from "../../services/actions/routing";
+import { TRootState } from "../../services/store";
+import { TIngredientsInfoState, TOrderState } from "../../utils/types";
+import IngredientDetailsPage from "../ingredient-details/ingredient-details";
+import { useTypeDispatch } from "../../utils/hooks-types";
+
 
 
 
 function App() {
-
-  
-  const orderIsOpened = useSelector((state) => state.orderInfo.isOpened);
-  const ingredientIsOpened = useSelector((state) => state.ingredientInfo.isOpened);
-  const modalIngredients = useSelector((state) => state.ingredientInfo.item);
-  const orderItems = useSelector((state) => state.orderInfo.orderItems);
-  const orderItem = orderItems.map((item) => item.action.order.number);
-  const orderNumber = orderItem[0];
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useTypeDispatch();
   const location = useLocation()
+  
+  const { isOpened, orderItems } = useSelector<TRootState, TOrderState>(state => state.orderInfo);
+  const { ingIsOpened, item } = useSelector<TRootState, TIngredientsInfoState>(state => state.ingredientInfo);//ингредиент модалки
+  // const modalIngredients = useSelector((state) => state.ingredientInfo.item);
+  const orderItem = orderItems.map((item:any) => item.action.order.number); //не уверена что такое orderItems
+  const orderNumber = orderItem[0];
+  
   const background = location.state && location.state.background 
   const elementId = location.state && location.state.elementId;
   
@@ -53,14 +56,15 @@ function App() {
     navigate('/')
   };
 
-  
+  console.log(ingIsOpened, background)
 
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkAuth())
     
     
-  }, [])
+    
+  }, [dispatch])
  
     
   
@@ -79,31 +83,31 @@ function App() {
           </main>
           
         } />
-        <Route path='/login' element={<ProtectedRoute anonymous={false} user={true}><LoginPage /></ProtectedRoute>} />
-        <Route path='/register' element={<ProtectedRoute anonymous={false} user={true}><RegistrationPage /></ProtectedRoute>} />
-        <Route path='/forgot-password' element={<ProtectedRoute anonymous={false} user={true}><ForgotPassword /></ProtectedRoute>} />
-        <Route path='/reset-password' element={<ProtectedRoute anonymous={false} user={true}><ResetPassword /> </ProtectedRoute>} />
+        <Route path='/login' element={<ProtectedRoute anonymous={false} isUser={true}><LoginPage /></ProtectedRoute>} />
+        <Route path='/register' element={<ProtectedRoute anonymous={false} isUser={true}><RegistrationPage /></ProtectedRoute>} />
+        <Route path='/forgot-password' element={<ProtectedRoute anonymous={false} isUser={true}><ForgotPassword /></ProtectedRoute>} />
+        <Route path='/reset-password' element={<ProtectedRoute anonymous={false} isUser={true}><ResetPassword /></ProtectedRoute>} />
         <Route path='/profile' element={
           <ProtectedRoute anonymous={false} >
             <ProfilePage />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Error404 />} />
-        <Route path={'/ingredients/:ingredientId'} element={<IngredientDetails title="Детали ингредиента" /> } />
+        <Route path={'/ingredients/:ingredientId'} element={<IngredientDetailsPage /> } />
 
 
       </Routes >
       
       
-        {background && ingredientIsOpened && <Routes>
+        {background && ingIsOpened && <Routes>
           <Route path={"/ingredients/" + elementId} element = {
           <Modal onClose={closeOrderModal} title="Детали ингредиента">
-          <IngredientDetails ingredients={modalIngredients}  />
+          <IngredientDetailsPage ingredients={item}  />
         </Modal>}
         />
           </Routes>}
       
-      {orderIsOpened && (
+      {isOpened && (
         <Modal onClose={closeOrderModal}>
           <OrderDetails number={orderNumber} />
         </Modal>

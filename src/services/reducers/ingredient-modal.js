@@ -6,8 +6,24 @@ import {
 } from "../actions/ingredient-modal";
 
 const initialState = {
-  item: {},
-  isOpened: false,
+  item: {
+    _id: '',
+    name: '',
+    price: 0,
+    image: '',
+    image_large: '',
+    image_mobile: '',
+    type: '',
+    calories: 0,
+    carbohydrates: 0,
+    fat: 0,
+    proteins: 0,
+    __v: 0,
+    uid: '',
+    uuid: '',
+    index: 0
+  },
+  ingIsOpened: false,
 };
 
 export const ingredientModalReducer = (state = initialState, action) => {
@@ -27,13 +43,13 @@ export const ingredientModalReducer = (state = initialState, action) => {
     case OPEN_ING_MODAL: {
       return {
         ...state,
-        isOpened: true,
+        ingIsOpened: true,
       };
     }
     case CLOSE_ING_MODAL: {
       return {
         ...state,
-        isOpened: false,
+        ingIsOpened: false,
       };
     }
     default: {

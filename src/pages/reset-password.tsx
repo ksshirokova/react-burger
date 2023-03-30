@@ -1,42 +1,44 @@
-import React, { useEffect } from "react"
+import { FormEvent, useEffect, useState, useRef } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
-
 import styles from './registration-styles.module.css'
-import { NavLink, Link, Navigate, useNavigate, useLocation } from "react-router-dom"
+import { NavLink, Link, useNavigate } from "react-router-dom"
 import { sendNewPassword } from "../services/actions/routing"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
+import { TRootState } from "../services/store"
+import { TRouteState } from "../utils/types"
+import { useTypeDispatch } from "../utils/hooks-types"
+
 
 export default function ResetPassword() {
-    const dispatch = useDispatch()
-    const [password, setPassword] = React.useState('')
-    const [code, setCode] = React.useState('')
-    const [icon, setIcon] = React.useState('HideIcon')
-    const inputRef = React.useRef(null)
-    const passInput = document.getElementById("resetPass");
-    const location = useLocation()
-    const emailSent = useSelector(state => state.routeStore.emailSent)
+
+    const dispatch = useTypeDispatch()
+    const [password, setPassword] = useState<string>('')
+    const [code, setCode] = useState<string>('')
+    const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">('HideIcon')
+    const inputRef = useRef<HTMLInputElement>(null!)
+    const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
     const navigate = useNavigate()
-    const lastPageIsVisited = useSelector(state=>state.routeStore.forgotPassVisited)
+    const {forgotPassVisited} = useSelector<TRootState, TRouteState>(state=>state.routeStore)
+
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
-        if (passInput.type === 'password') {
-            passInput.type = 'text'
+        if (inputType === 'password') {
+            setInputType('text')
             setIcon('ShowIcon')
         }
         else {
-            passInput.type = 'password'
+            setInputType('password')
             setIcon('HideIcon')
 
         }
 
     }
+
     useEffect(() => {
-        !lastPageIsVisited && navigate('/forgot-password')
-        
-           
-    }, [])
+        !forgotPassVisited && navigate('/forgot-password')        
+    }, [forgotPassVisited, navigate])
     
-    const handleClick = (e) => {
+    const handleClick = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(sendNewPassword(password, code))
     }
@@ -47,8 +49,7 @@ export default function ResetPassword() {
             <section className={styles.inputs}>
                 <form onSubmit={handleClick}>
                     <p className={`${styles.text} text text_type_main-medium mb-6`}>Восстановление пароля</p>
-                    <Input
-                        id={'resetPass'}
+                    <Input                
                         type={'password'}
                         placeholder={'Введите новый пароль'}
                         onChange={e => setPassword(e.target.value)}
@@ -66,12 +67,10 @@ export default function ResetPassword() {
                         type={'text'}
                         placeholder={'Введите код из письма'}
                         onChange={e => setCode(e.target.value)}
-
                         value={code}
                         name={'name'}
                         error={false}
                         ref={inputRef}
-
                         errorText={'Ошибка'}
                         size={'default'}
                         extraClass="ml-1 mb-6"

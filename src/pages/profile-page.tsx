@@ -1,39 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Input,
-  EditIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { changeData, checkAuth } from "../services/actions/routing";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { changeData } from "../services/actions/routing";
 import { logoutFromSite } from "../services/actions/routing";
 import { getCookie } from "../utils/utils";
+import { useTypeDispatch } from "../utils/hooks-types";
+import { TRootState } from "../services/store";
+import { TRouteState } from "../utils/types";
 
 export default function ProfilePage() {
-  const [nameIcon, setNameIcon] = React.useState("EditIcon");
-  const [emailIcon, setEmailIcon] = React.useState("EditIcon");
-  const [passwordIcon, setPasswordIcon] = React.useState("EditIcon");
-  // const name = useSelector((state) => state.routeStore.user.name)
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [nameDisabled, setNameDisabled] = React.useState(true);
-  const [passwordDisabled, setPasswordDisabled] = React.useState(true);
-  const [emailDisabled, setEmailDisabled] = React.useState(true);
 
-  const user = useSelector((state) => state.routeStore.user);
-  const isLoading = useSelector((state) => state.routeStore.loading);
-  const usersPassword = useSelector((state) => state.routeStore.password);
-  const inputRef = React.useRef(null);
-  const { pathname } = useLocation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const [nameIcon, setNameIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
+  const [emailIcon, setEmailIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
+  const [passwordIcon, setPasswordIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [usersPassword, setPassword] = useState("");
+  const [nameDisabled, setNameDisabled] = useState(true);
+  const [passwordDisabled, setPasswordDisabled] = useState(true);
+  const [emailDisabled, setEmailDisabled] = useState(true);
+
+  const {user, loading, password }= useSelector<TRootState, TRouteState>(state => state.routeStore);
+  const inputRef = useRef<HTMLInputElement>(null!);
+  const dispatch = useTypeDispatch();
+  
 
   const onIconEmailClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
+    
     if (emailDisabled === true) {
       setEmailDisabled(false);
       setEmailIcon("CloseIcon");
@@ -72,18 +71,18 @@ export default function ProfilePage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setPassword(usersPassword)
+      setPassword(password)
       
   
     }
-  }, [user]);
+  }, [user, password]);
 
   const backToUserData=()=>{
     setName(user.name);
     setEmail(user.email);
-    usersPassword && setPassword(usersPassword)
+    password && setPassword(password)
   }
-  const logoutFromHere = (e)=>{
+  const logoutFromHere = (e: any)=>{
     e.preventDefault()
     dispatch(logoutFromSite(getCookie('refreshToken')))
     
@@ -91,7 +90,7 @@ export default function ProfilePage() {
   }
 
   return (
-    isLoading ? 
+    loading ? 
     <p className={`${styles.loader} text text_type_main-large mt-10 `}>
             Загрузка...
         </p>
@@ -181,7 +180,7 @@ export default function ProfilePage() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={passwordDisabled}
             icon={passwordIcon}
-            value={password}
+            value={usersPassword}
             name={"name"}
             error={false}
             ref={inputRef}

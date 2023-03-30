@@ -1,36 +1,36 @@
-import React, { useEffect } from "react"
+import { useState, useRef, FormEvent } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import styles from './registration-styles.module.css'
 import { NavLink } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
 import { registerUser } from "../services/actions/routing"
+import { useTypeDispatch } from "../utils/hooks-types"
+
+
 
 export default function RegistrationPage() {
-    const [name, setName] = React.useState('')
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
-    const [icon, setIcon] = React.useState('HideIcon')
-    const inputRef = React.useRef(null)
-    const passInput = document.getElementById("passwordInput");
-    const isUser = !!useSelector(state => state.routeStore.user)
-
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const inputRef = useRef<HTMLInputElement>(null!)
+    const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">('HideIcon')
+    const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
     
-    const dispatch = useDispatch()
+    const dispatch = useTypeDispatch()
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
-        if (passInput.type === 'password') {
-            passInput.type = 'text'
+        if (inputType === 'password') {
+            setInputType('text')
             setIcon('ShowIcon')
         }
         else {
-            passInput.type = 'password'
+            setInputType('password')
             setIcon('HideIcon')
 
         }
 
     }
 
-    const sendData = (e) => {
+    const sendData = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         dispatch(registerUser(name, email, password))
         
@@ -44,16 +44,13 @@ export default function RegistrationPage() {
                 <form onSubmit={sendData}>
                     <p className={`${styles.text} text text_type_main-medium mb-6`}>Регистрация</p>
                     <Input
-
                         type={'text'}
                         placeholder={'Имя'}
                         onChange={e => setName(e.target.value)}
-
                         value={name}
                         name={'name'}
                         error={false}
                         ref={inputRef}
-
                         errorText={'Ошибка'}
                         size={'default'}
                         extraClass="ml-1 mb-6"
@@ -62,19 +59,16 @@ export default function RegistrationPage() {
                         type={'email'}
                         placeholder={'E-mail'}
                         onChange={e => setEmail(e.target.value)}
-
                         value={email}
                         name={'name'}
                         error={false}
                         ref={inputRef}
-
                         errorText={'Ошибка'}
                         size={'default'}
                         extraClass="ml-1 mb-6"
                     />
-                    <Input
-                        id="passwordInput"
-                        type={'password'}
+                    <Input                      
+                        type={inputType}
                         placeholder={'Пароль'}
                         onChange={e => setPassword(e.target.value)}
                         icon={icon}

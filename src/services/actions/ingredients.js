@@ -5,7 +5,7 @@ export const GET_INGREDIENTS_SUCCESS = "GET_INGREDIENTS_SUCCESS";
 export const GET_INGREDIENTS_FAILED = "GET_INGREDIENTS_FAILED";
 export const CHANGE_INGREDIENTS_COUNT = "CHANGE_INGREDIENTS_COUNT";
 
-export const getIngredients = () => (dispatch) => {
+export const getIngredients= () => (dispatch) => {
   //функция запроса ингредиентов, которая должна вернуть объект экшена
   dispatch({ type: GET_INGREDIENTS_REQUEST });
 

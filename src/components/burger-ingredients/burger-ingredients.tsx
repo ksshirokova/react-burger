@@ -2,20 +2,21 @@ import React from "react";
 
 import style from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import Ingredients from "../ingredient/ingredient";
+import { Ingredients } from "../ingredient/ingredient";
 
 import { addModalIngredients } from "../../services/actions/ingredient-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { OPEN_ING_MODAL } from "../../services/actions/ingredient-modal";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import PropTypes from "prop-types";
+import { TIngredientsState, TItem } from "../../utils/types";
+import { TRootState } from "../../services/store";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
 
 
 
 export default function BurgerIngredients() {
-  const { bun, main, sauce } = useSelector((state) => state.ingredients);
+  const { bun, main, sauce } = useSelector<TRootState, TIngredientsState>(state => state.ingredients);
   const dispatch = useDispatch();
   
 
@@ -27,7 +28,7 @@ export default function BurgerIngredients() {
   
   };
 
-  const handleClick = (item) => {
+  const handleClick = (item: TItem) => {
     
       dispatch(addModalIngredients(item));
       openIngredientModal();
@@ -35,7 +36,7 @@ export default function BurgerIngredients() {
     
   };
 
-  const handleDrag = (event, item) => {
+  const handleDrag = (event: KeyboardEvent, item: TItem) => {
     
     event.preventDefault();
     dispatch(addDraggedElement(item));
@@ -47,7 +48,7 @@ export default function BurgerIngredients() {
   const { ref: sauceRef, inView: inViewSauces } = useInView();
   const { ref: mainRef, inView: inViewMain } = useInView();
 
-  function tabSwitch(viewBuns, viewSauce, viewMain) {
+  function tabSwitch(viewBuns:boolean, viewSauce:boolean, viewMain:boolean) {
     if (viewBuns) {
       return setCurrent("one");
     }
@@ -63,7 +64,7 @@ export default function BurgerIngredients() {
     tabSwitch(inViewBuns, inViewSauces, inViewMain);
   }, [inViewBuns, inViewSauces, inViewMain]);
 
-  const moveToElement = (current) => {
+  const moveToElement = (current: string) => {
     const element = document.getElementById(`${current}`);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });

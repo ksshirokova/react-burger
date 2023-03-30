@@ -7,7 +7,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 
 const modals = document.getElementById("modals") as HTMLElement;
 
-export default function Modal({onClose, title, children} : {onClose: ()=> void, title: string, children: JSX.Element}) 
+export default function Modal({onClose, title, children} : {onClose: ()=> void, title?: string, children: JSX.Element}) 
 {
   React.useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
