@@ -1,3 +1,5 @@
+
+import { TOrderModalActions } from "../actions/order-modal";
 import {
   OPEN_ORDER_MODAL,
   CLOSE_ORDER_MODAL,
@@ -5,15 +7,23 @@ import {
   ADD_ORDER_SUCCESS,
   RESET_ORDER_DATA,
   ADD_ORDER_FAILED,
-} from "../actions/order-modal";
+} from "../constants";
 
-const initialState = {
+type TOrderModalState = {
+  orderItems: any,
+  isOpened: boolean,
+  loading: boolean,
+  error: null | string
+}
+
+const initialState: TOrderModalState = {
   orderItems: [],
   isOpened: false,
   loading: false,
+  error: null
 };
 
-export const orderModalReducer = (state = initialState, action) => {
+export const orderModalReducer = (state = initialState, action: TOrderModalActions): TOrderModalState => {
   switch (action.type) {
     case OPEN_ORDER_MODAL: {
       return {

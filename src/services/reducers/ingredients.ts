@@ -3,9 +3,22 @@ import {
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,
   CHANGE_INGREDIENTS_COUNT,
-} from "../actions/ingredients";
 
-const initialState = {
+} from "../constants";
+import { TIngredientsActions } from "../actions/ingredients";
+
+import { TItem } from "../../utils/types";
+type TIngredientsState ={
+  data: TItem[],
+  sauce:  TItem[]
+  main:  TItem[]
+  bun:  TItem[]
+  count: number | null,
+  loading: boolean,
+  error: boolean | null,
+}
+
+const initialState: TIngredientsState = {
   data: [],
   sauce: [],
   main: [],
@@ -14,7 +27,7 @@ const initialState = {
   loading: false,
   error: null,
 };
-export const ingredientsReducer = (state = initialState, action) => {
+export const ingredientsReducer = (state = initialState, action: TIngredientsActions): TIngredientsState => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return { ...state, loading: true };

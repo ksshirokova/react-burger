@@ -4,11 +4,17 @@ import ReactDOM from "react-dom";
 import style from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-
 const modals = document.getElementById("modals") as HTMLElement;
 
-export default function Modal({onClose, title, children} : {onClose: ()=> void, title?: string, children: JSX.Element}) 
-{
+export default function Modal({
+  onClose,
+  title,
+  children,
+}: {
+  onClose: () => void;
+  title?: string;
+  children: JSX.Element;
+}) {
   React.useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       event.key === "Escape" && onClose();
@@ -20,33 +26,23 @@ export default function Modal({onClose, title, children} : {onClose: ()=> void, 
       document.removeEventListener("keydown", handleEsc);
     };
   }, [onClose]);
-  
 
-  
+  return ReactDOM.createPortal(
+    <>
+      <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
+        <div className={style.div}>
+          <h3 className="text text_type_main-large">{title}</h3>
 
-
-    return ReactDOM.createPortal(
-
-
-
-      <>
-        <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
-          <div className={style.div}>
-            <h3 className="text text_type_main-large">{title}</h3>
-
-            <div className={style.closeIcon} onClick={onClose}>
-              <CloseIcon type="primary" />
-            </div>
+          <div className={style.closeIcon} onClick={onClose}>
+            <CloseIcon type="primary" />
           </div>
-          {children}
-        </section>
+        </div>
+        {children}
+      </section>
 
-        <ModalOverlay toClose={onClose} />
-      </>,
+      <ModalOverlay toClose={onClose} />
+    </>,
 
-      modals
-    )
-  
+    modals
+  );
 }
-
-

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react"
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import styles from './registration-styles.module.css'
 import { Link, useNavigate } from "react-router-dom"
-import { sendEmail, VISITED_FORGOT_PASSWORD } from "../services/actions/routing"
+import { VISITED_FORGOT_PASSWORD } from "../services/constants"
+import { sendEmail } from "../services/actions/routing"
 
 import { useTypeDispatch } from "../utils/hooks-types"
 

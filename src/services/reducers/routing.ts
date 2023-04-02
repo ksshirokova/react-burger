@@ -1,7 +1,32 @@
-import { SEND_EMAIL_REQUEST,USER_REQUEST, USER_FAILED, VISITED_FORGOT_PASSWORD, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED, SEND_EMAIL_FAILED, USER_SUCCESS, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../actions/routing";
+import { SEND_EMAIL_REQUEST,USER_REQUEST, USER_FAILED, VISITED_FORGOT_PASSWORD, LOGOUT_SUCCESS, LOGOUT_REQUEST, SEND_EMAIL_SUCCESS, SEND_NEW_DATA, AUTH_CHECKED, SEND_EMAIL_FAILED, USER_SUCCESS, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, RESET_USERS_DATA } from "../constants";
 import { setCookie } from "../../utils/utils";
 import { deleteCookie } from "../../utils/utils";
-const initialState = {
+import { LOGOUT_FAILED } from "../constants";
+import { TRoutingActions } from "../actions/routing";
+
+export type TRoutingState = {
+    isAuth: boolean,
+    loading: boolean,
+    error: null | string,
+    user:null | {
+        email: string,
+        name: string,
+        password?: string,
+      },
+    isRegistred: boolean,
+    isLogged: boolean,
+    password?: string | null,
+    isAuthChecked: boolean,
+    userChecked: boolean,
+    emailSent: boolean,
+    forgotPassVisited: boolean,
+    email?: string | null,
+    token?: string | null,
+    name?: string | null,
+    userCheked: boolean,
+    isLoading: boolean,
+};
+const initialState: TRoutingState = {
     isAuth: false,
     loading: false,
     error: null,
@@ -12,10 +37,15 @@ const initialState = {
     isAuthChecked: false,
     userChecked: false,
     emailSent: false,
-    forgotPassVisited: false
+    forgotPassVisited: false,
+    email: null,
+    token: null,
+    name: null,
+    userCheked: false,
+    isLoading: false,
 };
 
-export const routingReducer = (state = initialState, action) => {
+export const routingReducer = (state = initialState, action: TRoutingActions): TRoutingState => {
     switch (action.type) {
         case SEND_EMAIL_REQUEST: {
             return { ...state, loading: true, emailSent: false};
@@ -82,7 +112,6 @@ export const routingReducer = (state = initialState, action) => {
         }
         case LOGIN_USER_SUCCESS: {
             const authToken = action.accessToken.split('Bearer ')[1];
-            console.log(authToken)
             if (authToken) {
 
                 setCookie('token', authToken, { secure: true, 'max-age': 1000 });
@@ -174,6 +203,11 @@ export const routingReducer = (state = initialState, action) => {
             deleteCookie('refreshToken');
             return {
                 ...state, isLoading: false, isLogged: false, isAuth: false
+            }
+        }
+        case LOGOUT_FAILED: {
+            return {
+                ...state, isLoading: false, isLogged: true, isAuth: true, error: action.payload.error
             }
         }
         case RESET_USERS_DATA: {

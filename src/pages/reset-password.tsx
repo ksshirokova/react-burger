@@ -3,10 +3,8 @@ import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-component
 import styles from './registration-styles.module.css'
 import { NavLink, Link, useNavigate } from "react-router-dom"
 import { sendNewPassword } from "../services/actions/routing"
-import { useSelector } from "react-redux"
-import { TRootState } from "../services/store"
-import { TRouteState } from "../utils/types"
 import { useTypeDispatch } from "../utils/hooks-types"
+import { useTypeSelector } from "../utils/hooks-types"
 
 
 export default function ResetPassword() {
@@ -18,7 +16,7 @@ export default function ResetPassword() {
     const inputRef = useRef<HTMLInputElement>(null!)
     const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
     const navigate = useNavigate()
-    const {forgotPassVisited} = useSelector<TRootState, TRouteState>(state=>state.routeStore)
+    const {forgotPassVisited} = useTypeSelector(state=>state.routeStore)
 
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)

@@ -3,30 +3,21 @@ import {
   CLOSE_ING_MODAL,
   OPEN_ING_MODAL,
   DELITE_MODAL_INGREDIENTS,
-} from "../actions/ingredient-modal";
+} from "../constants";
+import { TItem, TItemUndefined } from "../../utils/types";
+import { TIngModalActions } from "../actions/ingredient-modal";
 
-const initialState = {
-  item: {
-    _id: '',
-    name: '',
-    price: 0,
-    image: '',
-    image_large: '',
-    image_mobile: '',
-    type: '',
-    calories: 0,
-    carbohydrates: 0,
-    fat: 0,
-    proteins: 0,
-    __v: 0,
-    uid: '',
-    uuid: '',
-    index: 0
-  },
+type TIngModalState = {
+  item: TItem | TItemUndefined,
+  ingIsOpened: boolean,
+}
+
+const initialState: TIngModalState = {
+  item: {},
   ingIsOpened: false,
 };
 
-export const ingredientModalReducer = (state = initialState, action) => {
+export const ingredientModalReducer = (state = initialState, action: TIngModalActions): TIngModalState => {
   switch (action.type) {
     case GET_MODAL_INGREDIENTS: {
       return {

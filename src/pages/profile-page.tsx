@@ -5,13 +5,13 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import { changeData } from "../services/actions/routing";
 import { logoutFromSite } from "../services/actions/routing";
 import { getCookie } from "../utils/utils";
 import { useTypeDispatch } from "../utils/hooks-types";
-import { TRootState } from "../services/store";
-import { TRouteState } from "../utils/types";
+import { useTypeSelector } from "../utils/hooks-types";
+import { TRoutingState } from "../services/reducers/routing";
 
 export default function ProfilePage() {
 
@@ -25,7 +25,7 @@ export default function ProfilePage() {
   const [passwordDisabled, setPasswordDisabled] = useState(true);
   const [emailDisabled, setEmailDisabled] = useState(true);
 
-  const {user, loading, password }= useSelector<TRootState, TRouteState>(state => state.routeStore);
+  const {user, loading, password }= useTypeSelector(state => state.routeStore);
   const inputRef = useRef<HTMLInputElement>(null!);
   const dispatch = useTypeDispatch();
   

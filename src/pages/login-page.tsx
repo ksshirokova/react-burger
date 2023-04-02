@@ -5,11 +5,12 @@ import {
 import { FormEvent, useState, useRef } from "react";
 import styles from "./registration-styles.module.css";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import { loginUser } from "../services/actions/routing";
-import { TRootState } from "../services/store";
-import { TRouteState } from "../utils/types";
+
+
 import { useTypeDispatch } from "../utils/hooks-types";
+import { useTypeSelector } from "../utils/hooks-types";
 
 export default function LoginPage() {
 
@@ -17,7 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const inputRef = useRef<HTMLInputElement>(null!);
   const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">("HideIcon");
-  const { loading } = useSelector<TRootState, TRouteState>((state) => state.routeStore);
+  const { loading } = useTypeSelector((state) => state.routeStore);
   const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
   
   const dispatch = useTypeDispatch();

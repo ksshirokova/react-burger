@@ -10,7 +10,6 @@ const logMiddleWare = (store: any) => (next: any) => (action: any) => {
 };
 const store = createStore(rootReducer, applyMiddleware(thunk, logMiddleWare));
 
-export type TRootState = ReturnType<typeof rootReducer>
-export type TAppDispatch = typeof store.dispatch
+
 
 export default store;
