@@ -4,25 +4,24 @@ import style from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Ingredients } from "../ingredient/ingredient";
 import { addModalIngredients } from "../../services/actions/ingredient-modal";
-import { OPEN_ING_MODAL } from "../../services/constants";
+import { TItem } from "../../utils/types";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { TIngredientsState, TItem } from "../../utils/types";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
-import { useTypeDispatch, useTypeSelector } from "../../utils/hooks-types";
+import { useSelector, useDispatch } from "../../utils";
 
 export default function BurgerIngredients() {
-  const { bun, main, sauce } = useTypeSelector(
+  const { bun, main, sauce } = useSelector(
     (state) => state.ingredients
   );
-  const dispatch = useTypeDispatch();
-  const openIngredientModal = () => {
-    dispatch({ type: OPEN_ING_MODAL });
-  };
+  const dispatch = useDispatch();
+  // const openIngredientModal = () => {
+  //   dispatch({ type: OPEN_ING_MODAL });
+  // };
 
   const handleClick = (item: TItem) => {
     dispatch(addModalIngredients(item));
-    openIngredientModal();
+    // openIngredientModal();
   };
 
   const handleDrag = (event: KeyboardEvent, item: TItem) => {

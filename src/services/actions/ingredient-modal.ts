@@ -1,5 +1,5 @@
 import { TItem } from '../../utils/types';
-import { GET_MODAL_INGREDIENTS, CLOSE_ING_MODAL, OPEN_ING_MODAL, DELITE_MODAL_INGREDIENTS } from '../constants'
+import { GET_MODAL_INGREDIENTS, CLOSE_ING_MODAL, OPEN_ING_MODAL,CLOSE_ORDER_MODAL, DELITE_MODAL_INGREDIENTS } from '../constants'
 
 export interface IGetModalIngredients {
     readonly type: typeof GET_MODAL_INGREDIENTS;
@@ -9,6 +9,11 @@ export interface IGetModalIngredients {
 
 export interface ICloseIngModal {
     readonly type: typeof CLOSE_ING_MODAL;
+    readonly ingIsOpened: boolean;
+
+}
+export interface ICloseOrderModal {
+    readonly type: typeof CLOSE_ORDER_MODAL;
     readonly ingIsOpened: boolean;
 
 }
@@ -37,6 +42,7 @@ export type TIngModalActions =
 | ICloseIngModal
 | IOpenIngModal
 | IDeliteModalIng
+| ICloseOrderModal
 
 
 export const deliteModalIngredients = (item: TItem): IDeliteModalIng => {

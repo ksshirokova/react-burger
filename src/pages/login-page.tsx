@@ -9,8 +9,9 @@ import { NavLink } from "react-router-dom";
 import { loginUser } from "../services/actions/routing";
 
 
-import { useTypeDispatch } from "../utils/hooks-types";
-import { useTypeSelector } from "../utils/hooks-types";
+
+import { useDispatch } from "../utils";
+import { useSelector } from "../utils";
 
 export default function LoginPage() {
 
@@ -18,10 +19,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const inputRef = useRef<HTMLInputElement>(null!);
   const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">("HideIcon");
-  const { loading } = useTypeSelector((state) => state.routeStore);
+  const { loading } = useSelector((state) => state.routeStore);
   const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
   
-  const dispatch = useTypeDispatch();
+  const dispatch = useDispatch();
  
   const onIconClick = () => {
     setTimeout(() => inputRef.current.focus(), 0)

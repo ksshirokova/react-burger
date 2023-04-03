@@ -1,10 +1,10 @@
 import doneIcon from "../../images/graphics.svg";
 import style from "./order-details.module.css";
 import { Circles } from "react-loader-spinner";
-import { useTypeSelector } from "../../utils/hooks-types";
-
+import { useSelector } from "../../utils";
 export default function OrderDetails({ number }: { number: number }) {
-  const { loading } = useTypeSelector((state) => state.orderInfo);
+  
+  const { loading } = useSelector((state) => state.orderInfo);
 
   return (
     <section className={style.section}>

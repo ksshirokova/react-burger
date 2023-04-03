@@ -5,11 +5,11 @@ import { Link, useNavigate } from "react-router-dom"
 import { VISITED_FORGOT_PASSWORD } from "../services/constants"
 import { sendEmail } from "../services/actions/routing"
 
-import { useTypeDispatch } from "../utils/hooks-types"
+import { useDispatch } from "../utils"
 
 export default function ForgotPassword() {
 
-    const dispatch = useTypeDispatch()
+    const dispatch = useDispatch()
     const [value, setValue] = useState('')
     const inputRef = useRef<HTMLInputElement>(null!)
     const onIconClick = () => {
@@ -27,7 +27,7 @@ export default function ForgotPassword() {
     }
 
     useEffect(() => {
-        dispatch({ type: VISITED_FORGOT_PASSWORD })
+        dispatch({ type: VISITED_FORGOT_PASSWORD, forgotPassVisited: true })
     }, [dispatch])
 
     return (

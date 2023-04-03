@@ -1,6 +1,7 @@
 import { AppDispatch, AppThunk } from "../../utils";
 import { sendEmailApi, sendNewPasswordApi, registerUserApi, loginUserApi, getUserApi, changeUsersDataApi } from "../../utils/api";
 import { getCookie } from "../../utils/utils";
+import { logoutApi } from "../../utils/api";
 import { SEND_EMAIL_REQUEST, SEND_EMAIL_SUCCESS, SEND_EMAIL_FAILED, SEND_NEW_PASSWORD_REQUEST, SEND_NEW_PASSWORD_SUCCESS, SEND_NEW_PASSWORD_FAILED, SEND_NEW_USER_REQUEST, SEND_NEW_USER_SUCCESS, SEND_NEW_USER_FAILED, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS, LOGIN_USER_FAILED, USER_SUCCESS, USER_REQUEST, USER_FAILED, AUTH_CHECKED, SEND_NEW_DATA, LOGOUT_REQUEST, LOGOUT_SUCCESS, RESET_USERS_DATA, VISITED_FORGOT_PASSWORD, LOGOUT_FAILED } from '../constants'
 
 
@@ -21,8 +22,7 @@ export interface ISendEmailFailed {
   readonly type: typeof SEND_EMAIL_FAILED;
   readonly loading: boolean;
   readonly emailSent: boolean;
-  readonly error: null | string
-  readonly payload: any;
+  readonly payload:{error: string}  
 }
 
 export interface ISendNewPasswordRequest {
@@ -40,8 +40,7 @@ export interface ISendNewPasswordSuccess {
 export interface ISendNewPasswordFailed {
   readonly type: typeof SEND_NEW_PASSWORD_FAILED;
   readonly loading: boolean;
-  readonly error: null | string;
-  readonly payload: any;
+  readonly payload: {error: string }
 }
 
 export interface ISendNewUserRequest {
@@ -64,21 +63,22 @@ export interface ISendNewUserSuccess {
     name: string,
     password: string,
   },
-  readonly error: string | null
+  readonly payload: {error: string}
 }
 
 export interface ISendNewUserFailed {
   readonly type: typeof SEND_NEW_USER_FAILED;
   readonly loading: boolean;
   readonly isRegistred: boolean;
-  readonly error: null | string;
-  readonly payload: any;
+  readonly payload: {error: string}
+  
 }
 
 export interface ILoginUserRequest {
   readonly type: typeof LOGIN_USER_REQUEST;
   readonly loading: boolean;
   readonly isAuth: boolean;
+  readonly isLogged: boolean
 }
 
 
@@ -90,7 +90,7 @@ export interface ILoginUserSuccess {
   readonly refreshToken: string,
   readonly password: string,
   readonly isLogged: boolean,
-  readonly error: null | string,
+  readonly payload: {error: string}
 
 
   user: {
@@ -104,15 +104,15 @@ export interface ILoginUserFailed {
   readonly type: typeof LOGIN_USER_FAILED;
   readonly loading: boolean;
   readonly isAuth: boolean;
-  readonly error: null | string,
-  readonly payload: any
+  readonly payload: {error: string}
+  readonly isLogged: boolean,
+
 }
 
 export interface IUserRequest {
   readonly type: typeof USER_REQUEST;
   readonly loading: boolean,
   readonly isAuth: boolean,
-  readonly user: null | {},
   readonly userChecked: boolean
 }
 
@@ -120,14 +120,10 @@ export interface IUserSuccess {
   readonly type: typeof USER_SUCCESS;
   readonly loading: boolean,
   readonly isAuth: true,
-  readonly user: {
-    email: string,
-    name: string,
-    password?: string,
-  },
   readonly userChecked: boolean,
-  readonly password: string,
-  readonly payload: any;
+  readonly password?: string,
+  readonly payload: any
+  
 }
 
 export interface IUserFailed {
@@ -135,11 +131,6 @@ export interface IUserFailed {
   readonly loading: boolean,
 
   readonly isAuth: boolean,
-  readonly user: {
-    email: string,
-    name: string,
-    password?: string,
-  },
   readonly userCheked: boolean,
   readonly isAuthChecked: boolean
 }
@@ -162,7 +153,7 @@ export interface ISendNewData {
     name: string,
     password?: string,
   },
-  readonly error: null | string
+  readonly payload: {error: string}
 
 }
 
@@ -176,7 +167,7 @@ export interface ILogoutSuccess {
   readonly type: typeof LOGOUT_SUCCESS;
   readonly isLoading: boolean;
   readonly isLogged: boolean;
-  readonly sAuth: boolean;
+  readonly isAuth: boolean;
 }
 
 export interface ILogoutFailed {
@@ -184,8 +175,8 @@ export interface ILogoutFailed {
   readonly isLoading: boolean;
   readonly isLogged: boolean;
   readonly isAuth: boolean;
-  readonly error: null | string;
-  readonly payload: any;
+  readonly payload: {error: string}
+
 }
 
 export interface IResetUsersData {
@@ -243,8 +234,8 @@ export type TRoutingActions =
 
 
 
-export const sendEmail: AppThunk = (email: string) => (dispatch: AppDispatch) => {
-  dispatch({ type: SEND_EMAIL_REQUEST });
+export const sendEmail = (email: string) => (dispatch: AppDispatch) => {
+  dispatch({ type: SEND_EMAIL_REQUEST, loading: true, emailSent: false });
 
   sendEmailApi(email)
     .then((res: any) => {
@@ -257,12 +248,12 @@ export const sendEmail: AppThunk = (email: string) => (dispatch: AppDispatch) =>
 
 
     .catch((err) => {
-      dispatch({ type: SEND_EMAIL_FAILED, payload: { error: err } });
+      dispatch({ type: SEND_EMAIL_FAILED, payload: err, loading: false, emailSent: false });
     });
 };
 
-export const sendNewPassword: AppThunk = (newPassword: string, code: string) => (dispatch: AppDispatch) => {
-  dispatch({ type: SEND_NEW_PASSWORD_REQUEST });
+export const sendNewPassword = (newPassword: string, code: string) => (dispatch: AppDispatch) => {
+  dispatch({ type: SEND_NEW_PASSWORD_REQUEST, loading: true });
 
   sendNewPasswordApi(newPassword, code)
     .then((res: any) => {
@@ -274,19 +265,19 @@ export const sendNewPassword: AppThunk = (newPassword: string, code: string) => 
 
 
     .catch((err) => {
-      dispatch({ type: SEND_NEW_PASSWORD_FAILED, payload: { error: err } });
+      dispatch({ type: SEND_NEW_PASSWORD_FAILED, payload: err, loading: false });
     });
 };
 
-export const registerUser: AppThunk = (name: string, email: string, password: string) => (dispatch: AppDispatch) => {
+export const registerUser = (name: string, email: string, password: string) => (dispatch: AppDispatch) => {
 
-  dispatch({ type: SEND_NEW_USER_REQUEST });
+  dispatch({ type: SEND_NEW_USER_REQUEST, loading: true, isRegistred: false });
 
   registerUserApi(name, email, password)
 
     .then((res: any) => {
 
-      res.success == true &&
+      res.success === true &&
         dispatch({
           type: SEND_NEW_USER_SUCCESS,
           name: name,
@@ -300,12 +291,12 @@ export const registerUser: AppThunk = (name: string, email: string, password: st
     })
 
     .catch((err) => {
-      dispatch({ type: LOGIN_USER_FAILED, payload: { error: err } });
+      dispatch({ type: LOGIN_USER_FAILED, payload: err, loading: false,  isAuth: false, isLogged: false });
     });
 }
 
-export const loginUser: AppThunk = (email: string, password: string) => (dispatch: AppDispatch) => {
-  dispatch({ type: LOGIN_USER_REQUEST, isLogged: false });
+export const loginUser = (email: string, password: string) => (dispatch: AppDispatch) => {
+  dispatch({ type: LOGIN_USER_REQUEST, isLogged: false, loading: true, isAuth: false });
 
   loginUserApi(email, password)
     .then((res: any) => {
@@ -322,27 +313,27 @@ export const loginUser: AppThunk = (email: string, password: string) => (dispatc
 
 
     .catch((err) => {
-      dispatch({ type: LOGIN_USER_FAILED, isLogged: false, payload: { error: err } });
+      dispatch({ type: LOGIN_USER_FAILED, isLogged: false, payload: err, loading: false, isAuth: false });
     });
 }
 
-export const checkAuth: AppThunk = () => (dispatch: AppDispatch) => {
+export const checkAuth = () => (dispatch: AppDispatch) => {
   dispatch(getUser(getCookie('refreshToken')))
-  dispatch({ type: AUTH_CHECKED })
+  dispatch({ type: AUTH_CHECKED, isAuthChecked: true })
 }
 
 
-export const getUser: AppThunk = (token: string) => (dispatch: AppDispatch) => {
-  dispatch({ type: USER_REQUEST })
+export const getUser = (token: string | undefined) => (dispatch: AppDispatch) => {
+  dispatch({ type: USER_REQUEST , loading: true, isAuth: false, userChecked: false})
 
   getUserApi(token)
     .then((res) => {
-      dispatch({ type: USER_SUCCESS, payload: res })
+      dispatch({ type: USER_SUCCESS, loading: false, isAuth: true, userChecked: true, payload: res })
 
 
     })
     .catch((err) => {
-      dispatch({ type: USER_FAILED, payload: err })
+      dispatch({ type: USER_FAILED, loading: false, isAuth: false, userCheked: false, isAuthChecked: false })
     })
 
 
@@ -351,7 +342,7 @@ export const getUser: AppThunk = (token: string) => (dispatch: AppDispatch) => {
 
 
 
-export const changeData: AppThunk = (name: string, email: string, password: string) => (dispatch: AppDispatch) => {
+export const changeData = (name: string, email: string, password: string) => (dispatch: AppDispatch) => {
   changeUsersDataApi(name, email, password)
     .then((res: any) => {
 
@@ -368,24 +359,24 @@ export const changeData: AppThunk = (name: string, email: string, password: stri
 
 }
 
-export const logoutFromSite: AppThunk = (refreshToken: string) => (dispatch) => {
-  dispatch({ type: LOGOUT_REQUEST })
+export const logoutFromSite = (refreshToken: string) => (dispatch: AppDispatch) => {
+  dispatch({ type: LOGOUT_REQUEST, isLoading: true })
   logoutApi(refreshToken)
     .then(() => {
       dispatch({
-        type: LOGOUT_SUCCESS
+        type: LOGOUT_SUCCESS, isLoading: false, isLogged: false, isAuth: false
 
       })
     })
     .then(() => {
       dispatch({
-        type: RESET_USERS_DATA
+        type: RESET_USERS_DATA, user: null, password: null
 
       })
     })
-    .catch(() => {
+    .catch((err) => {
       dispatch({
-        type: LOGOUT_FAILED
+        type: LOGOUT_FAILED, isLoading: false, isLogged: true, isAuth: true, payload: err
 
       })
     })

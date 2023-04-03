@@ -7,7 +7,7 @@ import { CHECK_DROPED_ELEMENT, DROP_MOVED_ELEMENT } from "../../services/constan
 import { FC, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { TConstructorProps, TItem } from "../../utils/types";
-import { useTypeDispatch } from "../../utils/hooks-types";
+import { useDispatch } from "../../utils";
 
 export const BurgerConstructorElement: FC<TConstructorProps> = ({
   id,
@@ -19,7 +19,7 @@ export const BurgerConstructorElement: FC<TConstructorProps> = ({
   typeOfText,
   className,
 }) => {
-  const dispatch = useTypeDispatch();
+  const dispatch = useDispatch();
   const ref = useRef(null);
 
   const [{ isDrag }, drag] = useDrag({
@@ -63,9 +63,9 @@ export const BurgerConstructorElement: FC<TConstructorProps> = ({
       <ConstructorElement
         type={type}
         isLocked={isLocked}
-        text={typeOfText}
+        text={`${typeOfText}`}
         price={item.price}
-        thumbnail={item.image}
+        thumbnail={`${item.image}`}
         handleClose={() => toClose(index)}
       />
     </li>

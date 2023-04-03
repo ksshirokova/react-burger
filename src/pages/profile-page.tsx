@@ -9,9 +9,7 @@ import { NavLink } from "react-router-dom";
 import { changeData } from "../services/actions/routing";
 import { logoutFromSite } from "../services/actions/routing";
 import { getCookie } from "../utils/utils";
-import { useTypeDispatch } from "../utils/hooks-types";
-import { useTypeSelector } from "../utils/hooks-types";
-import { TRoutingState } from "../services/reducers/routing";
+import { useSelector, useDispatch } from "../utils";
 
 export default function ProfilePage() {
 
@@ -25,9 +23,9 @@ export default function ProfilePage() {
   const [passwordDisabled, setPasswordDisabled] = useState(true);
   const [emailDisabled, setEmailDisabled] = useState(true);
 
-  const {user, loading, password }= useTypeSelector(state => state.routeStore);
+  const {user, loading, password }= useSelector(state => state.routeStore);
   const inputRef = useRef<HTMLInputElement>(null!);
-  const dispatch = useTypeDispatch();
+  const dispatch = useDispatch();
   
 
   const onIconEmailClick = () => {

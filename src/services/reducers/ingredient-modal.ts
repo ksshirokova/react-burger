@@ -8,12 +8,12 @@ import { TItem, TItemUndefined } from "../../utils/types";
 import { TIngModalActions } from "../actions/ingredient-modal";
 
 type TIngModalState = {
-  item: TItem | TItemUndefined,
+  item: TItem | TItemUndefined | undefined,
   ingIsOpened: boolean,
 }
 
 const initialState: TIngModalState = {
-  item: {},
+  item: undefined,
   ingIsOpened: false,
 };
 
@@ -28,7 +28,7 @@ export const ingredientModalReducer = (state = initialState, action: TIngModalAc
     case DELITE_MODAL_INGREDIENTS: {
       return {
         ...state,
-        item: {},
+        item: undefined,
       };
     }
     case OPEN_ING_MODAL: {

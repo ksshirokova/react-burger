@@ -5,9 +5,8 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { TIngredientsProps } from "../../utils/types";
-import { TConstructorState } from "../../utils/types";
-import { useTypeSelector } from "../../utils/hooks-types";
+import { TIngredientsProps, TItem, TItemUndefined } from "../../utils/types";
+import { useSelector } from "../../utils";
 
 export const Ingredients: FC<TIngredientsProps> = ({
   ingredients,
@@ -19,14 +18,14 @@ export const Ingredients: FC<TIngredientsProps> = ({
 }) => {
   const location = useLocation();
 
-  const { draggedBuns, draggedFilling } = useTypeSelector(
+  const { draggedBuns, draggedFilling } = useSelector(
     (state) => state.constructorStore
   );
 
   const ingredientCount = useMemo(() => {
     let counter: any = {};
 
-    draggedFilling.forEach((element) => {
+    draggedFilling.forEach((element: TItem | TItemUndefined) => {
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }

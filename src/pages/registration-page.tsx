@@ -3,7 +3,7 @@ import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-component
 import styles from './registration-styles.module.css'
 import { NavLink } from "react-router-dom"
 import { registerUser } from "../services/actions/routing"
-import { useTypeDispatch } from "../utils/hooks-types"
+import { useDispatch } from "../utils"
 
 
 
@@ -15,7 +15,7 @@ export default function RegistrationPage() {
     const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">('HideIcon')
     const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
     
-    const dispatch = useTypeDispatch()
+    const dispatch = useDispatch()
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
         if (inputType === 'password') {

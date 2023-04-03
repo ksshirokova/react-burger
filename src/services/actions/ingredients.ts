@@ -1,5 +1,5 @@
 
-import { AppDispatch, AppThunk } from "../../utils";
+import { AppDispatch } from "../../utils";
 import { getIngredientsApi } from "../../utils/api";
 import { TItem } from "../../utils/types";
 import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, CHANGE_INGREDIENTS_COUNT } from '../constants'
@@ -12,19 +12,20 @@ export interface IGetIngRequest {
 export interface IGetIngSuccess {
   readonly type: typeof GET_INGREDIENTS_SUCCESS;
   readonly loading: boolean;
-  readonly data: TItem[];
-  readonly sauce: TItem[];
-  readonly main: TItem[];
-  readonly bun: TItem[];
+  // readonly data: TItem[];
+  // readonly sauce: TItem[];
+  // readonly main: TItem[];
+  // readonly bun: TItem[];
   readonly payload: any;
 }
 
 export interface IGetIngFailed {
   readonly type: typeof GET_INGREDIENTS_FAILED;
   readonly loading: boolean;
-  readonly payload: any;
-  readonly error: boolean
+  readonly error: string;
+  
 }
+
 
 export interface IChangeIngCount {
   readonly type: typeof CHANGE_INGREDIENTS_COUNT;
@@ -41,7 +42,7 @@ export type TIngredientsActions =
 
 export const getIngredients = () => (dispatch: AppDispatch) => {
   //функция запроса ингредиентов, которая должна вернуть объект экшена
-  dispatch({ type: GET_INGREDIENTS_REQUEST });
+  dispatch({ type: GET_INGREDIENTS_REQUEST, loading: true });
 
   getIngredientsApi()
     .then((res: any) => {
@@ -51,12 +52,12 @@ export const getIngredients = () => (dispatch: AppDispatch) => {
       const main = apiIngredients.filter((item: TItem) => item.type === "main");
 
       dispatch({
-        type: GET_INGREDIENTS_SUCCESS,
+        type: GET_INGREDIENTS_SUCCESS, loading: false,
         payload: { data: res.data, sauce: sauce, bun: bun, main: main },
       });
     })
     .catch((err) => {
-      dispatch({ type: GET_INGREDIENTS_FAILED, payload: { error: err } });
+      dispatch({ type: GET_INGREDIENTS_FAILED, error: err , loading: false });
     });
 };
 

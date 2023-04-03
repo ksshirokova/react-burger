@@ -1,7 +1,7 @@
 import { sendOrdersData } from "../../utils/api";
 import { OPEN_ORDER_MODAL, CLOSE_ORDER_MODAL, ADD_ORDER_SUCCESS, ADD_ORDER_REQUEST, ADD_ORDER_FAILED, RESET_ORDER_DATA } from '../constants'
-import { TItem } from "../../utils/types";
-import { AppDispatch, AppThunk } from "../../utils";
+import { TItem, TItemUndefined } from "../../utils/types";
+import { AppDispatch } from "../../utils";
 
 export interface IOpenOrderModal {
   readonly type: typeof OPEN_ORDER_MODAL;
@@ -27,7 +27,6 @@ export interface IAddOrderRequest {
 export interface IAddOrderFailed {
   readonly type: typeof ADD_ORDER_FAILED;
   readonly loading: boolean;
-  readonly error: null | string;
   readonly payload: any
 }
 
@@ -46,8 +45,8 @@ export type TOrderModalActions =
 
 
 
-export const sendOrder = (data: TItem[])=> (dispatch: AppDispatch) => {
-  dispatch({ type: ADD_ORDER_REQUEST });
+export const sendOrder = (data: TItem[] | TItemUndefined[])=> (dispatch: AppDispatch) => {
+  dispatch({ type: ADD_ORDER_REQUEST, loading: true });
 
   sendOrdersData(data)
     .then((res: any) => {
@@ -65,6 +64,6 @@ export const sendOrder = (data: TItem[])=> (dispatch: AppDispatch) => {
 
 
     .catch((err) => {
-      dispatch({ type: ADD_ORDER_FAILED, payload: { error: err } });
+      dispatch({ type: ADD_ORDER_FAILED, loading: false, payload: { error: err } });
     });
 };

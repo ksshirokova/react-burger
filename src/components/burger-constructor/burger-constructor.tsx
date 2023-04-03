@@ -12,10 +12,11 @@ import { checkAuth } from "../../services/actions/routing";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch
  } from "../../utils";
-import { TItem } from "../../utils/types";
+
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
+  
   
   const navigate = useNavigate();
   const { isAuth } = useSelector((state) => state.routeStore);
@@ -27,11 +28,11 @@ export default function BurgerConstructor() {
   const openOrderModal = () => {
     dispatch(checkAuth());
     isAuth ? dispatch(sendOrder(draggedFilling)) : navigate("/login");
-    isAuth && dispatch({ type: OPEN_ORDER_MODAL });
+    isAuth && dispatch({ type: OPEN_ORDER_MODAL, isOpened: true});
   };
 
   //при клике мы сначала должны проверить авторизацию
-  const handleDrop = (e: any, item: TItem) => {
+  const handleDrop = (e: any, item: any) => {
     setTimeout(() => {
       e.preventDefault();
       dispatch(dropElement(item));
@@ -58,7 +59,7 @@ export default function BurgerConstructor() {
   });
   const initialValue = 0;
 
-  let fillingsPrice = fillingPrice.reduce((acc, i) => acc + i, initialValue);
+  let fillingsPrice = fillingPrice.reduce((acc: number, i: number | undefined) => acc + i, initialValue);
 
   const totalPriceCounter = useMemo(() => {
     let totalPrice = 0;
@@ -76,7 +77,7 @@ export default function BurgerConstructor() {
         <section
           className={style.section}
           onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e)}
+          onDrop={(e: any, item: any) => handleDrop(e, item)}
         >
           <ul className={style.ul}>
             {draggedBuns &&

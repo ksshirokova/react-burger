@@ -12,7 +12,7 @@ import ProtectedRoute from "../protected-route.js/protected-route";
 import Error404 from "../404-error/404-error";
 import { getIngredients } from "../../services/actions/ingredients";
 import {
-  CLOSE_ING_MODAL,
+  
   DELITE_MODAL_INGREDIENTS,CLOSE_ORDER_MODAL
 } from "../../services/constants";
 
@@ -34,7 +34,7 @@ function App() {
   const { isOpened, orderItems } = useSelector(
     (state) => state.orderInfo
   );
-  const { ingIsOpened, item } = useSelector(
+  const { item } = useSelector(
     (state) => state.ingredientInfo
   ); //ингредиент модалки
   // const modalIngredients = useSelector((state) => state.ingredientInfo.item);
@@ -46,15 +46,21 @@ function App() {
 
   const dispatch = useDispatch();
   const closeOrderModal = () => {
-    dispatch({ type: CLOSE_ORDER_MODAL });
-    dispatch({ type: CLOSE_ING_MODAL });
-    dispatch({ type: DELITE_MODAL_INGREDIENTS });
+    dispatch({ type: CLOSE_ORDER_MODAL, isOpened: false });
+    // dispatch({ type: CLOSE_ING_MODAL , ingIsOpened: false});
+    // dispatch({ type: DELITE_MODAL_INGREDIENTS, item });
+    
+    
+    
+  };
+
+  const closeIngModal = () => {
+    
     
     
     navigate("/");
   };
 
-  
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -123,12 +129,12 @@ function App() {
         />
       </Routes>
 
-      {background && ingIsOpened && (
+      {background  && (
         <Routes>
           <Route
             path={"/ingredients/" + elementId}
             element={
-              <Modal onClose={closeOrderModal} title="Детали ингредиента">
+              <Modal onClose={closeIngModal} title="Детали ингредиента">
                 <IngredientDetailsPage ingredients={item} />
               </Modal>
             }

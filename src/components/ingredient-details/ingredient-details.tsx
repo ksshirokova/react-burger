@@ -1,16 +1,16 @@
 import style from "./ingredients-details.module.css";
 import { useParams } from "react-router-dom";
-import { TItem } from "../../utils/types";
+import { TItem, TItemUndefined } from "../../utils/types";
 
-import { useTypeSelector } from "../../utils/hooks-types";
+import { useSelector } from "../../utils";
 
 export default function IngredientDetailsPage({
   ingredients,
 }: {
-  ingredients?: TItem;
+  ingredients?: TItem | TItemUndefined;
 }) {
   const { ingredientId } = useParams();
-  const { data } = useTypeSelector(
+  const { data } = useSelector(
     (state) => state.ingredients
   );
 

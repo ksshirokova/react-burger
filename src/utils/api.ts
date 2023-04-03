@@ -128,7 +128,7 @@ export const loginUserApi = async (usersEmail:string, usersPassword:string) => {
   );
 };
 
-export const getUserApi = async (token:string) => {
+export const getUserApi = async (token:string | undefined ) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(

@@ -1,6 +1,6 @@
 import { v4 as uuid1 } from "uuid";
 import { DRAG_CONSTRUCTOR_ELEMENT, DROP_CONSTRUCTOR_ELEMENT, DELITE_ELEMENT, DROP_MOVED_ELEMENT, CHECK_DROPED_ELEMENT, CLEAN_CONSTRUCTOR } from "../constants";
-import { TItem } from "../../utils/types";
+import { TItem, TItemUndefined } from "../../utils/types";
 
 export interface IDragConstructorElement {
   readonly type: typeof DRAG_CONSTRUCTOR_ELEMENT;
@@ -11,26 +11,23 @@ export interface IDragConstructorElement {
 export interface IDropConstructorElement {
   readonly type: typeof DROP_CONSTRUCTOR_ELEMENT;
   readonly draggedBuns?: TItem[];
-  readonly draggedFilling?: TItem[];
+  readonly draggedFilling?: TItem[] | TItemUndefined;
   readonly draggedElement?: TItem ;
   readonly item: TItem;
 }
 
 export interface IDeliteElement {
   readonly type: typeof DELITE_ELEMENT;
-  readonly draggedFilling: TItem[];
-  readonly payload: any
 }
 
 export interface IDropMovedElement {
   readonly type: typeof DROP_MOVED_ELEMENT;
   readonly payload: any;
-  readonly draggedFilling: TItem[]
+
 }
 
 export interface ICheckDropedElement {
   readonly type: typeof CHECK_DROPED_ELEMENT;
-  readonly draggedFilling: TItem[];
 }
 
 export interface ICleanConstructor {

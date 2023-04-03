@@ -43,7 +43,7 @@ export const ingredientsReducer = (state = initialState, action: TIngredientsAct
       };
     }
     case GET_INGREDIENTS_FAILED: {
-      return { ...state, error: action.payload.error, loading: false };
+      return { ...state, loading: false };
     }
     case CHANGE_INGREDIENTS_COUNT: {
       return { ...state, count: action.count };

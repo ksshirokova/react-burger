@@ -13,7 +13,7 @@ export type TOrderState = {
 export type TItem = {
     readonly _id: string,
     readonly name: string,
-    readonly price: number,
+    readonly price: number ,
     readonly image: string,
     readonly image_large: string,
     readonly image_mobile: string,
@@ -29,9 +29,9 @@ export type TItem = {
     index: number 
 }
 export type TItemUndefined = {
-    readonly _id?: string,
+    readonly _id: string,
     readonly name?: string,
-    readonly price?: number,
+    readonly price: number,
     readonly image?: string,
     readonly image_large?: string,
     readonly image_mobile?: string,
@@ -105,12 +105,12 @@ export type TIngredientsState={
 
 export type TConstructorProps = {
   id?: string,
-  item: TItem,
+  item: TItem |TItemUndefined,
   index: number,
   type?: "top"| "bottom" | undefined,
   isLocked: boolean,
   toClose: (parametr: number) => void ,
-  typeOfText: string,
+  typeOfText: string | undefined,
   className: string,
 }
 

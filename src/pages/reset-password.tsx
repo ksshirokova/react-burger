@@ -3,20 +3,18 @@ import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-component
 import styles from './registration-styles.module.css'
 import { NavLink, Link, useNavigate } from "react-router-dom"
 import { sendNewPassword } from "../services/actions/routing"
-import { useTypeDispatch } from "../utils/hooks-types"
-import { useTypeSelector } from "../utils/hooks-types"
-
+import { useSelector, useDispatch } from "../utils"
 
 export default function ResetPassword() {
 
-    const dispatch = useTypeDispatch()
+    const dispatch = useDispatch()
     const [password, setPassword] = useState<string>('')
     const [code, setCode] = useState<string>('')
     const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">('HideIcon')
     const inputRef = useRef<HTMLInputElement>(null!)
     const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
     const navigate = useNavigate()
-    const {forgotPassVisited} = useTypeSelector(state=>state.routeStore)
+    const {forgotPassVisited} = useSelector(state=>state.routeStore)
 
     const onIconClick = () => {
         setTimeout(() => inputRef.current.focus(), 0)
