@@ -2,7 +2,7 @@
 import { AppDispatch } from "../../utils";
 import { getIngredientsApi } from "../../utils/api";
 import { TItem } from "../../utils/types";
-import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, CHANGE_INGREDIENTS_COUNT } from '../constants'
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS,DELITE_MODAL_ORDER, GET_INGREDIENTS_FAILED, CHANGE_INGREDIENTS_COUNT } from '../constants'
 
 export interface IGetIngRequest {
   readonly type: typeof GET_INGREDIENTS_REQUEST;
@@ -11,28 +11,25 @@ export interface IGetIngRequest {
 
 export interface IGetIngSuccess {
   readonly type: typeof GET_INGREDIENTS_SUCCESS;
-  readonly loading: boolean;
-  // readonly data: TItem[];
-  // readonly sauce: TItem[];
-  // readonly main: TItem[];
-  // readonly bun: TItem[];
-  readonly payload: any;
-}
+  readonly payload: {sauce: TItem[], bun: TItem[], main: TItem[], data: TItem[]};
+  
+  
+  
+} 
 
 export interface IGetIngFailed {
   readonly type: typeof GET_INGREDIENTS_FAILED;
-  readonly loading: boolean;
-  readonly error: string;
   
 }
 
 
 export interface IChangeIngCount {
   readonly type: typeof CHANGE_INGREDIENTS_COUNT;
-  readonly loading?: boolean;
   readonly count: number;
-  readonly payload?: any;
+
 }
+
+
 
 export type TIngredientsActions =
 | IGetIngRequest

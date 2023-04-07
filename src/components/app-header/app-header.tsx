@@ -29,7 +29,7 @@ export default function AppHeader() {
             </p>
           </NavLink>
           <NavLink
-            to="/register"
+            to="/feed"
             className={({ isActive }) =>
               isActive
                 ? ` pt-4 pb-4 pr-5 pl-5 ml-2 ${style.listActive}`

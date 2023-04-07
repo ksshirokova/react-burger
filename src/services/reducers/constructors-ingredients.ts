@@ -9,7 +9,7 @@ import { TItem, TItemUndefined } from "../../utils/types";
 import { TConstructorActions } from "../actions/constructors-ingredients";
 
 type TConstructorState = {
-  draggedElement: TItem | TItemUndefined;
+  draggedElement: any;
   draggedBuns: TItem[] | TItemUndefined[];
   draggedFilling: TItem[] | TItemUndefined[];
 }

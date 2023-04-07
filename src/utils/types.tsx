@@ -49,9 +49,32 @@ export type TItemUndefined = {
 
 
 
-// type TOrder = {
-//     [key: string]: string
-// }
+export type TOrder = {
+    
+    _id: string,
+    createdAt: string,
+    ingredients: any,
+    name: string,
+    number: number,
+    status: string,
+    updatedAt: string
+    orders: any
+    
+}
+
+export type TOrderUndefined = {
+    
+    _id?: string,
+    createdAt?: string,
+    ingredients?: string[],
+    name?: string,
+    number?: number,
+    status?: string,
+    updatedAt?: string
+    orders?: any,
+    
+    
+}
 
 export type TIngredientsInfoState = {
     ingIsOpened: boolean,

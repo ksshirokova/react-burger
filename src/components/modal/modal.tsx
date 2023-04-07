@@ -10,10 +10,12 @@ export default function Modal({
   onClose,
   title,
   children,
+  classname
 }: {
   onClose: () => void;
-  title?: string;
+  title?: string | number;
   children: JSX.Element;
+  classname: string
 }) {
   React.useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -31,7 +33,7 @@ export default function Modal({
     <>
       <section className={`${style.container} pt-15 pb-15 pr-10 pl-10`}>
         <div className={style.div}>
-          <h3 className="text text_type_main-large">{title}</h3>
+          <h3 className={classname}>{title}</h3>
 
           <div className={style.closeIcon} onClick={onClose}>
             <CloseIcon type="primary" />

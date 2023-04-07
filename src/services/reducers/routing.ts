@@ -8,7 +8,7 @@ export type TRoutingState = {
     isAuth: boolean,
     loading: boolean,
     error: null | string,
-    user:null | {
+    user: null | {
         email: string,
         name: string,
         password?: string,
@@ -114,18 +114,19 @@ export const routingReducer = (state = initialState, action: TRoutingActions): T
             const authToken = action.accessToken.split('Bearer ')[1];
             if (authToken) {
 
-                setCookie('token', authToken, { secure: true, 'max-age': 1000 });
+                setCookie('token', authToken, { secure: true, 'max-age': 100 });
                 setCookie('refreshToken', action.refreshToken)
             }
             return {
                 ...state,
                 loading: false,
                 password: action.password,
+            
                 isLogged: true,
                 error: null,
-
                 isAuth: true,
                 user: action.user
+                
 
 
             };
@@ -135,7 +136,7 @@ export const routingReducer = (state = initialState, action: TRoutingActions): T
                 ...state,
                 loading: false,
                 isAuth: true,
-                user: action.payload.user,
+                user: action.user,
                 userChecked: true,
                 password: '',
 
@@ -189,7 +190,7 @@ export const routingReducer = (state = initialState, action: TRoutingActions): T
                     name: action.name,
                     password: action.password,
                 },
-                error: null
+                
 
             };
         }

@@ -28,13 +28,13 @@ export default function BurgerConstructor() {
   const openOrderModal = () => {
     dispatch(checkAuth());
     isAuth ? dispatch(sendOrder(draggedFilling)) : navigate("/login");
-    isAuth && dispatch({ type: OPEN_ORDER_MODAL, isOpened: true});
+    isAuth && dispatch({ type: OPEN_ORDER_MODAL});
   };
 
   //при клике мы сначала должны проверить авторизацию
-  const handleDrop = (e: any, item: any) => {
+  const handleDrop = ( item: any) => {
     setTimeout(() => {
-      e.preventDefault();
+      // e.preventDefault();
       dispatch(dropElement(item));
 
       dispatch({ type: CHECK_DROPED_ELEMENT });
@@ -59,7 +59,7 @@ export default function BurgerConstructor() {
   });
   const initialValue = 0;
 
-  let fillingsPrice = fillingPrice.reduce((acc: number, i: number | undefined) => acc + i, initialValue);
+  let fillingsPrice = fillingPrice.reduce((acc: number, i: any) => acc + i, initialValue);
 
   const totalPriceCounter = useMemo(() => {
     let totalPrice = 0;
@@ -77,7 +77,7 @@ export default function BurgerConstructor() {
         <section
           className={style.section}
           onDragOver={handleDragOver}
-          onDrop={(e: any, item: any) => handleDrop(e, item)}
+          onDrop={(item: any) => handleDrop(item)}
         >
           <ul className={style.ul}>
             {draggedBuns &&

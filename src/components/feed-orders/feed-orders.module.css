@@ -1,0 +1,49 @@
+.element {
+
+    width: 584px;
+    background: #1C1C21;
+    border-radius: 40px;
+    text-decoration: none;
+    color: white;
+    
+}
+.link{
+text-decoration: none;
+color: white;
+}
+
+.flex {
+    display: flex;
+}
+
+.date {
+    margin-left: auto;
+}
+
+.status {
+    color: #00CCCC
+}
+
+.price {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.img{
+    background: linear-gradient(#131316, #131316) padding-box,
+        linear-gradient(to right, #801AB2, #4C4CFF) border-box;
+    width: 60px;
+    height: 60px;
+    
+    border-radius: 50%;
+    border: 2px solid transparent;
+    object-fit: cover;
+    margin-right: -16px;
+   
+}
+
+.mainLink{
+    text-decoration: none;
+    list-style-type: none;
+}

@@ -5,29 +5,27 @@ import { AppDispatch } from "../../utils";
 
 export interface IOpenOrderModal {
   readonly type: typeof OPEN_ORDER_MODAL;
-  readonly isOpened: boolean;
 }
 
 export interface ICloseOrderModal {
   readonly type: typeof CLOSE_ORDER_MODAL;
-  readonly isOpened: boolean;
+
 }
 
 export interface IAddOrderSuccess {
   readonly type: typeof ADD_ORDER_SUCCESS;
-  readonly loading: boolean;
-  readonly orderItems: []
+
 }
 
 export interface IAddOrderRequest {
   readonly type: typeof ADD_ORDER_REQUEST;
-  readonly loading: boolean;
+  
 }
 
 export interface IAddOrderFailed {
   readonly type: typeof ADD_ORDER_FAILED;
-  readonly loading: boolean;
-  readonly payload: any
+  readonly payload: { error: string }
+ 
 }
 
 export interface IResetOrderData {
@@ -46,7 +44,7 @@ export type TOrderModalActions =
 
 
 export const sendOrder = (data: TItem[] | TItemUndefined[])=> (dispatch: AppDispatch) => {
-  dispatch({ type: ADD_ORDER_REQUEST, loading: true });
+  dispatch({ type: ADD_ORDER_REQUEST });
 
   sendOrdersData(data)
     .then((res: any) => {
@@ -64,6 +62,6 @@ export const sendOrder = (data: TItem[] | TItemUndefined[])=> (dispatch: AppDisp
 
 
     .catch((err) => {
-      dispatch({ type: ADD_ORDER_FAILED, loading: false, payload: { error: err } });
+      dispatch({ type: ADD_ORDER_FAILED,  payload: { error: err } });
     });
 };

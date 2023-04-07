@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, KeyboardEvent } from "react";
 import {
   Input,
   Button,
@@ -10,6 +10,7 @@ import { changeData } from "../services/actions/routing";
 import { logoutFromSite } from "../services/actions/routing";
 import { getCookie } from "../utils/utils";
 import { useSelector, useDispatch } from "../utils";
+import ProfileNav from "../components/profile-nav/profile-nav";
 
 export default function ProfilePage() {
 
@@ -40,8 +41,10 @@ export default function ProfilePage() {
     }
   };
 
-  const submitData = () => {
-    dispatch(changeData(name, email, password));
+  const submitData = (e: any) => {
+    console.log('click')
+    e.preventDefault()
+    dispatch(changeData(name, email, usersPassword));
   };
 
   const onIconNameClick = () => {
@@ -69,23 +72,20 @@ export default function ProfilePage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setPassword(password)
+      password && setPassword(password)
       
   
     }
   }, [user, password]);
 
   const backToUserData=()=>{
+    if (user) {
     setName(user.name);
     setEmail(user.email);
     password && setPassword(password)
+    }
   }
-  const logoutFromHere = (e: any)=>{
-    e.preventDefault()
-    dispatch(logoutFromSite(getCookie('refreshToken')))
-    
-    
-  }
+  
 
   return (
     loading ? 
@@ -94,50 +94,7 @@ export default function ProfilePage() {
         </p>
         :
     <main className={styles.main}>
-      <div className={styles.nav}>
-        <NavLink
-          to="/profile"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_active`}
-          >
-            Профиль
-          </p>
-        </NavLink>
-        <NavLink
-          to="/profile/orders"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_inactive`}
-          >
-            История заказов
-          </p>
-        </NavLink>
-        <NavLink
-          to="/profile/orders:id"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_inactive`} onClick={logoutFromHere}
-          >
-            Выход
-          </p>
-        </NavLink>
-
-        <p
-          className={`${styles.explanation} text text_type_main-default text_color_inactive mt-20`}
-        >
-          В этом разделе вы можете изменить свои персональные данные
-        </p>
-      </div>
+      <ProfileNav />
       <div className={styles.inputs}>
         <form onSubmit={submitData}>
           <Input
@@ -193,7 +150,7 @@ export default function ProfilePage() {
               Отмена
             </p>
             <Button
-              htmlType="button"
+              htmlType="submit"
               type="primary"
               size="medium"
               

@@ -25,6 +25,7 @@ export const sendOrdersData = async (burgerIngredients: Array<object>) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: getCookie('token')
           },
           body: JSON.stringify({
             ingredients: burgerIngredients,
@@ -154,7 +155,7 @@ export const getUserApi = async (token:string | undefined ) => {
 
 
 
-export const changeUsersDataApi = async (newName:string, newEmail:string, newPassword:string) => {
+export const changeUsersDataApi = async (newName: string, newEmail: string, newPassword: string | undefined | null) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
@@ -181,7 +182,7 @@ export const changeUsersDataApi = async (newName:string, newEmail:string, newPas
   );
 };
 
-export const logoutApi = async (refreshToken:string) => {
+export const logoutApi = async (refreshToken:string | undefined) => {
   return await new Promise((resolve) =>
     setTimeout(() => {
       resolve(
