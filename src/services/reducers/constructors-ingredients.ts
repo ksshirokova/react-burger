@@ -2,7 +2,9 @@ import {
   DRAG_CONSTRUCTOR_ELEMENT,
   DROP_CONSTRUCTOR_ELEMENT,
   DELITE_ELEMENT,
-  CHECK_DROPED_ELEMENT,DROP_MOVED_ELEMENT, CLEAN_CONSTRUCTOR
+  CHECK_DROPED_ELEMENT,
+  DROP_MOVED_ELEMENT,
+  CLEAN_CONSTRUCTOR,
 } from "../constants";
 
 import { TItem, TItemUndefined } from "../../utils/types";
@@ -12,7 +14,7 @@ type TConstructorState = {
   draggedElement: any;
   draggedBuns: TItem[] | TItemUndefined[];
   draggedFilling: TItem[] | TItemUndefined[];
-}
+};
 
 const initialState: TConstructorState = {
   draggedElement: {},
@@ -20,18 +22,21 @@ const initialState: TConstructorState = {
   draggedFilling: [],
 };
 
-export const constructorReducer = (state = initialState, action: TConstructorActions): TConstructorState => {
+export const constructorReducer = (
+  state = initialState,
+  action: TConstructorActions
+): TConstructorState => {
   switch (action.type) {
     case DROP_CONSTRUCTOR_ELEMENT: {
       return {
-        ...state, 
+        ...state,
         draggedBuns:
           state.draggedElement.type === "bun"
             ? [state.draggedElement]
             : [...state.draggedBuns],
         draggedFilling:
           state.draggedElement.type !== "bun"
-            ? [...state.draggedFilling, state.draggedElement ]
+            ? [...state.draggedFilling, state.draggedElement]
             : [...state.draggedFilling],
 
         draggedElement: {},
@@ -69,11 +74,11 @@ export const constructorReducer = (state = initialState, action: TConstructorAct
         ],
       };
     }
-    
-    case CLEAN_CONSTRUCTOR:{
-      return { ...state, draggedBuns: [], draggedFilling:[] };
+
+    case CLEAN_CONSTRUCTOR: {
+      return { ...state, draggedBuns: [], draggedFilling: [] };
     }
-    
+
     default: {
       return state;
     }

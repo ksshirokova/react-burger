@@ -33,7 +33,8 @@
 .FeedOrders{
     display: block;
     max-height: 686px;
-   overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .DoneList{
     list-style-type: none;

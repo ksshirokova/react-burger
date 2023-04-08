@@ -1,4 +1,17 @@
 .main {
+   padding-top: 40px;
     width: 1230px;
     margin: 0 auto;
+    display: flex;
+}
+.orders{
+    display: flex;
+    flex-direction: column;
+    max-height: 850px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.nav{
+    margin-top: 80px;
+    margin-right: 60px;
 }

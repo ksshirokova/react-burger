@@ -9,7 +9,8 @@
 
 .container {
   max-height: 686px;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .ul {
   list-style-type: none;

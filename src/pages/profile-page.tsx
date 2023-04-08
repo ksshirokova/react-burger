@@ -1,22 +1,24 @@
-import React, { useEffect, useState, useRef, KeyboardEvent } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
-import { NavLink } from "react-router-dom";
 
 import { changeData } from "../services/actions/routing";
-import { logoutFromSite } from "../services/actions/routing";
-import { getCookie } from "../utils/utils";
 import { useSelector, useDispatch } from "../utils";
 import ProfileNav from "../components/profile-nav/profile-nav";
 
 export default function ProfilePage() {
-
-  const [nameIcon, setNameIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
-  const [emailIcon, setEmailIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
-  const [passwordIcon, setPasswordIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
+  const [nameIcon, setNameIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
+  const [emailIcon, setEmailIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
+  const [passwordIcon, setPasswordIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [usersPassword, setPassword] = useState("");
@@ -24,14 +26,13 @@ export default function ProfilePage() {
   const [passwordDisabled, setPasswordDisabled] = useState(true);
   const [emailDisabled, setEmailDisabled] = useState(true);
 
-  const {user, loading, password }= useSelector(state => state.routeStore);
+  const { user, loading, password } = useSelector((state) => state.routeStore);
   const inputRef = useRef<HTMLInputElement>(null!);
   const dispatch = useDispatch();
-  
 
   const onIconEmailClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
-    
+
     if (emailDisabled === true) {
       setEmailDisabled(false);
       setEmailIcon("CloseIcon");
@@ -42,8 +43,8 @@ export default function ProfilePage() {
   };
 
   const submitData = (e: any) => {
-    console.log('click')
-    e.preventDefault()
+    console.log("click");
+    e.preventDefault();
     dispatch(changeData(name, email, usersPassword));
   };
 
@@ -72,27 +73,23 @@ export default function ProfilePage() {
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      password && setPassword(password)
-      
-  
+      password && setPassword(password);
     }
-  }, [user, password]);
+  }, [password, user]);
 
-  const backToUserData=()=>{
+  const backToUserData = () => {
     if (user) {
-    setName(user.name);
-    setEmail(user.email);
-    password && setPassword(password)
+      setName(user.name);
+      setEmail(user.email);
+      password && setPassword(password);
     }
-  }
-  
+  };
 
-  return (
-    loading ? 
+  return loading ? (
     <p className={`${styles.loader} text text_type_main-large mt-10 `}>
-            Загрузка...
-        </p>
-        :
+      Загрузка...
+    </p>
+  ) : (
     <main className={styles.main}>
       <ProfileNav />
       <div className={styles.inputs}>
@@ -143,18 +140,15 @@ export default function ProfilePage() {
             errorText={"Ошибка"}
             size={"default"}
             extraClass="ml-1"
-            
           />
           <div className={styles.hiddenBlock}>
-            <p className={`${styles.span} text text_type_main-small mr-7`} onClick={backToUserData}>
+            <p
+              className={`${styles.span} text text_type_main-small mr-7`}
+              onClick={backToUserData}
+            >
               Отмена
             </p>
-            <Button
-              htmlType="submit"
-              type="primary"
-              size="medium"
-              
-            >
+            <Button htmlType="submit" type="primary" size="medium">
               Сохранить
             </Button>
           </div>
@@ -163,4 +157,3 @@ export default function ProfilePage() {
     </main>
   );
 }
-

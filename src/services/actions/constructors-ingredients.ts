@@ -1,5 +1,12 @@
 import { v4 as uuid1 } from "uuid";
-import { DRAG_CONSTRUCTOR_ELEMENT, DROP_CONSTRUCTOR_ELEMENT, DELITE_ELEMENT, DROP_MOVED_ELEMENT, CHECK_DROPED_ELEMENT, CLEAN_CONSTRUCTOR } from "../constants";
+import {
+  DRAG_CONSTRUCTOR_ELEMENT,
+  DROP_CONSTRUCTOR_ELEMENT,
+  DELITE_ELEMENT,
+  DROP_MOVED_ELEMENT,
+  CHECK_DROPED_ELEMENT,
+  CLEAN_CONSTRUCTOR,
+} from "../constants";
 import { TItem } from "../../utils/types";
 
 export interface IDragConstructorElement {
@@ -14,14 +21,12 @@ export interface IDropConstructorElement {
 
 export interface IDeliteElement {
   readonly type: typeof DELITE_ELEMENT;
-  readonly payload: number
+  readonly payload: number;
 }
 
 export interface IDropMovedElement {
   readonly type: typeof DROP_MOVED_ELEMENT;
-  readonly payload: {fromIndex: number, toIndex: number};
-  
-
+  readonly payload: { fromIndex: number; toIndex: number };
 }
 
 export interface ICheckDropedElement {
@@ -33,13 +38,12 @@ export interface ICleanConstructor {
 }
 
 export type TConstructorActions =
-| IDragConstructorElement
-| IDropConstructorElement
-| IDeliteElement
-| IDropMovedElement
-| ICheckDropedElement
-| ICleanConstructor
-
+  | IDragConstructorElement
+  | IDropConstructorElement
+  | IDeliteElement
+  | IDropMovedElement
+  | ICheckDropedElement
+  | ICleanConstructor;
 
 export const addDraggedElement = (item: TItem): IDragConstructorElement => {
   return {

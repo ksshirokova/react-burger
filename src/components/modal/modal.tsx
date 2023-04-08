@@ -10,12 +10,12 @@ export default function Modal({
   onClose,
   title,
   children,
-  classname
+  classname,
 }: {
   onClose: () => void;
   title?: string | number;
   children: JSX.Element;
-  classname: string
+  classname: string;
 }) {
   React.useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {

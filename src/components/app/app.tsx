@@ -12,8 +12,8 @@ import ProtectedRoute from "../protected-route.js/protected-route";
 import Error404 from "../404-error/404-error";
 import { getIngredients } from "../../services/actions/ingredients";
 import {
-  
-  DELITE_MODAL_INGREDIENTS,CLOSE_ORDER_MODAL
+
+  DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL, CLOSE_ING_MODAL
 } from "../../services/constants";
 import OrdersHistoryPage from "../../pages/orders-history-page";
 
@@ -28,55 +28,58 @@ import FeedPage from "../../pages/feed-page";
 import { useSelector, useDispatch } from "../../utils";
 import OrderModalDetails from "../order-modal-details/order-modal-details";
 import { deliteModalOrder } from "../../services/actions/ingredient-modal";
+import { getCookie } from "../../utils/utils";
 
 
 function App() {
   const navigate = useNavigate();
-  
+
   const location = useLocation();
 
   const { isOpened, orderItems } = useSelector(
     (state) => state.orderInfo
   );
+  const {ingIsOpened} =  useSelector(
+    (state) => state.ingredientInfo)
+
   const { item } = useSelector(
     (state) => state.ingredientInfo
-  ); //ингредиент модалки
-  // const modalIngredients = useSelector((state) => state.ingredientInfo.item);
-  const orderElement = orderItems.map((item: any) => item.action.order.number); //не уверена что такое orderItems
+  );
+
+  const orderElement = orderItems.map((item: any) => item.action.order.number);
   const orderNumber = orderElement[0];
 
   const background = location.state && location.state.background;
   const elementId = location.state && location.state.elementId;
-  const {orderItem}= useSelector(state=>state.ingredientInfo)
+  const { orderItem } = useSelector(state => state.ingredientInfo)
 
   const dispatch = useDispatch();
-  const closeOrderModal = (item?: any) => {
+  const closeOrderModal = () => {
     dispatch({ type: CLOSE_ORDER_MODAL, isOpened: false });
-    // dispatch({ type: CLOSE_ING_MODAL , ingIsOpened: false});
-    
-    
-    
-    
-    
+
   };
 
-  const closeIngModal = (item?: any) => {
-    dispatch({type: DELITE_MODAL_INGREDIENTS, item})
+  const closeIngModal = () => {
+    dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {}})
     navigate("/");
   };
 
   const closeFeedModal = (item?: any) => {
-    
+
     dispatch(deliteModalOrder(item));
-    navigate("/feed");
+    navigate(-1);
   };
 
 
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkAuth());
+    dispatch({ type: CLOSE_ING_MODAL, ingIsOpened: false });
+
   }, [dispatch]);
 
+
+  console.log(getCookie('token'))
   return (
     <>
       <AppHeader />
@@ -147,15 +150,23 @@ function App() {
         />
         <Route
           path={"/feed"}
-          element={<FeedPage />}
+          element={
+            <ProtectedRoute anonymous={false}>
+              <FeedPage />
+            </ProtectedRoute>}
+
         />
         <Route
           path={"/feed/:ingredientId"}
-          element={ <OrderModalDetails />}
+          element={
+            <ProtectedRoute anonymous={false}>
+              <OrderModalDetails />
+            </ProtectedRoute>
+          }
         />
       </Routes>
 
-      {background  && (
+    {background  && (
         <Routes>
           <Route
             path={"/ingredients/" + elementId}
@@ -167,7 +178,7 @@ function App() {
           />
         </Routes>
       )}
-{background  && (
+      {background && (
         <Routes>
           <Route
             path={"/feed/" + elementId}

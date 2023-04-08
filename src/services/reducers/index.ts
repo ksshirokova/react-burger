@@ -6,7 +6,6 @@ import { orderModalReducer } from "./order-modal";
 import { constructorReducer } from "./constructors-ingredients";
 import { routingReducer } from "./routing";
 import { feedReducer } from "./feed";
-import { orderReducer } from "./users-orders";
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -15,5 +14,4 @@ export const rootReducer = combineReducers({
   feed: feedReducer,
   constructorStore: constructorReducer,
   routeStore: routingReducer,
-  usersOrder: orderReducer
 });

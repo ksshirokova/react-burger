@@ -4,6 +4,7 @@
 .element {
     width: 640px;
     margin: 0 auto;
+    
 }
 .orderElement{
     display: flex;
@@ -28,6 +29,12 @@
     display: flex;
     
     align-items: center;
+}
+.composition{
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: 15px;
 }
 .img{
     background: linear-gradient(#131316, #131316) padding-box,

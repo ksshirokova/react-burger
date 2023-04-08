@@ -3,7 +3,6 @@ import style from "./order-details.module.css";
 import { Circles } from "react-loader-spinner";
 import { useSelector } from "../../utils";
 export default function OrderDetails({ number }: { number: number }) {
-  
   const { loading } = useSelector((state) => state.orderInfo);
 
   return (

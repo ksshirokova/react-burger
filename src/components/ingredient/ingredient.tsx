@@ -64,7 +64,7 @@ export const Ingredients: FC<TIngredientsProps> = ({
                 className={`${style.list} ml-4 mb-8`}
                 onClick={() => onOpen(item)}
                 draggable
-                onDrag={(e) => onDragHandler(e, item)}
+                onDrag={(e: any) => onDragHandler(e, item)}
               >
                 <img src={item.image} alt={item.name} />
                 {ingredientCount[item._id] && (

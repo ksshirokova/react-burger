@@ -1,7 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "../../utils";
 
-
 export default function ProtectedRoute({
   children,
   isUser,
@@ -11,8 +10,9 @@ export default function ProtectedRoute({
   anonymous: boolean;
   children: JSX.Element;
 }) {
-  const { isAuth, isAuthChecked, isLogged, userChecked, user } =
-  useSelector((state) => state.routeStore);
+  const { isAuth, isAuthChecked, isLogged, userChecked, user } = useSelector(
+    (state) => state.routeStore
+  );
 
   const location = useLocation();
   const from = location.state?.from || "/";

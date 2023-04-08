@@ -3,7 +3,10 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrop } from "react-dnd";
-import { CHECK_DROPED_ELEMENT, DROP_MOVED_ELEMENT } from "../../services/constants";
+import {
+  CHECK_DROPED_ELEMENT,
+  DROP_MOVED_ELEMENT,
+} from "../../services/constants";
 import { FC, useRef } from "react";
 import { useDrag } from "react-dnd";
 import { TConstructorProps, TItem } from "../../utils/types";
@@ -34,8 +37,6 @@ export const BurgerConstructorElement: FC<TConstructorProps> = ({
     accept: "element",
     hover(item: TItem) {
       const { _id: draggedId, index: itemIndex } = item;
-      // item = { id, index }
-
       const fromIndex = index;
       const toIndex = itemIndex;
 

@@ -8,11 +8,11 @@ import {
 import { TIngredientsActions } from "../actions/ingredients";
 
 import { TItem } from "../../utils/types";
-type TIngredientsState ={
+type TIngredientsState = {
   data: TItem[],
-  sauce:  TItem[]
-  main:  TItem[]
-  bun:  TItem[]
+  sauce: TItem[]
+  main: TItem[]
+  bun: TItem[]
   count: number | null,
   loading: boolean,
   error: boolean | null,

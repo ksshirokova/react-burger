@@ -1,18 +1,20 @@
 import style from "./ingredients-details.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TItem, TItemUndefined } from "../../utils/types";
 
 import { useSelector } from "../../utils";
+import { useEffect } from "react";
 
 export default function IngredientDetailsPage({
   ingredients,
 }: {
   ingredients?: TItem | TItemUndefined;
 }) {
+  
   const { ingredientId } = useParams();
-  const { data } = useSelector(
-    (state) => state.ingredients
-  );
+  const { data } = useSelector((state) => state.ingredients);
+  console.log(ingredients);
+  
 
   const selectedArr = data.filter((item) => {
     return item._id === ingredientId;
@@ -20,7 +22,7 @@ export default function IngredientDetailsPage({
 
   const chosedIngredient = selectedArr[0];
 
-  return data.length === 0 ? (
+  return !data ? (
     <p className={`${style.loader} text text_type_main-large mt-10 `}>
       Загрузка...
     </p>
@@ -32,6 +34,7 @@ export default function IngredientDetailsPage({
         }
         alt={ingredients ? ingredients.name : chosedIngredient.name}
       />
+
       <p className="text text_type_main-medium mt-4 mb-8">
         {ingredients ? ingredients.name : chosedIngredient.name}
       </p>

@@ -1,4 +1,3 @@
-
 import { TOrderModalActions } from "../actions/order-modal";
 import {
   OPEN_ORDER_MODAL,
@@ -10,20 +9,23 @@ import {
 } from "../constants";
 
 type TOrderModalState = {
-  orderItems: any,
-  isOpened: boolean,
-  loading: boolean,
-  error: null | string
-}
+  orderItems: object[];
+  isOpened: boolean;
+  loading: boolean;
+  error: null | string;
+};
 
 const initialState: TOrderModalState = {
   orderItems: [],
   isOpened: false,
   loading: false,
-  error: null
+  error: null,
 };
 
-export const orderModalReducer = (state = initialState, action: TOrderModalActions): TOrderModalState => {
+export const orderModalReducer = (
+  state = initialState,
+  action: TOrderModalActions
+): TOrderModalState => {
   switch (action.type) {
     case OPEN_ORDER_MODAL: {
       return {

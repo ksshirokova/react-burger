@@ -12,6 +12,7 @@ import { checkAuth } from "../../services/actions/routing";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch
  } from "../../utils";
+import { TItem } from "../../utils/types";
 
 
 export default function BurgerConstructor() {
@@ -32,7 +33,7 @@ export default function BurgerConstructor() {
   };
 
   //при клике мы сначала должны проверить авторизацию
-  const handleDrop = ( item: any) => {
+  const handleDrop = ( item: TItem) => {
     setTimeout(() => {
       // e.preventDefault();
       dispatch(dropElement(item));
@@ -59,7 +60,7 @@ export default function BurgerConstructor() {
   });
   const initialValue = 0;
 
-  let fillingsPrice = fillingPrice.reduce((acc: number, i: any) => acc + i, initialValue);
+  let fillingsPrice = fillingPrice.reduce((acc: number, i: number) => acc + i, initialValue);
 
   const totalPriceCounter = useMemo(() => {
     let totalPrice = 0;
