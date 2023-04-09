@@ -144,7 +144,8 @@ export const routingReducer = (
     case LOGIN_USER_SUCCESS: {
       const authToken = action.accessToken.split("Bearer ")[1];
       if (authToken) {
-        setCookie("token", authToken, { secure: true, "max-age": 10 });
+        setCookie("token", authToken, { secure: true, "max-age": 1000000
+       });
         setCookie("refreshToken", action.refreshToken);
       }
       return {

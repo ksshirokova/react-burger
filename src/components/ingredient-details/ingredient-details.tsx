@@ -1,42 +1,35 @@
 import style from "./ingredients-details.module.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { TItem, TItemUndefined } from "../../utils/types";
+import { useParams } from "react-router-dom";
+
 
 import { useSelector } from "../../utils";
-import { useEffect } from "react";
 
-export default function IngredientDetailsPage({
-  ingredients,
-}: {
-  ingredients?: TItem | TItemUndefined;
-}) {
-  
+
+export default function IngredientDetailsPage() {
   const { ingredientId } = useParams();
+  
   const { data } = useSelector((state) => state.ingredients);
-  console.log(ingredients);
+  const ingredients = data.find(el => {
+    return el._id === ingredientId;
+  })
   
 
-  const selectedArr = data.filter((item) => {
-    return item._id === ingredientId;
-  });
 
-  const chosedIngredient = selectedArr[0];
-
-  return !data ? (
-    <p className={`${style.loader} text text_type_main-large mt-10 `}>
-      Загрузка...
-    </p>
-  ) : (
-    <section className={ingredients ? style.section : style.single}>
+  return (
+    data.length === 0 ?
+        <p className={`${style.loader} text text_type_main-large mt-10 `}>
+            Загрузка...
+        </p> :
+    <section className={ingredients && style.section}>
       <img
         src={
-          ingredients ? ingredients.image_large : chosedIngredient.image_large
+          ingredients && ingredients.image_large 
         }
-        alt={ingredients ? ingredients.name : chosedIngredient.name}
+        alt={ingredients && ingredients.name }
       />
 
       <p className="text text_type_main-medium mt-4 mb-8">
-        {ingredients ? ingredients.name : chosedIngredient.name}
+        {ingredients && ingredients.name }
       </p>
 
       <ul className={style.ul}>
@@ -45,7 +38,7 @@ export default function IngredientDetailsPage({
             Ккалории, ккал
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredients ? ingredients.calories : chosedIngredient.calories}
+            {ingredients && ingredients.calories}
           </p>
         </li>
         <li className={style.list}>
@@ -53,7 +46,7 @@ export default function IngredientDetailsPage({
             Белки, г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredients ? ingredients.fat : chosedIngredient.fat}
+            {ingredients && ingredients.fat }
           </p>
         </li>
         <li className={style.list}>
@@ -61,7 +54,7 @@ export default function IngredientDetailsPage({
             Жиры. г
           </p>
           <p className="text text_type_digits-default text_color_inactive">
-            {ingredients ? ingredients.proteins : chosedIngredient.proteins}
+            {ingredients && ingredients.proteins}
           </p>
         </li>
         <li className={style.list}>
@@ -70,8 +63,8 @@ export default function IngredientDetailsPage({
           </p>
           <p className="text text_type_digits-default text_color_inactive">
             {ingredients
-              ? ingredients.carbohydrates
-              : chosedIngredient.carbohydrates}
+              && ingredients.carbohydrates
+             }
           </p>
         </li>
       </ul>

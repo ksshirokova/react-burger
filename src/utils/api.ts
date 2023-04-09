@@ -93,7 +93,7 @@ export const getUserApi = (token: string | undefined) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: "Bearer " + `${token}`,
+      Authorization: token
     },
   });
 };
@@ -108,7 +108,7 @@ export const changeUsersDataApi = (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: "Bearer " + getCookie("token"),
+      Authorization: getCookie("token"),
     },
     body: JSON.stringify({
       name: newName,
@@ -151,7 +151,6 @@ export const fetchWithRefresh = async (url: string, options: any) => {
   } catch (err: any) {
     if (err.message === "jwt malformed" || "jwt expired") {
       const refreshUsersData = await refreshToken(getCookie("refreshToken"));
-      console.log(getCookie("refreshToken"));
 
       await checkResponse<TRefreshUsersData>(refreshUsersData).then(
         (refreshUsersData) => {

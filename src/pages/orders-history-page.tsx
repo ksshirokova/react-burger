@@ -7,12 +7,15 @@ import { getCookie } from "../utils/utils";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "../utils";
 import FeedOrders from "../components/feed-orders/feed-orders";
+import { checkAuth } from "../services/actions/routing";
+
 
 export default function OrdersHistoryPage() {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.feed);
 
   useEffect(() => {
+    
     getCookie("token")?.slice(0, 7) === "Bearer "
       ? dispatch(
           feedInitAction(
@@ -30,7 +33,7 @@ export default function OrdersHistoryPage() {
     return () => {
       dispatch(feedCloseAction());
     };
-  }, [dispatch]);
+  }, []);
 
   return (
     <main className={styles.main}>
@@ -39,7 +42,10 @@ export default function OrdersHistoryPage() {
       </div>
 
       <div className={styles.orders}>
-        {orders && orders.map((order) => <FeedOrders order={order} />)}
+        {!orders &&  <p className={`text text_type_main-large mt-10 `}>
+            Загрузка...
+        </p> }
+        {orders && orders.map((order) => <FeedOrders order={order} key={order._id} path={'/profile/orders/'}/>)}
       </div>
     </main>
   );

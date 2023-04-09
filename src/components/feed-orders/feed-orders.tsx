@@ -5,9 +5,10 @@ import { FormattedDate, CurrencyIcon } from '@ya.praktikum/react-developer-burge
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from '../../utils'
 import { addModalOrder } from '../../services/actions/ingredient-modal'
+import { v4 as uuid1 } from "uuid";
 
 
-export default function FeedOrders({ order }: { order: TOrder }) {
+export default function FeedOrders({ order, path }: { order: TOrder, path: string}) {
     const { _id, ingredients, name, number, updatedAt, status } = order
     const location = useLocation()
     const { data } = useSelector((state) => state.ingredients) //массив всех ингредиентов
@@ -54,7 +55,7 @@ export default function FeedOrders({ order }: { order: TOrder }) {
 
     return (
         <div className={`${styles.element} p-6 mb-4`}>
-            <Link to={'/feed/' + _id} state={{ background: location, elementId: _id }} className={styles.link} >
+            <Link to={ path + _id} state={{ background: location, elementId: _id }} className={styles.link}>
                 <div className={styles.mainLink} onClick={() => onOpen(order)}>
 
 
@@ -68,11 +69,11 @@ export default function FeedOrders({ order }: { order: TOrder }) {
                     <div className={styles.flex}>
                         {orderIngredients.length < 6 && orderIngredients.map((element: TItem) =>
 
-                            <img className={styles.img} src={element.image_mobile} alt={element.name}
+                            <img className={styles.img} src={element.image_mobile} alt={element.name} key = {uuid1()}
                             ></img>)}
                         {orderIngredients.length >= 6 && orderIngredients.slice(0, 6).map((element: TItem) =>
 
-                            <img className={styles.hiddenImg} src={element.image_mobile} alt={element.name}
+                            <img className={styles.hiddenImg} src={element.image_mobile} alt={element.name} key = {uuid1()}
                             ></img>
 
 

@@ -57,7 +57,7 @@ export const Ingredients: FC<TIngredientsProps> = ({
             <Link
               to={"/ingredients/" + item._id}
               state={{ background: location, elementId: item._id }}
-              className={style.list}
+              className={style.list} key={item._id}
             >
               <li
                 key={item._id}

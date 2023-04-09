@@ -33,7 +33,7 @@ export default function FeedPage() {
         <main className={styles.main}>
           <div className={styles.FeedOrders}>
             {orders.map((order) => (
-              <FeedOrders order={order} />
+              <FeedOrders order={order} path={'/feed/'} key={order._id}/>
             ))}
           </div>
 

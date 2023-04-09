@@ -13,7 +13,7 @@ import Error404 from "../404-error/404-error";
 import { getIngredients } from "../../services/actions/ingredients";
 import {
 
-  DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL, CLOSE_ING_MODAL
+  DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL
 } from "../../services/constants";
 import OrdersHistoryPage from "../../pages/orders-history-page";
 
@@ -29,6 +29,7 @@ import { useSelector, useDispatch } from "../../utils";
 import OrderModalDetails from "../order-modal-details/order-modal-details";
 import { deliteModalOrder } from "../../services/actions/ingredient-modal";
 import { getCookie } from "../../utils/utils";
+import OrderModalUsersDetails from "../order-modal-users-details/order-modal-users-details";
 
 
 function App() {
@@ -39,18 +40,12 @@ function App() {
   const { isOpened, orderItems } = useSelector(
     (state) => state.orderInfo
   );
-  const {ingIsOpened} =  useSelector(
-    (state) => state.ingredientInfo)
 
-  const { item } = useSelector(
-    (state) => state.ingredientInfo
-  );
 
   const orderElement = orderItems.map((item: any) => item.action.order.number);
   const orderNumber = orderElement[0];
 
   const background = location.state && location.state.background;
-  const elementId = location.state && location.state.elementId;
   const { orderItem } = useSelector(state => state.ingredientInfo)
 
   const dispatch = useDispatch();
@@ -60,7 +55,7 @@ function App() {
   };
 
   const closeIngModal = () => {
-    dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {}})
+    dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {} })
     navigate("/");
   };
 
@@ -74,8 +69,7 @@ function App() {
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkAuth());
-    dispatch({ type: CLOSE_ING_MODAL, ingIsOpened: false });
-
+    console.log('страница отрендерилась')
   }, [dispatch]);
 
 
@@ -144,35 +138,50 @@ function App() {
           }
         />
         <Route path="/*" element={<Error404 />} />
+
         <Route
           path={"/ingredients/:ingredientId"}
-          element={<IngredientDetailsPage />}
+          element={
+
+            <IngredientDetailsPage />}
         />
         <Route
           path={"/feed"}
           element={
-            <ProtectedRoute anonymous={false}>
-              <FeedPage />
-            </ProtectedRoute>}
+
+            <FeedPage />
+          }
 
         />
+
         <Route
-          path={"/feed/:ingredientId"}
+          path={"/feed/:orderId"}
           element={
-            <ProtectedRoute anonymous={false}>
-              <OrderModalDetails />
-            </ProtectedRoute>
+
+            <OrderModalDetails isPage={true} />
+
           }
         />
+
+        <Route
+          path={"/profile/orders/:usersOrderId"}
+          element={
+            
+              <OrderModalUsersDetails isPage={true} />
+           
+
+          }
+        />
+
       </Routes>
 
-    {background  && (
+      {background && (
         <Routes>
           <Route
-            path={"/ingredients/" + elementId}
+            path={"/ingredients/:ingredientId"}
             element={
               <Modal onClose={closeIngModal} title="Детали ингредиента" classname={"text text_type_main-large"}>
-                <IngredientDetailsPage ingredients={item} />
+                <IngredientDetailsPage />
               </Modal>
             }
           />
@@ -181,10 +190,22 @@ function App() {
       {background && (
         <Routes>
           <Route
-            path={"/feed/" + elementId}
+            path={"/feed/:orderId"}
             element={
               <Modal onClose={closeFeedModal} title={orderItem && `#${orderItem.number}`} classname={"text text_type_digits-default"}>
                 <OrderModalDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {background && (
+        <Routes>
+          <Route
+            path={"/profile/orders/:usersOrderId"}
+            element={
+              <Modal onClose={closeFeedModal} title={orderItem && `#${orderItem.number}`} classname={"text text_type_digits-default"}>
+                <OrderModalUsersDetails />
               </Modal>
             }
           />

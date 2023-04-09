@@ -5,7 +5,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
 
-import { changeData } from "../services/actions/routing";
+import { changeData, checkAuth } from "../services/actions/routing";
 import { useSelector, useDispatch } from "../utils";
 import ProfileNav from "../components/profile-nav/profile-nav";
 
@@ -70,6 +70,7 @@ export default function ProfilePage() {
     }
   };
   useEffect(() => {
+    // dispatch(checkAuth())
     if (user) {
       setName(user.name);
       setEmail(user.email);
