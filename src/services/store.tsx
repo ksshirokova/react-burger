@@ -1,6 +1,11 @@
-import { createStore, applyMiddleware } from "redux";
+import { applyMiddleware } from "redux";
 import { rootReducer } from "./reducers";
 import thunk from 'redux-thunk';
+import { legacy_createStore as createStore} from 'redux'
+import { WebsocketMiddleware } from "./middlewares/websocket";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { feedWsActions } from "./actions/feed";
+
 
 const logMiddleWare = (store: any) => (next: any) => (action: any) => {
   console.log("dispatching", action);
@@ -8,9 +13,8 @@ const logMiddleWare = (store: any) => (next: any) => (action: any) => {
   console.log("next state", store.getState());
   return result;
 };
-const store = createStore(rootReducer, applyMiddleware(thunk, logMiddleWare));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logMiddleWare, WebsocketMiddleware(feedWsActions))));
 
-export type TRootState = ReturnType<typeof rootReducer>
-export type TAppDispatch = typeof store.dispatch
+
 
 export default store;

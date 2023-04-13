@@ -1,0 +1,104 @@
+.element {
+
+    width: 584px;
+    background: #1C1C21;
+    border-radius: 40px;
+    text-decoration: none;
+    color: white;
+
+}
+
+.link {
+    text-decoration: none;
+    color: white;
+}
+
+.flex {
+    display: flex;
+}
+
+.date {
+    margin-left: auto;
+}
+
+.status {
+    color: #00CCCC
+}
+
+.price {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.img {
+    background: linear-gradient(#131316, #131316) padding-box,
+        linear-gradient(to right, #801AB2, #4C4CFF) border-box;
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    border: 2px solid transparent;
+    object-fit: cover;
+    margin-right: -16px;
+
+
+}
+
+.mainLink {
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.hiddenImg {
+    background: linear-gradient(#131316, #131316) padding-box,
+        linear-gradient(to right, #801AB2, #4C4CFF) border-box;
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    border: 2px solid transparent;
+    object-fit: cover;
+    margin-right: -16px;
+    
+
+}
+
+.hiddenImg:nth-child(6) {
+    position: relative;
+    
+    
+    
+    
+    /* opacity: 0.6; */
+
+}
+
+.overlay {
+    position: relative;
+    top:0px;
+    right: 48px;
+    color: #1C1C21;
+    opacity: 0.6;
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    background: linear-gradient(#131316, #131316) padding-box,
+        linear-gradient(to right, #801AB2, #4C4CFF) border-box;
+    padding-right: -50px;
+    border-radius: 50%;
+    
+    
+    
+}
+.overlayText{
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: white;
+    
+    opacity: 1;
+   position: relative;
+   top:0px;
+    right: 98px;
+}

@@ -1,115 +1,130 @@
 export type TOrderState = {
-    isOpened: boolean,
-    loading: boolean,
-    orderItems: [{
-        _id: string;
-        status: string;
-        name: string;
-        number: number
+  isOpened: boolean;
+  loading: boolean;
+  orderItems: [
+    {
+      _id: string;
+      status: string;
+      name: string;
+      number: number;
     }
-    ]
-
-}
+  ];
+};
 export type TItem = {
-    _id: string,
-    name: string,
-    price: number,
-    image: string,
-    image_large: string,
-    image_mobile: string,
-    type: string,
-    calories: number,
-    carbohydrates: number,
-    fat: number,
-    proteins: number,
-    __v: number,
-    uid: string,
-    uuid: string,
-    index: number
-}
+  readonly _id: string;
+  readonly name: string;
+  readonly price: number;
+  readonly image: string;
+  readonly image_large: string;
+  readonly image_mobile: string;
+  readonly type: string;
+  readonly calories: number;
+  readonly carbohydrates: number;
+  readonly fat: number;
+  readonly proteins: number;
+  readonly __v: number;
+  uuid: string;
+  index: number;
+};
+export type TItemUndefined = {
+  readonly _id: string;
+  readonly name?: string;
+  readonly price: number;
+  readonly image?: string;
+  readonly image_large?: string;
+  readonly image_mobile?: string;
+  readonly type?: string;
+  readonly calories?: number;
+  readonly carbohydrates?: number;
+  readonly fat?: number;
+  readonly proteins?: number;
+  readonly __v?: number;
+  uuid?: string;
+  index?: number;
+};
 
-// type TOrder = {
-//     [key: string]: string
-// }
+export type TOrder = {
+  _id: string;
+  createdAt: string;
+  ingredients: string[];
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  orders: TOrder[];
+};
+
+export type TOrderUndefined = {
+  _id?: string;
+  createdAt?: string;
+  ingredients?: string[];
+  name?: string;
+  number?: number;
+  status?: string;
+  updatedAt?: string;
+  orders?: TOrder[];
+};
 
 export type TIngredientsInfoState = {
-    ingIsOpened: boolean,
-    item: TItem
-    
-
-}
+  ingIsOpened: boolean;
+  item: TItem;
+};
 
 export type TRouteState = {
-    emailSent: boolean,
-    error: string,
-    forgotPassVisited: boolean,
-    isAuth: boolean,
-    isAuthChecked: boolean,
-    isLogged: boolean,
-    isRegistred: boolean,
-    loading: boolean,
-    password: string,
-    user: {
-        name: string,
-        email: string
-    },
-    userChecked: boolean,
-    userCheked: boolean
-
-
-}
-
-// export type TOptions = {
-//     method: string,
-//     headers?: {
-//         Authorization?: string ,
-//         "Content-Type"?: string | undefined,
-//         Accept?: string | undefined,
-//     } | undefined,
-//     body?: BodyInit,
-
-
-// }
+  emailSent: boolean;
+  error: string;
+  forgotPassVisited: boolean;
+  isAuth: boolean;
+  isAuthChecked: boolean;
+  isLogged: boolean;
+  isRegistred: boolean;
+  loading: boolean;
+  password: string;
+  user: {
+    name: string;
+    email: string;
+  };
+  userChecked: boolean;
+  userCheked: boolean;
+};
 
 export type TConstructorState = {
-    draggedBuns: Array<TItem>
-
-    draggedElement: TItem
-    draggedFilling: Array<TItem>
-}
+  draggedBuns: Array<TItem> | Array<TItemUndefined>;
+  draggedElement: TItem | TItemUndefined;
+  draggedFilling: Array<TItem> | Array<TItemUndefined>;
+};
 
 export type TRefreshUsersData = {
-    success: boolean,
-    accessToken: string,
-    refreshToken: string
-}
-export type TIngredientsState={
-    bun:Array<TItem>,
-    count?: any,
-    data: Array<TItem>,
-    error?: any,
-    loading: boolean,
-    main: Array<TItem>,
-    sauce: Array<TItem>
-}
-
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+};
+export type TIngredientsState = {
+  bun: Array<TItem>;
+  count?: number;
+  data: Array<TItem>;
+  error?: string;
+  loading: boolean;
+  main: Array<TItem>;
+  sauce: Array<TItem>;
+};
 
 export type TConstructorProps = {
-  id?: string,
-  item: TItem,
-  index: number,
-  type?: "top"| "bottom" | undefined,
-  isLocked: boolean,
-  toClose: (parametr: number) => void ,
-  typeOfText: string,
-  className: string,
-}
+  id?: string;
+  item: TItem | TItemUndefined;
+  index: number;
+  type?: "top" | "bottom" | undefined;
+  isLocked: boolean;
+  toClose: (parametr: number) => void;
+  typeOfText: string | undefined;
+  className: string;
+};
 
-export type TIngredientsProps ={
-    ingredients: Array<TItem>,
-    name: string,
-  onOpen: (parametr: TItem) => void | undefined,
-  onDragHandler: (event: any, item: TItem)=>void,
-  elRef: any,
-  currentId: string,
-}
+export type TIngredientsProps = {
+  ingredients: Array<TItem>;
+  name: string;
+  onOpen: (parametr: TItem) => void | undefined;
+  onDragHandler: (event: KeyboardEvent, item: TItem) => void;
+  elRef: any;
+  currentId: string;
+};

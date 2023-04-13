@@ -3,31 +3,29 @@ import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import { FC, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { TIngredientsProps} from "../../utils/types";
-import { TRootState } from "../../services/store";
-import { TConstructorState } from "../../utils/types";
+import { TIngredientsProps, TItem, TItemUndefined } from "../../utils/types";
+import { useSelector } from "../../utils";
 
-export const Ingredients:FC<TIngredientsProps>=({
+export const Ingredients: FC<TIngredientsProps> = ({
   ingredients,
   name,
   onOpen,
   onDragHandler,
   elRef,
   currentId,
-}) =>{
- 
-  const location = useLocation()
-  
-  const {draggedBuns, draggedFilling} = useSelector<TRootState, TConstructorState>(state => state.constructorStore);
- 
+}) => {
+  const location = useLocation();
+
+  const { draggedBuns, draggedFilling } = useSelector(
+    (state) => state.constructorStore
+  );
 
   const ingredientCount = useMemo(() => {
     let counter: any = {};
 
-    draggedFilling.forEach(element => {
+    draggedFilling.forEach((element: TItem | TItemUndefined) => {
       if (!counter[element._id]) {
         counter[element._id] = 0;
       }
@@ -41,7 +39,6 @@ export const Ingredients:FC<TIngredientsProps>=({
       counter[element._id]++;
     });
 
-    
     return counter;
   }, [draggedFilling, draggedBuns]);
 
@@ -57,39 +54,42 @@ export const Ingredients:FC<TIngredientsProps>=({
       <ul className={style.ul}>
         {ingredients &&
           ingredients.map((item) => (
-            <Link to={'/ingredients/' + item._id} state={{background: location, elementId: item._id}} className={style.list}><li
-              key={item._id}
-              className={`${style.list} ml-4 mb-8`}
-              onClick={() => onOpen(item)}
-              draggable
-              onDrag={(e) => onDragHandler(e, item)}
+            <Link
+              to={"/ingredients/" + item._id}
+              state={{ background: location, elementId: item._id }}
+              className={style.list} key={item._id}
             >
-              <img src={item.image} alt={item.name} />
-              {ingredientCount[item._id] && (
-                <div className={style.counter}>
-                  <Counter
-                    size="default"
-                    extraClass="m-1"
-                    count={ingredientCount[item._id]}
-                  />
+              <li
+                key={item._id}
+                className={`${style.list} ml-4 mb-8`}
+                onClick={() => onOpen(item)}
+                draggable
+                onDrag={(e: any) => onDragHandler(e, item)}
+              >
+                <img src={item.image} alt={item.name} />
+                {ingredientCount[item._id] && (
+                  <div className={style.counter}>
+                    <Counter
+                      size="default"
+                      extraClass="m-1"
+                      count={ingredientCount[item._id]}
+                    />
+                  </div>
+                )}
+                <div className={`${style.price} mt-1 mb-1`}>
+                  <p className="text text_type_digits-default mr-2">
+                    {item.price}
+                  </p>
+                  <CurrencyIcon type="primary" />
                 </div>
-              )}
-              <div className={`${style.price} mt-1 mb-1`}>
-                <p className="text text_type_digits-default mr-2">
-                  {item.price}
-                </p>
-                <CurrencyIcon type="primary" />
-              </div>
 
-              <p className={`${style.name} text text_type_main-default`}>
-                {item.name}
-              </p>
-            </li>
+                <p className={`${style.name} text text_type_main-default`}>
+                  {item.name}
+                </p>
+              </li>
             </Link>
           ))}
       </ul>
     </>
   );
-}
-
-
+};

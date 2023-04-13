@@ -3,41 +3,28 @@ import React from "react";
 import style from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Ingredients } from "../ingredient/ingredient";
-
 import { addModalIngredients } from "../../services/actions/ingredient-modal";
-import { useDispatch, useSelector } from "react-redux";
-import { OPEN_ING_MODAL } from "../../services/actions/ingredient-modal";
+import { TItem } from "../../utils/types";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { TIngredientsState, TItem } from "../../utils/types";
-import { TRootState } from "../../services/store";
 import { addDraggedElement } from "../../services/actions/constructors-ingredients";
-
-
+import { useSelector, useDispatch } from "../../utils";
 
 export default function BurgerIngredients() {
-  const { bun, main, sauce } = useSelector<TRootState, TIngredientsState>(state => state.ingredients);
+  const { bun, main, sauce } = useSelector(
+    (state) => state.ingredients
+  );
   const dispatch = useDispatch();
-  
-
-  
-  const openIngredientModal = () => {
-    
-    dispatch({ type: OPEN_ING_MODAL });
-  
-  
-  };
+  // const openIngredientModal = () => {
+  //   dispatch({ type: OPEN_ING_MODAL });
+  // };
 
   const handleClick = (item: TItem) => {
-    
-      dispatch(addModalIngredients(item));
-      openIngredientModal();
-    
-    
+    dispatch(addModalIngredients(item));
+    // openIngredientModal();
   };
 
   const handleDrag = (event: KeyboardEvent, item: TItem) => {
-    
     event.preventDefault();
     dispatch(addDraggedElement(item));
   };
@@ -48,7 +35,7 @@ export default function BurgerIngredients() {
   const { ref: sauceRef, inView: inViewSauces } = useInView();
   const { ref: mainRef, inView: inViewMain } = useInView();
 
-  function tabSwitch(viewBuns:boolean, viewSauce:boolean, viewMain:boolean) {
+  function tabSwitch(viewBuns: boolean, viewSauce: boolean, viewMain: boolean) {
     if (viewBuns) {
       return setCurrent("one");
     }
@@ -140,5 +127,3 @@ export default function BurgerIngredients() {
     </section>
   );
 }
-
-

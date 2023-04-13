@@ -5,48 +5,40 @@ import {
 import { FormEvent, useState, useRef } from "react";
 import styles from "./registration-styles.module.css";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { loginUser } from "../services/actions/routing";
-import { TRootState } from "../services/store";
-import { TRouteState } from "../utils/types";
-import { useTypeDispatch } from "../utils/hooks-types";
+import { useDispatch } from "../utils";
+import { useSelector } from "../utils";
 
 export default function LoginPage() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputRef = useRef<HTMLInputElement>(null!);
   const [icon, setIcon] = useState<"HideIcon" | "ShowIcon">("HideIcon");
-  const { loading } = useSelector<TRootState, TRouteState>((state) => state.routeStore);
-  const [inputType, setInputType] = useState<"password" | "text" | undefined>('password');
-  
-  const dispatch = useTypeDispatch();
- 
+  const { loading } = useSelector((state) => state.routeStore);
+  const [inputType, setInputType] = useState<"password" | "text">("password");
+
+  const dispatch = useDispatch();
+
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
-    if (inputType === 'password') {
-        setInputType('text')
-        setIcon('ShowIcon')
+    setTimeout(() => inputRef.current.focus(), 0);
+    if (inputType === "password") {
+      setInputType("text");
+      setIcon("ShowIcon");
+    } else {
+      setInputType("password");
+      setIcon("HideIcon");
     }
-    else {
-        setInputType('password')
-        setIcon('HideIcon')
-
-    }
-
-}
+  };
   const sendData = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginUser(email, password));
-   
   };
 
-  return (
-    loading ?
+  return loading ? (
     <p className={`${styles.loader} text text_type_main-large mt-10 `}>
-            Загрузка...
-        </p>
-        :
+      Загрузка...
+    </p>
+  ) : (
     <main className={styles.main}>
       <section className={styles.inputs}>
         <form onSubmit={sendData}>
@@ -69,7 +61,7 @@ export default function LoginPage() {
           />
           <Input
             id={"userPassword"}
-            type={"password"}
+            type={inputType}
             placeholder={"Пароль"}
             onChange={(e) => setPassword(e.target.value)}
             icon={icon}

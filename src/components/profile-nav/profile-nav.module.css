@@ -1,0 +1,23 @@
+.text{
+    width: 320px;
+    height: 64px;
+    align-items: center;
+    display: flex;
+   
+   
+    
+}
+
+.linkActive{
+    color: white;
+    text-decoration: none;
+}
+.linkInactive{
+    
+    color: #8585AD;
+    text-decoration: none;
+}
+
+.explanation{
+    width: 320px;
+}

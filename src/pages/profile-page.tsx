@@ -1,23 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
-import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { changeData } from "../services/actions/routing";
-import { logoutFromSite } from "../services/actions/routing";
-import { getCookie } from "../utils/utils";
-import { useTypeDispatch } from "../utils/hooks-types";
-import { TRootState } from "../services/store";
-import { TRouteState } from "../utils/types";
+
+import { changeData, checkAuth } from "../services/actions/routing";
+import { useSelector, useDispatch } from "../utils";
+import ProfileNav from "../components/profile-nav/profile-nav";
 
 export default function ProfilePage() {
-
-  const [nameIcon, setNameIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
-  const [emailIcon, setEmailIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
-  const [passwordIcon, setPasswordIcon] = useState<"EditIcon" | "CloseIcon">("EditIcon");
+  const [nameIcon, setNameIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
+  const [emailIcon, setEmailIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
+  const [passwordIcon, setPasswordIcon] = useState<"EditIcon" | "CloseIcon">(
+    "EditIcon"
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [usersPassword, setPassword] = useState("");
@@ -25,14 +26,13 @@ export default function ProfilePage() {
   const [passwordDisabled, setPasswordDisabled] = useState(true);
   const [emailDisabled, setEmailDisabled] = useState(true);
 
-  const {user, loading, password }= useSelector<TRootState, TRouteState>(state => state.routeStore);
+  const { user, loading, password } = useSelector((state) => state.routeStore);
   const inputRef = useRef<HTMLInputElement>(null!);
-  const dispatch = useTypeDispatch();
-  
+  const dispatch = useDispatch();
 
   const onIconEmailClick = () => {
     setTimeout(() => inputRef.current.focus(), 0);
-    
+
     if (emailDisabled === true) {
       setEmailDisabled(false);
       setEmailIcon("CloseIcon");
@@ -42,8 +42,10 @@ export default function ProfilePage() {
     }
   };
 
-  const submitData = () => {
-    dispatch(changeData(name, email, password));
+  const submitData = (e: any) => {
+    console.log("click");
+    e.preventDefault();
+    dispatch(changeData(name, email, usersPassword));
   };
 
   const onIconNameClick = () => {
@@ -68,78 +70,29 @@ export default function ProfilePage() {
     }
   };
   useEffect(() => {
+    // dispatch(checkAuth())
     if (user) {
       setName(user.name);
       setEmail(user.email);
-      setPassword(password)
-      
-  
+      password && setPassword(password);
     }
-  }, [user, password]);
+  }, [password, user]);
 
-  const backToUserData=()=>{
-    setName(user.name);
-    setEmail(user.email);
-    password && setPassword(password)
-  }
-  const logoutFromHere = (e: any)=>{
-    e.preventDefault()
-    dispatch(logoutFromSite(getCookie('refreshToken')))
-    
-    
-  }
+  const backToUserData = () => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      password && setPassword(password);
+    }
+  };
 
-  return (
-    loading ? 
+  return loading ? (
     <p className={`${styles.loader} text text_type_main-large mt-10 `}>
-            Загрузка...
-        </p>
-        :
+      Загрузка...
+    </p>
+  ) : (
     <main className={styles.main}>
-      <div className={styles.nav}>
-        <NavLink
-          to="/profile"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_active`}
-          >
-            Профиль
-          </p>
-        </NavLink>
-        <NavLink
-          to="/profile/orders"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_inactive`}
-          >
-            История заказов
-          </p>
-        </NavLink>
-        <NavLink
-          to="/profile/orders:id"
-          className={({ isActive }) =>
-            isActive ? styles.linkActive : styles.linkInactive
-          }
-        >
-          <p
-            className={`${styles.text} text text_type_main-medium text_color_inactive`} onClick={logoutFromHere}
-          >
-            Выход
-          </p>
-        </NavLink>
-
-        <p
-          className={`${styles.explanation} text text_type_main-default text_color_inactive mt-20`}
-        >
-          В этом разделе вы можете изменить свои персональные данные
-        </p>
-      </div>
+      <ProfileNav />
       <div className={styles.inputs}>
         <form onSubmit={submitData}>
           <Input
@@ -188,18 +141,15 @@ export default function ProfilePage() {
             errorText={"Ошибка"}
             size={"default"}
             extraClass="ml-1"
-            
           />
           <div className={styles.hiddenBlock}>
-            <p className={`${styles.span} text text_type_main-small mr-7`} onClick={backToUserData}>
+            <p
+              className={`${styles.span} text text_type_main-small mr-7`}
+              onClick={backToUserData}
+            >
               Отмена
             </p>
-            <Button
-              htmlType="button"
-              type="primary"
-              size="medium"
-              
-            >
+            <Button htmlType="submit" type="primary" size="medium">
               Сохранить
             </Button>
           </div>
@@ -208,4 +158,3 @@ export default function ProfilePage() {
     </main>
   );
 }
-

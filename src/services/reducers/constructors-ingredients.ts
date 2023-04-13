@@ -3,32 +3,40 @@ import {
   DROP_CONSTRUCTOR_ELEMENT,
   DELITE_ELEMENT,
   CHECK_DROPED_ELEMENT,
-} from "../actions/constructors-ingredients";
-import {
-  SEND_ORDER_DATA_REQUEST,
-  SEND_ORDER_DATA_SUCCESS,
-  SEND_ORDER_DATA_FAILED,
-  DROP_MOVED_ELEMENT, CLEAN_CONSTRUCTOR
-} from "../actions/constructors-ingredients";
+  DROP_MOVED_ELEMENT,
+  CLEAN_CONSTRUCTOR,
+} from "../constants";
 
-const initialState = {
+import { TItem, TItemUndefined } from "../../utils/types";
+import { TConstructorActions } from "../actions/constructors-ingredients";
+
+type TConstructorState = {
+  draggedElement: any;
+  draggedBuns: TItem[] | TItemUndefined[];
+  draggedFilling: TItem[] | TItemUndefined[];
+};
+
+const initialState: TConstructorState = {
   draggedElement: {},
   draggedBuns: [],
   draggedFilling: [],
 };
 
-export const constructorReducer = (state = initialState, action) => {
+export const constructorReducer = (
+  state = initialState,
+  action: TConstructorActions
+): TConstructorState => {
   switch (action.type) {
     case DROP_CONSTRUCTOR_ELEMENT: {
       return {
-        ...state, 
+        ...state,
         draggedBuns:
           state.draggedElement.type === "bun"
             ? [state.draggedElement]
             : [...state.draggedBuns],
         draggedFilling:
           state.draggedElement.type !== "bun"
-            ? [...state.draggedFilling, state.draggedElement ]
+            ? [...state.draggedFilling, state.draggedElement]
             : [...state.draggedFilling],
 
         draggedElement: {},
@@ -66,18 +74,9 @@ export const constructorReducer = (state = initialState, action) => {
         ],
       };
     }
-    case SEND_ORDER_DATA_REQUEST: {
-      return { ...state, loading: true };
-    }
 
-    case SEND_ORDER_DATA_SUCCESS: {
-      return { ...state, loading: false, ingredients: state.draggedFilling.id };
-    }
-    case CLEAN_CONSTRUCTOR:{
-      return { ...state, loading: false, draggedBuns: [], draggedFilling:[] };
-    }
-    case SEND_ORDER_DATA_FAILED: {
-      return { ...state, error: action.payload.error, loading: false };
+    case CLEAN_CONSTRUCTOR: {
+      return { ...state, draggedBuns: [], draggedFilling: [] };
     }
 
     default: {

@@ -3,60 +3,46 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./burger-constructor.module.css";
-import {useSelector } from "react-redux";
 import { useMemo } from "react";
 import { BurgerConstructorElement } from "../burger-constructor-element/burger-constructor-element";
-import {
-  CHECK_DROPED_ELEMENT,
-} from "../../services/actions/constructors-ingredients";
-import {
-  OPEN_ORDER_MODAL,
-} from "../../services/actions/order-modal";
+import { CHECK_DROPED_ELEMENT, DELITE_ELEMENT, OPEN_ORDER_MODAL } from "../../services/constants";
 import { sendOrder } from "../../services/actions/order-modal";
-import { DELITE_ELEMENT } from "../../services/actions/constructors-ingredients";
 import { dropElement } from "../../services/actions/constructors-ingredients";
 import { checkAuth } from "../../services/actions/routing";
 import { useNavigate } from "react-router-dom";
-import { TRouteState } from "../../utils/types";
-import { TRootState } from "../../services/store";
-import { TConstructorState, TItem } from "../../utils/types";
-import { useTypeDispatch } from "../../utils/hooks-types";
-
+import { useSelector, useDispatch
+ } from "../../utils";
+import { TItem } from "../../utils/types";
 
 
 export default function BurgerConstructor() {
-  const dispatch = useTypeDispatch();
-  const navigate = useNavigate()
-  const { isAuth } = useSelector<TRootState, TRouteState>(state=>state.routeStore)
+  const dispatch = useDispatch();
+  
+  
+  const navigate = useNavigate();
+  const { isAuth } = useSelector((state) => state.routeStore);
 
-  const { draggedFilling, draggedBuns }= useSelector<TRootState, TConstructorState>(
-    state => state.constructorStore
+  const { draggedFilling, draggedBuns } = useSelector(
+    (state) => state.constructorStore
   );
-  
-  
 
   const openOrderModal = () => {
-    dispatch(checkAuth())
-    isAuth ? dispatch(sendOrder(draggedFilling)) : navigate('/login');
-    isAuth && dispatch({ type: OPEN_ORDER_MODAL });
-    
-
+    dispatch(checkAuth());
+    isAuth ? dispatch(sendOrder(draggedFilling)) : navigate("/login");
+    isAuth && dispatch({ type: OPEN_ORDER_MODAL});
   };
 
   //при клике мы сначала должны проверить авторизацию
-  const handleDrop = (e: any, item?: TItem) => {
+  const handleDrop = ( item: TItem) => {
     setTimeout(() => {
-      e.preventDefault();
+      // e.preventDefault();
       dispatch(dropElement(item));
-      
+
       dispatch({ type: CHECK_DROPED_ELEMENT });
     }, 0);
-
   };
-  
-  
 
-  const handleDragOver = (event: any ) => {
+  const handleDragOver = (event: any) => {
     //обработчик при наведении
     event.preventDefault();
   };
@@ -74,8 +60,7 @@ export default function BurgerConstructor() {
   });
   const initialValue = 0;
 
-  let fillingsPrice = fillingPrice.reduce((acc, i) => acc + i, initialValue);
-  
+  let fillingsPrice = fillingPrice.reduce((acc: number, i: number) => acc + i, initialValue);
 
   const totalPriceCounter = useMemo(() => {
     let totalPrice = 0;
@@ -93,7 +78,7 @@ export default function BurgerConstructor() {
         <section
           className={style.section}
           onDragOver={handleDragOver}
-          onDrop={(e)=>handleDrop(e)}
+          onDrop={(item: any) => handleDrop(item)}
         >
           <ul className={style.ul}>
             {draggedBuns &&
@@ -122,8 +107,6 @@ export default function BurgerConstructor() {
                     id={item._id}
                     className={"mb-4 ml-2"}
                     toClose={onDelite}
-                    
-                   
                   />
                 ))}
             </div>
@@ -148,29 +131,29 @@ export default function BurgerConstructor() {
           <div className={style.icon}>
             <CurrencyIcon type="primary" />
           </div>
-          {draggedFilling.length > 0  && draggedBuns.length >0 ?<Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            disabled={false}
-            onClick={openOrderModal}
-          >
-            Оформить заказ
-          </Button>
-          :
-          <Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            disabled={true}
-            onClick={openOrderModal}
-          >
-            Оформить заказ
-          </Button>
-        }
+          {draggedFilling.length > 0 && draggedBuns.length > 0 ? (
+            <Button
+              htmlType="button"
+              type="primary"
+              size="large"
+              disabled={false}
+              onClick={openOrderModal}
+            >
+              Оформить заказ
+            </Button>
+          ) : (
+            <Button
+              htmlType="button"
+              type="primary"
+              size="large"
+              disabled={true}
+              onClick={openOrderModal}
+            >
+              Оформить заказ
+            </Button>
+          )}
         </section>
       </section>
     </>
   );
 }
-
