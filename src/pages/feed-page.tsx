@@ -3,13 +3,14 @@ import styles from "./feed.module.css";
 import { feedInitAction, feedCloseAction } from "../services/actions/feed";
 import { useDispatch, useSelector } from "../utils";
 import { useEffect } from "react";
+import { WS_BASE_URL } from "../services/constants";
 
 export default function FeedPage() {
   const { orders } = useSelector((state) => state.feed);
   const { data } = useSelector((state) => state.feed);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(feedInitAction("wss://norma.nomoreparties.space/orders/all"));
+    dispatch(feedInitAction(`${WS_BASE_URL}/all`));
 
     return () => {
       dispatch(feedCloseAction());

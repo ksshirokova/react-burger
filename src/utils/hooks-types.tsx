@@ -9,7 +9,7 @@ export type TAppDispatch = typeof store.dispatch
 
 type DispatchFunc = () => TAppDispatch
 
-export const useTypeDispatch: DispatchFunc = useDispatch
+
 
 
 

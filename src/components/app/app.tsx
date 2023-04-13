@@ -74,6 +74,7 @@ function App() {
 
 
   console.log(getCookie('token'))
+  console.log(getCookie('refreshToken'))
   return (
     <>
       <AppHeader />
@@ -132,9 +133,9 @@ function App() {
         <Route
           path="/profile/orders"
           element={
-            <ProtectedRoute anonymous={false}>
-              <OrdersHistoryPage />
-            </ProtectedRoute>
+            
+            <OrdersHistoryPage />
+           
           }
         />
         <Route path="/*" element={<Error404 />} />
@@ -166,9 +167,9 @@ function App() {
         <Route
           path={"/profile/orders/:usersOrderId"}
           element={
-            
-              <OrderModalUsersDetails isPage={true} />
-           
+
+            <OrderModalUsersDetails isPage={true} />
+
 
           }
         />
@@ -185,10 +186,6 @@ function App() {
               </Modal>
             }
           />
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
             path={"/feed/:orderId"}
             element={
@@ -197,10 +194,6 @@ function App() {
               </Modal>
             }
           />
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
             path={"/profile/orders/:usersOrderId"}
             element={
@@ -211,6 +204,8 @@ function App() {
           />
         </Routes>
       )}
+
+
       {isOpened && (
         <Modal onClose={closeOrderModal} classname={"text text_type_main-large"}>
           <OrderDetails number={orderNumber} />

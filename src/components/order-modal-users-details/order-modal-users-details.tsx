@@ -8,8 +8,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { feedInitAction, feedCloseAction } from "../../services/actions/feed";
 import { v4 as uuid1 } from "uuid";
-import { TItem } from "../../utils/types";
+import { TItem, TOrder } from "../../utils/types";
 import { getCookie } from "../../utils/utils";
+import { WS_BASE_URL } from "../../services/constants";
+import { useMemo } from "react";
 
 export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
     
@@ -21,7 +23,7 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
 
 
 
-    const usersOrder: any = orders.find((elem) => {
+    const usersOrder: TOrder | undefined = orders.find((elem) => {
         return elem._id === usersOrderId;
     })
     useEffect(() => {
@@ -30,13 +32,13 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
         getCookie("token")?.slice(0, 7) === "Bearer "
             ? dispatch(
                 feedInitAction(
-                    `wss://norma.nomoreparties.space/orders?token=${getCookie("token")?.split("Bearer ")[1]
+                    `${WS_BASE_URL}?token=${getCookie("token")?.split("Bearer ")[1]
                     }`
                 )
             )
             : dispatch(
                 feedInitAction(
-                    `wss://norma.nomoreparties.space/orders?token=${getCookie("token")}`
+                    `${WS_BASE_URL}?token=${getCookie("token")}`
                 )
             );
 
@@ -46,17 +48,14 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
         };
     }, [dispatch]);
 
-    let orderIngredients: TItem[] = [];
-
-    if (usersOrder) {
-        usersOrder.ingredients.forEach((ingredient: string) => {
-            data.forEach((element: TItem) => {
-                if (element._id === ingredient) {
-                    orderIngredients = [...orderIngredients, element];
-                }
-            });
-        });
-    }
+    const groupIngredients = useMemo(() => usersOrder && usersOrder.ingredients.reduce((index: { [x: string]: any; }, el: string | number) => {
+        index[el] = (index[el] || 0) + 1;
+        return index;
+    }, {}), [usersOrder])
+    
+      const orderIngredients = data.filter((item) => {
+        return groupIngredients && groupIngredients[item._id];
+    })
 
     console.log(usersOrder)
 
@@ -91,22 +90,21 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
                 <div className={styles.composition}>
                     <ul className={styles.ul}>
                         {orderIngredients && orderIngredients.map((element: TItem) => (
-                            <li className={`${styles.orderElement} mb-4`} key={uuid1()}>
+                            <li className={`${styles.orderElement} mb-4`} key={element._id}>
                                 <img
                                     className={styles.img}
                                     src={element.image_mobile}
                                     alt={element.name}
-                                    key={uuid1()}
+                                    
                                 ></img>
                                 <p className={`${styles.text} text text_type_main-small`}>
                                     {element.name}
                                 </p>
                                 <div className={styles.price}>
-                                    <p className="text text_type_digits-default mr-2">
-                                        {element.type === "bun"
-                                            ? `${"2 x"}  ${element.price}`
-                                            : `${"1 x"}  ${element.price}`}
-                                    </p>
+                                {groupIngredients &&
+                  <p className="text text_type_digits-default mr-2">
+                  {`${element.type === "bun" ? "2" : groupIngredients[element._id]} x ${element.price}`}
+                  </p>}
 
                                     <CurrencyIcon type="primary" />
                                 </div>

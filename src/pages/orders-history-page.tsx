@@ -7,26 +7,28 @@ import { getCookie } from "../utils/utils";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "../utils";
 import FeedOrders from "../components/feed-orders/feed-orders";
-import { checkAuth } from "../services/actions/routing";
+
+import { WS_BASE_URL } from "../services/constants";
 
 
 export default function OrdersHistoryPage() {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.feed);
+  // const usersOrders = orders.reverse()
 
   useEffect(() => {
     
     getCookie("token")?.slice(0, 7) === "Bearer "
       ? dispatch(
           feedInitAction(
-            `wss://norma.nomoreparties.space/orders?token=${
+            `${WS_BASE_URL}?token=${
               getCookie("token")?.split("Bearer ")[1]
             }`
           )
         )
       : dispatch(
           feedInitAction(
-            `wss://norma.nomoreparties.space/orders?token=${getCookie("token")}`
+            `${WS_BASE_URL}?token=${getCookie("token")}`
           )
         );
 

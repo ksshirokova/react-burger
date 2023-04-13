@@ -26,6 +26,7 @@ import { deleteCookie } from "../../utils/utils";
 import { LOGOUT_FAILED } from "../constants";
 import { TRoutingActions } from "../actions/routing";
 
+
 export type TRoutingState = {
   isAuth: boolean;
   loading: boolean;
@@ -48,7 +49,7 @@ export type TRoutingState = {
   userCheked: boolean;
   isLoading: boolean;
 };
-const initialState: TRoutingState = {
+export const initialState: TRoutingState = {
   isAuth: false,
   loading: false,
   error: null,
@@ -142,6 +143,7 @@ export const routingReducer = (
       return { ...state, loading: true, isAuth: false };
     }
     case LOGIN_USER_SUCCESS: {
+      
       const authToken = action.accessToken.split("Bearer ")[1];
       if (authToken) {
         setCookie("token", authToken, { secure: true, "max-age": 1000000

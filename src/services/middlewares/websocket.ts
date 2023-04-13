@@ -10,7 +10,7 @@ export type TWSActions = {
   closed: string;
 };
 
-export const WebsocketMiddleware =
+export const socketMiddleware =
   (WSAction: TWSActions): Middleware =>
   (store) => {
     let socket: WebSocket | null = null;

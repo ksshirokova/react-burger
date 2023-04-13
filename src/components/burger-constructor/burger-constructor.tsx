@@ -25,10 +25,11 @@ export default function BurgerConstructor() {
   const { draggedFilling, draggedBuns } = useSelector(
     (state) => state.constructorStore
   );
+  const  draggedElements = [...draggedFilling, ...draggedBuns]
 
   const openOrderModal = () => {
     dispatch(checkAuth());
-    isAuth ? dispatch(sendOrder(draggedFilling)) : navigate("/login");
+    isAuth ? dispatch(sendOrder(draggedElements)) : navigate("/login");
     isAuth && dispatch({ type: OPEN_ORDER_MODAL});
   };
 
@@ -42,7 +43,7 @@ export default function BurgerConstructor() {
     }, 0);
   };
 
-  const handleDragOver = (event: any) => {
+  const handleDragOver = (event: React.MouseEvent<HTMLElement>) => {
     //обработчик при наведении
     event.preventDefault();
   };

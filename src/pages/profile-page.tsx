@@ -5,7 +5,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile-page.module.css";
 
-import { changeData, checkAuth } from "../services/actions/routing";
+import { changeData } from "../services/actions/routing";
 import { useSelector, useDispatch } from "../utils";
 import ProfileNav from "../components/profile-nav/profile-nav";
 
@@ -42,7 +42,7 @@ export default function ProfilePage() {
     }
   };
 
-  const submitData = (e: any) => {
+  const submitData = (e: React.FormEvent<HTMLFormElement>) => {
     console.log("click");
     e.preventDefault();
     dispatch(changeData(name, email, usersPassword));
@@ -99,7 +99,7 @@ export default function ProfilePage() {
             id={"changeNameInput"}
             type={"text"}
             placeholder={"Имя"}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
             disabled={nameDisabled}
             value={name}
             error={false}
@@ -114,7 +114,7 @@ export default function ProfilePage() {
             id={"changeEmailInput"}
             type={"email"}
             placeholder={"Логин"}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             disabled={emailDisabled}
             icon={emailIcon}
             value={email}
@@ -130,7 +130,7 @@ export default function ProfilePage() {
             id={"changePasswordInput"}
             type={"password"}
             placeholder={"Пароль"}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             disabled={passwordDisabled}
             icon={passwordIcon}
             value={usersPassword}

@@ -238,6 +238,8 @@ export const loginUser =
           password: password,
           ...res,
         });
+        
+      
       })
 
       .catch((err) => {
