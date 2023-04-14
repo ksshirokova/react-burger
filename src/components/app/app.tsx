@@ -30,11 +30,12 @@ import OrderModalDetails from "../order-modal-details/order-modal-details";
 import { deliteModalOrder } from "../../services/actions/ingredient-modal";
 import { getCookie } from "../../utils/utils";
 import OrderModalUsersDetails from "../order-modal-users-details/order-modal-users-details";
+import { getUser } from "../../services/actions/routing";
 
 
 function App() {
   const navigate = useNavigate();
-
+  const { loading } = useSelector((state) => state.routeStore);
   const location = useLocation();
 
   const { isOpened, orderItems } = useSelector(
@@ -69,12 +70,14 @@ function App() {
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkAuth());
-    console.log('страница отрендерилась')
+      dispatch(
+        getUser(getCookie('token'))
+        );
+    
   }, [dispatch]);
 
 
   console.log(getCookie('token'))
-  console.log(getCookie('refreshToken'))
   return (
     <>
       <AppHeader />
@@ -93,7 +96,7 @@ function App() {
         <Route
           path="/login"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true} >
               <LoginPage />
             </ProtectedRoute>
           }
@@ -101,7 +104,7 @@ function App() {
         <Route
           path="/register"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true} >
               <RegistrationPage />
             </ProtectedRoute>
           }
@@ -109,7 +112,7 @@ function App() {
         <Route
           path="/forgot-password"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true}>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -117,7 +120,7 @@ function App() {
         <Route
           path="/reset-password"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true}>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -133,9 +136,9 @@ function App() {
         <Route
           path="/profile/orders"
           element={
-            
+            <ProtectedRoute anonymous={false}>
             <OrdersHistoryPage />
-           
+            </ProtectedRoute>
           }
         />
         <Route path="/*" element={<Error404 />} />

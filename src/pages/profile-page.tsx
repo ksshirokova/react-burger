@@ -70,7 +70,6 @@ export default function ProfilePage() {
     }
   };
   useEffect(() => {
-    // dispatch(checkAuth())
     if (user) {
       setName(user.name);
       setEmail(user.email);

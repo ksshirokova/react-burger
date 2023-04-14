@@ -1,6 +1,7 @@
 import { requestData, getCookie, checkResponse, setCookie } from "./utils";
 
 import { TRefreshUsersData } from "./types";
+import { getUser } from "../services/actions/routing";
 
 const API_URL = "https://norma.nomoreparties.space/api";
 
@@ -14,7 +15,7 @@ export const sendOrdersData = (burgerIngredients: Array<object>) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: getCookie("token"),
+      Authorization: 'Bearer ' + getCookie("token"),
     },
     body: JSON.stringify({
       ingredients: burgerIngredients,
@@ -62,7 +63,6 @@ export const registerUserApi = (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: "Bearer " + getCookie("token"),
     },
     body: JSON.stringify({
       email: usersEmail,
@@ -87,14 +87,16 @@ export const loginUserApi = (usersEmail: string, usersPassword: string) => {
   });
 };
 
-export const getUserApi = (token: string | undefined) => {
+export const getUserApi = (token: string |undefined) => {
   return fetchWithRefresh(`${API_URL}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: token
+      Authorization: 'Bearer ' + `${token}`,
     },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer'
   });
 };
 
@@ -108,7 +110,7 @@ export const changeUsersDataApi = (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: getCookie("token"),
+      Authorization: 'Bearer ' + getCookie('token'),
     },
     body: JSON.stringify({
       name: newName,
@@ -149,15 +151,19 @@ export const fetchWithRefresh = async (url: string, options: any) => {
     const res = await fetch(url, options);
     return await checkResponse(res);
   } catch (err: any) {
-    if (err.message === "jwt malformed" || "jwt expired") {
+    if (err.message === "jwt expired" || 'jwt malformed' ) {
+
       const refreshUsersData = await refreshToken(getCookie("refreshToken"));
 
       await checkResponse<TRefreshUsersData>(refreshUsersData).then(
         (refreshUsersData) => {
           options.headers.Authorization = refreshUsersData.accessToken;
 
-          setCookie("token", refreshUsersData.accessToken);
-          setCookie("refreshToken", refreshUsersData.refreshToken);
+          setCookie("token", refreshUsersData.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
+          console.log('token chaged')
+          console.log(getCookie('token'))
+          setCookie("refreshToken", refreshUsersData.refreshToken,  { secure: true, SameSite: "Lax" });
+        
         }
       );
 
@@ -168,3 +174,4 @@ export const fetchWithRefresh = async (url: string, options: any) => {
     }
   }
 };
+

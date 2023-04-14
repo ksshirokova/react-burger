@@ -18,7 +18,7 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
     const { data } = useSelector((state) => state.ingredients); //массив всех ингредиентов
     
     const { usersOrderId } = useParams();
-    const { orders } = useSelector((state) => state.feed);
+    const { orders }  = useSelector((state) => state.feed);
     const dispatch = useDispatch();
 
 
@@ -26,27 +26,20 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
     const usersOrder: TOrder | undefined = orders.find((elem) => {
         return elem._id === usersOrderId;
     })
-    useEffect(() => {
+    // useEffect(() => {
         
             
-        getCookie("token")?.slice(0, 7) === "Bearer "
-            ? dispatch(
-                feedInitAction(
-                    `${WS_BASE_URL}?token=${getCookie("token")?.split("Bearer ")[1]
-                    }`
-                )
-            )
-            : dispatch(
-                feedInitAction(
-                    `${WS_BASE_URL}?token=${getCookie("token")}`
-                )
-            );
+    //     dispatch(
+    //             feedInitAction(
+    //                 `${WS_BASE_URL}?token=${getCookie("token")}`
+    //             )
+    //         );
 
-        return () => {
-            dispatch(feedCloseAction());
+    //     return () => {
+    //         dispatch(feedCloseAction());
             
-        };
-    }, [dispatch]);
+    //     };
+    // }, [dispatch]);
 
     const groupIngredients = useMemo(() => usersOrder && usersOrder.ingredients.reduce((index: { [x: string]: any; }, el: string | number) => {
         index[el] = (index[el] || 0) + 1;
@@ -62,8 +55,8 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
     const initialValue = 0;
 
     return (
-
-        !usersOrder ?
+        orders.length === 0 || !usersOrder?
+            
             <p className={`${styles.loader} text text_type_main-large mt-10 `}>
                 Загрузка...
             </p>

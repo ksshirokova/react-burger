@@ -17,14 +17,12 @@ export default function FeedPage() {
     };
   }, [dispatch]);
 
-  if (!data) {
+  if (!data || !orders) {
     return (
       <h2 className="text text_type_main-large mt-15 pt-15">Загрузка...</h2>
     );
   } else {
-    return !data ? (
-      <p className="text text_type_main-large mt-10">Загрузка...</p>
-    ) : (
+    return  (
       <>
         <h1
           className={`${styles.header} text text_type_main-large  pt-15 pb-5`}

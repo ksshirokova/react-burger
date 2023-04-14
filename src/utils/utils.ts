@@ -61,5 +61,4 @@ export function getCookie(name: string): string | undefined {
 }
 
 export function deleteCookie(name: string) {
-  setCookie(name, "null", { path: -1 });
-}
+  setCookie(name, "null", { path: -1 })}

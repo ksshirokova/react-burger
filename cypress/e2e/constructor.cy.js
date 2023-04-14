@@ -1,12 +1,8 @@
-// describe('app works correctly with routes', () => {
-//   it('passes', () => {
-//     cy.visit('http://localhost:3000')
-//   })
-// })
+
 
 describe("app works correctly with routes", function () {
   beforeEach(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("dashboard");
     cy.viewport(1280, 1024);
   });
 
@@ -22,6 +18,7 @@ describe("app works correctly with routes", function () {
   });
 
   it("should drag ang drop ingredients", () => {
+    const container = "[class^=modal_container_]";
     cy.intercept(`https://norma.nomoreparties.space/api/ingredients`).as(
       "getIngredients"
     );
@@ -49,6 +46,10 @@ describe("app works correctly with routes", function () {
     cy.get("[type=password]").type(123456789);
     cy.get("button").contains("Войти").click();
     cy.get("button").contains("Оформить заказ").click();
+    cy.intercept(`https://norma.nomoreparties.space/api/ingredients`).as(
+      "getIngredients"
+    );
+    cy.wait("@getIngredients");
     cy.get("[class^=modal_container_]").should("be.visible");
     cy.get("[class^=order_number").should("be.visible");
     cy.get("[class^=modal_closeIcon_]").click();

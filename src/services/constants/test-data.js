@@ -225,3 +225,5 @@ export const userWithPassword = {
     name: "123123qwe",
     password: "123qwe"
 }
+
+export const testUrl = 'http://localhost:3000'

@@ -7,7 +7,7 @@ import {
   getUserApi,
   changeUsersDataApi,
 } from "../../utils/api";
-import { getCookie } from "../../utils/utils";
+
 import { logoutApi } from "../../utils/api";
 import {
   SEND_EMAIL_REQUEST,
@@ -69,7 +69,8 @@ export interface ISendNewUserRequest {
 
 export interface ISendNewUserSuccess {
   readonly type: typeof SEND_NEW_USER_SUCCESS;
-
+  readonly refreshToken: string,
+  readonly accessToken: string,
   readonly password: string;
   readonly email: string;
   readonly name: string;
@@ -207,25 +208,22 @@ export const sendNewPassword =
 
 export const registerUser =
   (name: string, email: string, password: string) =>
-  (dispatch: AppDispatch) => {
-    dispatch({ type: SEND_NEW_USER_REQUEST });
+    (dispatch: AppDispatch) => {
+      dispatch({ type: SEND_NEW_USER_REQUEST });
 
-    registerUserApi(name, email, password)
-      .then((res: any) => {
-        res.success === true &&
-          dispatch({
-            type: SEND_NEW_USER_SUCCESS,
-            name: name,
-            email: email,
-            password: password,
-            ...res,
-          });
-      })
+      registerUserApi(name, email, password)
+        .then((res: any) => {
+          res.success === true &&
+            dispatch({
+              type: SEND_NEW_USER_SUCCESS,
+              ...res,
+            });
+        })
 
-      .catch((err) => {
-        dispatch({ type: LOGIN_USER_FAILED, payload: { error: err } });
-      });
-  };
+        .catch((err) => {
+          dispatch({ type: LOGIN_USER_FAILED, payload: { error: err } });
+        });
+    };
 
 export const loginUser =
   (email: string, password: string) => (dispatch: AppDispatch) => {
@@ -235,11 +233,10 @@ export const loginUser =
       .then((res: any) => {
         dispatch({
           type: LOGIN_USER_SUCCESS,
-          password: password,
           ...res,
         });
-        
-      
+
+
       })
 
       .catch((err) => {
@@ -248,12 +245,12 @@ export const loginUser =
   };
 
 export const checkAuth = () => (dispatch: AppDispatch) => {
-  dispatch(getUser(getCookie("token")));
+ 
   dispatch({ type: AUTH_CHECKED, isAuthChecked: true });
 };
 
 export const getUser =
-  (token: string | undefined) => (dispatch: AppDispatch) => {
+  (token:string | undefined) => (dispatch: AppDispatch) => {
     dispatch({ type: USER_REQUEST });
 
     getUserApi(token)
@@ -270,21 +267,21 @@ export const getUser =
 
 export const changeData =
   (name: string, email: string, password: string) =>
-  (dispatch: AppDispatch) => {
-    changeUsersDataApi(name, email, password)
-      .then((res: any) => {
-        setTimeout(() => {
-          dispatch({
-            type: SEND_NEW_DATA,
-            name: name,
-            email: email,
-            password: password,
-            ...res,
-          });
-        }, 0);
-      })
-      .catch((err) => console.log(`ошибка ${err}, данные не изменились`));
-  };
+    (dispatch: AppDispatch) => {
+      changeUsersDataApi(name, email, password)
+        .then((res: any) => {
+          setTimeout(() => {
+            dispatch({
+              type: SEND_NEW_DATA,
+              name: name,
+              email: email,
+              password: password,
+              ...res,
+            });
+          }, 0);
+        })
+        .catch((err) => console.log(`ошибка ${err}, данные не изменились`));
+    };
 
 export const logoutFromSite =
   (refreshToken: string | undefined) => (dispatch: AppDispatch) => {
