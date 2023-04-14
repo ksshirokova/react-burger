@@ -10,7 +10,7 @@ export default function ProtectedRoute({
   anonymous: boolean;
   children: JSX.Element;
 }) {
-  const { isAuthChecked, userChecked, user } = useSelector(
+  const { isAuthChecked, userChecked, user, isAuth } = useSelector(
     (state) => state.routeStore
   );
 

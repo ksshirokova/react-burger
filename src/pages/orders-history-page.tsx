@@ -16,6 +16,9 @@ import { getUser } from "../services/actions/routing";
 export default function OrdersHistoryPage() {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.feed);
+  const { user } = useSelector(
+    (state) => state.routeStore
+  );
   
   
 

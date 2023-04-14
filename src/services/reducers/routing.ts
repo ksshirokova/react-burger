@@ -161,7 +161,6 @@ export const routingReducer = (
         isAuth: true,
         user: action.user,
         userChecked: true,
-        isAuthChecked: true,
         password: "",
       };
     }
@@ -172,7 +171,6 @@ export const routingReducer = (
         isAuth: false,
         user: null,
         userCheked: false,
-        isAuthChecked: false,
       };
     }
     case USER_FAILED: {
@@ -182,7 +180,6 @@ export const routingReducer = (
         isAuth: false,
         user: null,
         userCheked: false,
-        isAuthChecked: true,
       };
     }
     case AUTH_CHECKED: {

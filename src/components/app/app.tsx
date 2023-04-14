@@ -65,18 +65,24 @@ function App() {
     dispatch(deliteModalOrder(item));
     navigate(-1);
   };
-
-
+  const checkAuth = () => {
+    getCookie('token') && dispatch(
+      getUser(getCookie('token'))
+    );
+  }
+  const { isAuthChecked, user, } = useSelector(
+    (state) => state.routeStore
+  );
   useEffect(() => {
     dispatch(getIngredients());
-    dispatch(checkAuth());
-      dispatch(
-        getUser(getCookie('token'))
-        );
-    
+
+    checkAuth()
+
+   
+
   }, [dispatch]);
 
-
+  console.log(user, isAuthChecked)
   console.log(getCookie('token'))
   return (
     <>
@@ -137,7 +143,7 @@ function App() {
           path="/profile/orders"
           element={
             <ProtectedRoute anonymous={false}>
-            <OrdersHistoryPage />
+              <OrdersHistoryPage />
             </ProtectedRoute>
           }
         />

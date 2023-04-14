@@ -262,7 +262,10 @@ export const getUser =
       })
       .catch((err) => {
         dispatch({ type: USER_FAILED, payload: err });
-      });
+      })
+      .finally(()=>{
+        dispatch({ type: AUTH_CHECKED });
+      })
   };
 
 export const changeData =

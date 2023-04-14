@@ -87,7 +87,7 @@ export const loginUserApi = (usersEmail: string, usersPassword: string) => {
   });
 };
 
-export const getUserApi = (token: string |undefined) => {
+export const getUserApi = (token: string | undefined) => {
   return fetchWithRefresh(`${API_URL}/auth/user`, {
     method: "GET",
     headers: {
@@ -141,7 +141,7 @@ export const refreshToken = (refreshToken: string | undefined) => {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      token: `${refreshToken}`,
+      token: refreshToken,
     }),
   });
 };
@@ -149,26 +149,42 @@ export const refreshToken = (refreshToken: string | undefined) => {
 export const fetchWithRefresh = async (url: string, options: any) => {
   try {
     const res = await fetch(url, options);
+    console.log(res)
     return await checkResponse(res);
   } catch (err: any) {
-    if (err.message === "jwt expired" || 'jwt malformed' ) {
+    if (err.message === "jwt expired" || 'jwt malformed') {
 
       const refreshUsersData = await refreshToken(getCookie("refreshToken"));
+      console.log(refreshUsersData) //здесь не ок, когда обновляю первый раз
+      console.log('дошло до объявления константы')
+      //ломается потому что в checkResponse не ок
 
       await checkResponse<TRefreshUsersData>(refreshUsersData).then(
-        (refreshUsersData) => {
-          options.headers.Authorization = refreshUsersData.accessToken;
-
-          setCookie("token", refreshUsersData.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
-          console.log('token chaged')
+        (res) => {
+          console.log(res)
+          console.log('дошло до блока then')
+          setCookie("token", res.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
+          options.headers.Authorization = res.accessToken;
           console.log(getCookie('token'))
-          setCookie("refreshToken", refreshUsersData.refreshToken,  { secure: true, SameSite: "Lax" });
-        
+
+          console.log('token chaged')
+
+          setCookie("refreshToken", res.refreshToken, { secure: true, SameSite: "Lax" });
+
         }
-      );
+      )
+        .catch((res) => {
+          console.log(res)
+        })
 
       const res = await fetch(url, options);
-      return await checkResponse(res);
+      console.log('дошло до последней проверки')
+      return await checkResponse(res)
+      // .then((res)=>console.log(res))
+      // .catch((res) => {
+      //   console.log(res)
+      // })
+      
     } else {
       return Promise.reject(err);
     }

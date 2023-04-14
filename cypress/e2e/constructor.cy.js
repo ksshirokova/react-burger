@@ -18,7 +18,7 @@ describe("app works correctly with routes", function () {
   });
 
   it("should drag ang drop ingredients", () => {
-    const container = "[class^=modal_container_]";
+    
     cy.intercept(`https://norma.nomoreparties.space/api/ingredients`).as(
       "getIngredients"
     );
