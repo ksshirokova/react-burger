@@ -226,4 +226,8 @@ export const userWithPassword = {
     password: "123qwe"
 }
 
-export const testUrl = 'http://localhost:3000'
+
+export const testConsts = {
+    API_URL: `https://norma.nomoreparties.space/api`,
+    modalContainer: "[class^=modal_container_]"
+    };

@@ -15,7 +15,7 @@ export const sendOrdersData = (burgerIngredients: Array<object>) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: 'Bearer ' + getCookie("token"),
+      Authorization: getCookie("token"),
     },
     body: JSON.stringify({
       ingredients: burgerIngredients,
@@ -86,7 +86,6 @@ export const loginUserApi = (usersEmail: string, usersPassword: string) => {
     }),
   });
 };
-
 export const getUserApi = (token: string | undefined) => {
   return fetchWithRefresh(`${API_URL}/auth/user`, {
     method: "GET",
@@ -99,6 +98,8 @@ export const getUserApi = (token: string | undefined) => {
     referrerPolicy: 'no-referrer'
   });
 };
+
+
 
 export const changeUsersDataApi = (
   newName: string,
@@ -163,9 +164,11 @@ export const fetchWithRefresh = async (url: string, options: any) => {
         (res) => {
           console.log(res)
           console.log('дошло до блока then')
-          setCookie("token", res.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
           options.headers.Authorization = res.accessToken;
+          setCookie("token", res.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
+          
           console.log(getCookie('token'))
+          console.log(getCookie('refreshToken'))
 
           console.log('token chaged')
 

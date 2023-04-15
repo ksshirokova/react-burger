@@ -244,13 +244,9 @@ export const loginUser =
       });
   };
 
-export const checkAuth = () => (dispatch: AppDispatch) => {
- 
-  dispatch({ type: AUTH_CHECKED, isAuthChecked: true });
-};
 
 export const getUser =
-  (token:string | undefined) => (dispatch: AppDispatch) => {
+  (token: string | undefined) => (dispatch: AppDispatch) => {
     dispatch({ type: USER_REQUEST });
 
     getUserApi(token)
@@ -263,10 +259,12 @@ export const getUser =
       .catch((err) => {
         dispatch({ type: USER_FAILED, payload: err });
       })
-      .finally(()=>{
+      .finally(() => {
         dispatch({ type: AUTH_CHECKED });
       })
   };
+
+
 
 export const changeData =
   (name: string, email: string, password: string) =>

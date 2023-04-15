@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "../../utils";
+import { useEffect } from "react";
 
 export default function ProtectedRoute({
   children,
@@ -10,12 +11,14 @@ export default function ProtectedRoute({
   anonymous: boolean;
   children: JSX.Element;
 }) {
-  const { isAuthChecked, userChecked, user, isAuth } = useSelector(
+  const { isAuthChecked, user } = useSelector(
     (state) => state.routeStore
   );
 
   const location = useLocation();
   const from = location.state?.from || "/";
+
+  
 
   if (!isAuthChecked) {
     return <p className="text text_type_main-large mt-15 mb-1">Загрузка...</p>
@@ -32,6 +35,7 @@ if (!anonymous && !user) {
         <Navigate to="/login" state={{ from: location}} />
     )
 }
+ 
 
   return <>{children}</>;
 }

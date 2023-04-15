@@ -15,14 +15,13 @@ import {
 
   DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL
 } from "../../services/constants";
+import { setCookie } from "../../utils/utils";
 import OrdersHistoryPage from "../../pages/orders-history-page";
-
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import ProfilePage from "../../pages/profile-page";
 import RegistrationPage from "../../pages/registration-page";
 import ResetPassword from "../../pages/reset-password";
 import { useEffect } from "react";
-import { checkAuth } from "../../services/actions/routing";
 import IngredientDetailsPage from "../ingredient-details/ingredient-details";
 import FeedPage from "../../pages/feed-page";
 import { useSelector, useDispatch } from "../../utils";
@@ -59,31 +58,30 @@ function App() {
     dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {} })
     navigate("/");
   };
-
+  getCookie('refreshToken')
+  const checkAuth = () => {
+    dispatch(
+      getUser(getCookie('refreshToken'))
+    );
+  }
   const closeFeedModal = (item?: any) => {
 
     dispatch(deliteModalOrder(item));
     navigate(-1);
   };
-  const checkAuth = () => {
-    getCookie('token') && dispatch(
-      getUser(getCookie('token'))
-    );
-  }
+  
   const { isAuthChecked, user, } = useSelector(
     (state) => state.routeStore
   );
   useEffect(() => {
     dispatch(getIngredients());
-
     checkAuth()
-
-   
 
   }, [dispatch]);
 
   console.log(user, isAuthChecked)
   console.log(getCookie('token'))
+  console.log(getCookie('refreshToken'))
   return (
     <>
       <AppHeader />
