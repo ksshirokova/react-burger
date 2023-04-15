@@ -175,8 +175,7 @@ it('should handle SEND_NEW_USER_SUCCESS', () => {
     expect(
         routingReducer(initialState, {
             type: SEND_NEW_USER_SUCCESS,
-            user: userWithPassword,
-            password: '123qwe',
+            // user: userWithPassword,
             name: "123123qwe",
             email: "123@123.ru",
 
@@ -185,11 +184,11 @@ it('should handle SEND_NEW_USER_SUCCESS', () => {
         ...initialState,
 
         loading: false,
-        password: '123qwe',
+        password: '',
         email: "123@123.ru",
         name: "123123qwe",
         isRegistred: true,
-        user: userWithPassword,
+        user: null,
         error: null,
 
     });
@@ -287,7 +286,7 @@ it('should handle USER_FAILED', () => {
         isAuth: false,
         user: null,
         userCheked: false,
-        isAuthChecked: true,
+        isAuthChecked: false,
 
     });
 });

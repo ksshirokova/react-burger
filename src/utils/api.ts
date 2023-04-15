@@ -92,7 +92,7 @@ export const getUserApi = (token: string | undefined) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: 'Bearer ' + `${token}`,
+      Authorization: token,
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer'
@@ -144,7 +144,16 @@ export const refreshToken = (refreshToken: string | undefined) => {
     body: JSON.stringify({
       token: refreshToken,
     }),
-  });
+  })
+    .then(res => checkResponse<TRefreshUsersData>(res))
+    .then((data) => {
+      if (!data.success) {
+        return Promise.reject(data)
+      }
+      setCookie("token", data.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
+      setCookie("refreshToken", data.refreshToken, { secure: true, SameSite: "Lax" });
+      return data;
+    })
 };
 
 export const fetchWithRefresh = async (url: string, options: any) => {
@@ -159,26 +168,11 @@ export const fetchWithRefresh = async (url: string, options: any) => {
       console.log(refreshUsersData) //здесь не ок, когда обновляю первый раз
       console.log('дошло до объявления константы')
       //ломается потому что в checkResponse не ок
+      if (options.header) {
+        (options.headers as { [key: string]: string }).Authorization = refreshUsersData.accessToken
+      }
 
-      await checkResponse<TRefreshUsersData>(refreshUsersData).then(
-        (res) => {
-          console.log(res)
-          console.log('дошло до блока then')
-          options.headers.Authorization = res.accessToken;
-          setCookie("token", res.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
-          
-          console.log(getCookie('token'))
-          console.log(getCookie('refreshToken'))
 
-          console.log('token chaged')
-
-          setCookie("refreshToken", res.refreshToken, { secure: true, SameSite: "Lax" });
-
-        }
-      )
-        .catch((res) => {
-          console.log(res)
-        })
 
       const res = await fetch(url, options);
       console.log('дошло до последней проверки')
@@ -187,7 +181,7 @@ export const fetchWithRefresh = async (url: string, options: any) => {
       // .catch((res) => {
       //   console.log(res)
       // })
-      
+
     } else {
       return Promise.reject(err);
     }

@@ -15,7 +15,7 @@ import {
 
   DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL
 } from "../../services/constants";
-import { setCookie } from "../../utils/utils";
+
 import OrdersHistoryPage from "../../pages/orders-history-page";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import ProfilePage from "../../pages/profile-page";
@@ -58,10 +58,11 @@ function App() {
     dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {} })
     navigate("/");
   };
-  getCookie('refreshToken')
+  
   const checkAuth = () => {
+    
     dispatch(
-      getUser(getCookie('refreshToken'))
+      getUser(getCookie('token'))
     );
   }
   const closeFeedModal = (item?: any) => {

@@ -41,16 +41,18 @@ describe("app works correctly with routes", function () {
     cy.get("[class^=burger-constructor_section_]").trigger("drop", {
       dataTransfer,
     });
+
     cy.get("button").contains("Оформить заказ").click();
 
     cy.get("[type=email]").type("123456789@111.ru");
     cy.get("[type=password]").type(123456789);
     cy.get("button").contains("Войти").click();
+    cy.intercept(`${testConsts.API_URL}/ingredients`).as(
+      "getIngredients"
+    );
+    cy.wait("@getIngredients");
     cy.get("button").contains("Оформить заказ").click();
-    // cy.intercept(`https://norma.nomoreparties.space/api/ingredients`).as(
-    //   "getIngredients"
-    // );
-    // cy.wait("@getIngredients");
+    
     cy.get(testConsts.modalContainer).should("be.visible");
     cy.wait(17000);
     cy.get("[class^=order_number").should("be.visible");

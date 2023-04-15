@@ -26,7 +26,7 @@ export default function ProtectedRoute({
 
 if (anonymous && user) {
     return (
-        <Navigate to={from.pathname} replace/>
+        <Navigate to={from} />
     )
 }
 
