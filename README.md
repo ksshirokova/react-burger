@@ -38,6 +38,10 @@ JavaScript, React, Redux, TypeScript, HTML, CSS
 
 `npm start`
 
+## Ссылка на проект
+
+https://main--astounding-lily-bcfa26.netlify.app/ 
+
 ## План по доработке проекта 
 
 1) Создание страниц заказа  
