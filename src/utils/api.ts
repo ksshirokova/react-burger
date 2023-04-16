@@ -1,9 +1,9 @@
 import { requestData, getCookie, checkResponse, setCookie } from "./utils";
 
 import { TRefreshUsersData } from "./types";
-import { getUser } from "../services/actions/routing";
 
-const API_URL = "https://norma.nomoreparties.space/api";
+
+export const API_URL = "https://norma.nomoreparties.space/api";
 
 export const getIngredientsApi = () => {
   return requestData(`${API_URL}/ingredients`);

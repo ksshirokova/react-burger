@@ -228,6 +228,6 @@ export const userWithPassword = {
 
 
 export const testConsts = {
-    API_URL: `https://norma.nomoreparties.space/api`,
+    
     modalContainer: "[class^=modal_container_]"
     };

@@ -1,4 +1,5 @@
-import {testConsts} from '../../src/services/constants/test-data'
+import { testConsts } from "../../src/services/constants/test-data";
+import { API_URL } from "../../src/utils/api";
 
 describe("app works correctly with routes", function () {
   beforeEach(function () {
@@ -7,10 +8,8 @@ describe("app works correctly with routes", function () {
   });
 
   it("should open ingredients details", () => {
-    cy.intercept(`${testConsts.API_URL}/ingredients`).as(
-      "getIngredients"
-    );
-    
+    cy.intercept(`${API_URL}/ingredients`).as("getIngredients");
+
     cy.wait("@getIngredients");
     cy.get("a").contains("Соус традиционный галактический").click();
     cy.get(testConsts.modalContainer).should("be.visible");
@@ -19,10 +18,7 @@ describe("app works correctly with routes", function () {
   });
 
   it("should drag ang drop ingredients", () => {
-    
-    cy.intercept(`${testConsts.API_URL}/ingredients`).as(
-      "getIngredients"
-    );
+    cy.intercept(`${API_URL}/ingredients`).as("getIngredients");
     cy.wait("@getIngredients");
 
     const dataTransfer = new DataTransfer();
@@ -47,12 +43,10 @@ describe("app works correctly with routes", function () {
     cy.get("[type=email]").type("123456789@111.ru");
     cy.get("[type=password]").type(123456789);
     cy.get("button").contains("Войти").click();
-    cy.intercept(`${testConsts.API_URL}/ingredients`).as(
-      "getIngredients"
-    );
+    cy.intercept(`${API_URL}/ingredients`).as("getIngredients");
     cy.wait("@getIngredients");
     cy.get("button").contains("Оформить заказ").click();
-    
+
     cy.get(testConsts.modalContainer).should("be.visible");
     cy.wait(17000);
     cy.get("[class^=order_number").should("be.visible");

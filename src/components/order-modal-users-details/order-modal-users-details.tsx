@@ -26,21 +26,21 @@ export default function OrderModalUsersDetails({isPage}:{isPage?:boolean}) {
     const usersOrder: TOrder | undefined = orders.find((elem) => {
         return elem._id === usersOrderId;
     })
-    // useEffect(() => {
-        
-            
-    //     dispatch(
-    //             feedInitAction(
-    //                 `${WS_BASE_URL}?token=${getCookie("token")}`
-    //             )
-    //         );
+useEffect(()=>{
+   dispatch(
+        feedInitAction(
+            `${WS_BASE_URL}?token=${getCookie("token")?.split("Bearer ")[1]
+            }`
+        )
+    )
+    return () => {
+        dispatch(feedCloseAction());
+      };
+}, [dispatch])
+   
 
-    //     return () => {
-    //         dispatch(feedCloseAction());
-            
-    //     };
-    // }, [dispatch]);
-
+ 
+    
     const groupIngredients = useMemo(() => usersOrder && usersOrder.ingredients.reduce((index: { [x: string]: any; }, el: string | number) => {
         index[el] = (index[el] || 0) + 1;
         return index;
