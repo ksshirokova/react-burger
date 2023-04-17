@@ -16,7 +16,7 @@ type TConstructorState = {
   draggedFilling: TItem[] | TItemUndefined[];
 };
 
-const initialState: TConstructorState = {
+export const initialState: TConstructorState = {
   draggedElement: {},
   draggedBuns: [],
   draggedFilling: [],

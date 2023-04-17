@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "../../utils";
+import { useEffect } from "react";
 
 export default function ProtectedRoute({
   children,
@@ -10,31 +11,31 @@ export default function ProtectedRoute({
   anonymous: boolean;
   children: JSX.Element;
 }) {
-  const { isAuth, isAuthChecked, isLogged, userChecked, user } = useSelector(
+  const { isAuthChecked, user } = useSelector(
     (state) => state.routeStore
   );
 
   const location = useLocation();
   const from = location.state?.from || "/";
 
-  if (!isAuthChecked && !userChecked) {
-    return <h1>Загрузка...</h1>;
-  }
+  
 
-  //анонимный доступ - может ли сюда войти человек без данных юзера
-  if (anonymous && user && !isUser) {
-    return <Navigate to={from} />;
-  }
+  if (!isAuthChecked) {
+    return <p className="text text_type_main-large mt-15 mb-1">Загрузка...</p>
+}
 
-  if (!anonymous && !user && !isUser) {
-    return <Navigate to="/login" state={{ from: location }} />;
-  }
-  if (!anonymous && !isAuth && isLogged) {
-    return <Navigate to="/login" state={{ from: location }} />;
-  }
-  if (!anonymous && user && isUser && isAuth) {
-    return <Navigate to={from} />;
-  }
+if (anonymous && user) {
+    return (
+        <Navigate to={from} />
+    )
+}
+
+if (!anonymous && !user) {
+    return (
+        <Navigate to="/login" state={{ from: location}} />
+    )
+}
+ 
 
   return <>{children}</>;
 }

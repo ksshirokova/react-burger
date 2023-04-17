@@ -7,7 +7,7 @@ export default function OrderDetails({ number }: { number: number }) {
 
   return (
     <section className={style.section}>
-      <p className="text text_type_digits-large mt-9 mb-8">{number}</p>
+      <p className="order_number text text_type_digits-large mt-9 mb-8">{number}</p>
       <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
       {loading ? (
         <div className={style.loader}>

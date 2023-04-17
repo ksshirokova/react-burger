@@ -3,27 +3,26 @@ import styles from "./feed.module.css";
 import { feedInitAction, feedCloseAction } from "../services/actions/feed";
 import { useDispatch, useSelector } from "../utils";
 import { useEffect } from "react";
+import { WS_BASE_URL } from "../services/constants";
 
 export default function FeedPage() {
   const { orders } = useSelector((state) => state.feed);
   const { data } = useSelector((state) => state.feed);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(feedInitAction("wss://norma.nomoreparties.space/orders/all"));
+    dispatch(feedInitAction(`${WS_BASE_URL}/all`));
 
     return () => {
       dispatch(feedCloseAction());
     };
   }, [dispatch]);
 
-  if (!data) {
+  if (!data || !orders) {
     return (
       <h2 className="text text_type_main-large mt-15 pt-15">Загрузка...</h2>
     );
   } else {
-    return !data ? (
-      <p className="text text_type_main-large mt-10">Загрузка...</p>
-    ) : (
+    return  (
       <>
         <h1
           className={`${styles.header} text text_type_main-large  pt-15 pb-5`}

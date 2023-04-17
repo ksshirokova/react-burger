@@ -15,9 +15,7 @@ export default function BurgerIngredients() {
     (state) => state.ingredients
   );
   const dispatch = useDispatch();
-  // const openIngredientModal = () => {
-  //   dispatch({ type: OPEN_ING_MODAL });
-  // };
+  
 
   const handleClick = (item: TItem) => {
     dispatch(addModalIngredients(item));

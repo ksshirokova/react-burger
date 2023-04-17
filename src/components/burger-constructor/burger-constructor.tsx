@@ -8,11 +8,12 @@ import { BurgerConstructorElement } from "../burger-constructor-element/burger-c
 import { CHECK_DROPED_ELEMENT, DELITE_ELEMENT, OPEN_ORDER_MODAL } from "../../services/constants";
 import { sendOrder } from "../../services/actions/order-modal";
 import { dropElement } from "../../services/actions/constructors-ingredients";
-import { checkAuth } from "../../services/actions/routing";
+import {  } from "../../services/actions/routing";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch
  } from "../../utils";
 import { TItem } from "../../utils/types";
+import { getCookie } from "../../utils/utils";
 
 
 export default function BurgerConstructor() {
@@ -25,10 +26,12 @@ export default function BurgerConstructor() {
   const { draggedFilling, draggedBuns } = useSelector(
     (state) => state.constructorStore
   );
+  const  draggedElements = [...draggedFilling, ...draggedBuns]
 
   const openOrderModal = () => {
-    dispatch(checkAuth());
-    isAuth ? dispatch(sendOrder(draggedFilling)) : navigate("/login");
+    // dispatch(checkAuth());
+    // dispatch(getUser(getCookie('token')))
+    isAuth ? dispatch(sendOrder(draggedElements)) : navigate("/login");
     isAuth && dispatch({ type: OPEN_ORDER_MODAL});
   };
 
@@ -42,7 +45,7 @@ export default function BurgerConstructor() {
     }, 0);
   };
 
-  const handleDragOver = (event: any) => {
+  const handleDragOver = (event: React.MouseEvent<HTMLElement>) => {
     //обработчик при наведении
     event.preventDefault();
   };

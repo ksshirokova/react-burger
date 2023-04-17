@@ -21,7 +21,7 @@ export default function ForgotPassword() {
 
   const navigate = useNavigate();
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     value && dispatch(sendEmail(value));
     value && navigate("/reset-password");
@@ -41,7 +41,7 @@ export default function ForgotPassword() {
           <Input
             type={"email"}
             placeholder={"E-mail"}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
             value={value}
             name={"name"}
             error={false}

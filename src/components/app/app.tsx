@@ -15,14 +15,13 @@ import {
 
   DELITE_MODAL_INGREDIENTS, CLOSE_ORDER_MODAL
 } from "../../services/constants";
-import OrdersHistoryPage from "../../pages/orders-history-page";
 
+import OrdersHistoryPage from "../../pages/orders-history-page";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import ProfilePage from "../../pages/profile-page";
 import RegistrationPage from "../../pages/registration-page";
 import ResetPassword from "../../pages/reset-password";
 import { useEffect } from "react";
-import { checkAuth } from "../../services/actions/routing";
 import IngredientDetailsPage from "../ingredient-details/ingredient-details";
 import FeedPage from "../../pages/feed-page";
 import { useSelector, useDispatch } from "../../utils";
@@ -30,11 +29,12 @@ import OrderModalDetails from "../order-modal-details/order-modal-details";
 import { deliteModalOrder } from "../../services/actions/ingredient-modal";
 import { getCookie } from "../../utils/utils";
 import OrderModalUsersDetails from "../order-modal-users-details/order-modal-users-details";
+import { getUser } from "../../services/actions/routing";
 
 
 function App() {
   const navigate = useNavigate();
-
+  const { loading } = useSelector((state) => state.routeStore);
   const location = useLocation();
 
   const { isOpened, orderItems } = useSelector(
@@ -58,22 +58,31 @@ function App() {
     dispatch({ type: DELITE_MODAL_INGREDIENTS, item: {} })
     navigate("/");
   };
-
+  
+  const checkAuth = () => {
+    
+    dispatch(
+      getUser(getCookie('token'))
+    );
+  }
   const closeFeedModal = (item?: any) => {
 
     dispatch(deliteModalOrder(item));
     navigate(-1);
   };
-
-
+  
+  const { isAuthChecked, user, } = useSelector(
+    (state) => state.routeStore
+  );
   useEffect(() => {
     dispatch(getIngredients());
-    dispatch(checkAuth());
-    console.log('страница отрендерилась')
+    checkAuth()
+
   }, [dispatch]);
 
-
+  console.log(user, isAuthChecked)
   console.log(getCookie('token'))
+  console.log(getCookie('refreshToken'))
   return (
     <>
       <AppHeader />
@@ -92,7 +101,7 @@ function App() {
         <Route
           path="/login"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true} >
               <LoginPage />
             </ProtectedRoute>
           }
@@ -100,7 +109,7 @@ function App() {
         <Route
           path="/register"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true} >
               <RegistrationPage />
             </ProtectedRoute>
           }
@@ -108,7 +117,7 @@ function App() {
         <Route
           path="/forgot-password"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true}>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -116,7 +125,7 @@ function App() {
         <Route
           path="/reset-password"
           element={
-            <ProtectedRoute anonymous={false} isUser={true}>
+            <ProtectedRoute anonymous={true}>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -166,9 +175,9 @@ function App() {
         <Route
           path={"/profile/orders/:usersOrderId"}
           element={
-            
-              <OrderModalUsersDetails isPage={true} />
-           
+
+            <OrderModalUsersDetails isPage={true} />
+
 
           }
         />
@@ -185,10 +194,6 @@ function App() {
               </Modal>
             }
           />
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
             path={"/feed/:orderId"}
             element={
@@ -197,10 +202,6 @@ function App() {
               </Modal>
             }
           />
-        </Routes>
-      )}
-      {background && (
-        <Routes>
           <Route
             path={"/profile/orders/:usersOrderId"}
             element={
@@ -211,6 +212,8 @@ function App() {
           />
         </Routes>
       )}
+
+
       {isOpened && (
         <Modal onClose={closeOrderModal} classname={"text text_type_main-large"}>
           <OrderDetails number={orderNumber} />

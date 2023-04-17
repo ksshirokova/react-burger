@@ -7,46 +7,55 @@ import { getCookie } from "../utils/utils";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "../utils";
 import FeedOrders from "../components/feed-orders/feed-orders";
-import { checkAuth } from "../services/actions/routing";
+
+import { WS_BASE_URL } from "../services/constants";
+import { getUser } from "../services/actions/routing";
+
 
 
 export default function OrdersHistoryPage() {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.feed);
+  const { user } = useSelector(
+    (state) => state.routeStore
+  );
+  
+  
 
   useEffect(() => {
     
-    getCookie("token")?.slice(0, 7) === "Bearer "
-      ? dispatch(
-          feedInitAction(
-            `wss://norma.nomoreparties.space/orders?token=${
-              getCookie("token")?.split("Bearer ")[1]
-            }`
-          )
-        )
-      : dispatch(
-          feedInitAction(
-            `wss://norma.nomoreparties.space/orders?token=${getCookie("token")}`
-          )
-        );
+    
+    
+    dispatch(
+      feedInitAction(
+          `${WS_BASE_URL}?token=${getCookie('token')?.split('Bearer ')[1]}`
+      ))
+    
+    
 
     return () => {
       dispatch(feedCloseAction());
     };
-  }, []);
+  }, [dispatch]);
 
-  return (
-    <main className={styles.main}>
-      <div className={styles.nav}>
-        <ProfileNav />
-      </div>
+  return !orders ? (
+    <p className={`${styles.loader} text text_type_main-large mt-10 `}>
+      Загрузка...
+    </p>
+  ) : (
 
-      <div className={styles.orders}>
-        {!orders &&  <p className={`text text_type_main-large mt-10 `}>
+      <main className={styles.main}>
+        <div className={styles.nav}>
+          <ProfileNav />
+        </div>
+
+        <div className={styles.orders}>
+          {!orders && <p className={`text text_type_main-large mt-10 `}>
             Загрузка...
-        </p> }
-        {orders && orders.map((order) => <FeedOrders order={order} key={order._id} path={'/profile/orders/'}/>)}
-      </div>
-    </main>
-  );
-}
+          </p>}
+          {orders && orders.map((order) => <FeedOrders order={order} key={order._id} path={'/profile/orders/'} />)}
+        </div>
+      </main>
+    )
+  }
+

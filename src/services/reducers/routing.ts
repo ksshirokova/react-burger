@@ -26,6 +26,7 @@ import { deleteCookie } from "../../utils/utils";
 import { LOGOUT_FAILED } from "../constants";
 import { TRoutingActions } from "../actions/routing";
 
+
 export type TRoutingState = {
   isAuth: boolean;
   loading: boolean;
@@ -48,7 +49,7 @@ export type TRoutingState = {
   userCheked: boolean;
   isLoading: boolean;
 };
-const initialState: TRoutingState = {
+export const initialState: TRoutingState = {
   isAuth: false,
   loading: false,
   error: null,
@@ -115,18 +116,14 @@ export const routingReducer = (
       return { ...state, loading: true, isRegistred: false };
     }
     case SEND_NEW_USER_SUCCESS: {
+      setCookie('token', action.accessToken);
+      setCookie('refreshToken', action.refreshToken)
       return {
         ...state,
         loading: false,
-        password: action.password,
         email: action.email,
         name: action.name,
         isRegistred: true,
-        user: {
-          email: action.email,
-          name: action.name,
-          password: action.password,
-        },
         error: null,
       };
     }
@@ -142,12 +139,9 @@ export const routingReducer = (
       return { ...state, loading: true, isAuth: false };
     }
     case LOGIN_USER_SUCCESS: {
-      const authToken = action.accessToken.split("Bearer ")[1];
-      if (authToken) {
-        setCookie("token", authToken, { secure: true, "max-age": 1000000
-       });
-        setCookie("refreshToken", action.refreshToken);
-      }
+
+      setCookie('token', action.accessToken);
+      setCookie('refreshToken', action.refreshToken)
       return {
         ...state,
         loading: false,
@@ -160,7 +154,7 @@ export const routingReducer = (
       };
     }
     case USER_SUCCESS: {
-      
+
       return {
         ...state,
         loading: false,
@@ -186,7 +180,6 @@ export const routingReducer = (
         isAuth: false,
         user: null,
         userCheked: false,
-        isAuthChecked: true,
       };
     }
     case AUTH_CHECKED: {

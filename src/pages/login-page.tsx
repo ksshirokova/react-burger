@@ -51,7 +51,7 @@ export default function LoginPage() {
             placeholder={"E-mail"}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            name={"name"}
+            name={email}
             error={false}
             ref={inputRef}
             onIconClick={onIconClick}
@@ -66,7 +66,7 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             icon={icon}
             value={password}
-            name={"name"}
+            name={password}
             error={false}
             ref={inputRef}
             onIconClick={onIconClick}

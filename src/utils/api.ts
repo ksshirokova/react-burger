@@ -2,7 +2,8 @@ import { requestData, getCookie, checkResponse, setCookie } from "./utils";
 
 import { TRefreshUsersData } from "./types";
 
-const API_URL = "https://norma.nomoreparties.space/api";
+
+export const API_URL = "https://norma.nomoreparties.space/api";
 
 export const getIngredientsApi = () => {
   return requestData(`${API_URL}/ingredients`);
@@ -62,7 +63,6 @@ export const registerUserApi = (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: "Bearer " + getCookie("token"),
     },
     body: JSON.stringify({
       email: usersEmail,
@@ -86,17 +86,20 @@ export const loginUserApi = (usersEmail: string, usersPassword: string) => {
     }),
   });
 };
-
 export const getUserApi = (token: string | undefined) => {
   return fetchWithRefresh(`${API_URL}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: token
+      Authorization: token,
     },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer'
   });
 };
+
+
 
 export const changeUsersDataApi = (
   newName: string,
@@ -108,7 +111,7 @@ export const changeUsersDataApi = (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: getCookie("token"),
+      Authorization: 'Bearer ' + getCookie('token'),
     },
     body: JSON.stringify({
       name: newName,
@@ -139,32 +142,49 @@ export const refreshToken = (refreshToken: string | undefined) => {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      token: `${refreshToken}`,
+      token: refreshToken,
     }),
-  });
+  })
+    .then(res => checkResponse<TRefreshUsersData>(res))
+    .then((data) => {
+      if (!data.success) {
+        return Promise.reject(data)
+      }
+      setCookie("token", data.accessToken, { secure: true, 'max-age': 20000, SameSite: "Lax" });
+      setCookie("refreshToken", data.refreshToken, { secure: true, SameSite: "Lax" });
+      return data;
+    })
 };
 
 export const fetchWithRefresh = async (url: string, options: any) => {
   try {
     const res = await fetch(url, options);
+    console.log(res)
     return await checkResponse(res);
   } catch (err: any) {
-    if (err.message === "jwt malformed" || "jwt expired") {
+    if (err.message === "jwt expired" || 'jwt malformed') {
+
       const refreshUsersData = await refreshToken(getCookie("refreshToken"));
+      console.log(refreshUsersData) //здесь не ок, когда обновляю первый раз
+      console.log('дошло до объявления константы')
+      //ломается потому что в checkResponse не ок
+      if (options.header) {
+        (options.headers as { [key: string]: string }).Authorization = refreshUsersData.accessToken
+      }
 
-      await checkResponse<TRefreshUsersData>(refreshUsersData).then(
-        (refreshUsersData) => {
-          options.headers.Authorization = refreshUsersData.accessToken;
 
-          setCookie("token", refreshUsersData.accessToken);
-          setCookie("refreshToken", refreshUsersData.refreshToken);
-        }
-      );
 
       const res = await fetch(url, options);
-      return await checkResponse(res);
+      console.log('дошло до последней проверки')
+      return await checkResponse(res)
+      // .then((res)=>console.log(res))
+      // .catch((res) => {
+      //   console.log(res)
+      // })
+
     } else {
       return Promise.reject(err);
     }
   }
 };
+

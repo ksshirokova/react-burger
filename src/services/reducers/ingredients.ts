@@ -18,7 +18,7 @@ type TIngredientsState = {
   error: boolean | null,
 }
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   data: [],
   sauce: [],
   main: [],
